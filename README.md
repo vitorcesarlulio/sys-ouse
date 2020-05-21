@@ -145,6 +145,7 @@ $route->get('/cadastro', function() use ($blade) {
 - @endsection```:fim da seção criada para inserir codigo HTML
 
 ##Efeitos Javascript/JQuery
+Tudo sobre Js esta no caminho: public/doc/documentation/
 
 
 

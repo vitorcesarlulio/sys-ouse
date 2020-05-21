@@ -21,6 +21,10 @@ $route->get('/cadastro', function() use ($blade) {
     echo $blade->render('cadastro.cadastro');
 });
 
+$route->get('/cadastro2', function() use ($blade) {
+    echo $blade->render('cadastro.cadastro2');
+});
+
 
 $route->on();
 

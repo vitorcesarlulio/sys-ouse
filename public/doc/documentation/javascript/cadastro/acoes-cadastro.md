@@ -3,7 +3,8 @@
 ## Efeitos Javascript/JQuery
 **Ao clicar no botao ele oculta, se clicar de novo ele mostra:**
 
-```<!DOCTYPE html>
+```
+<!DOCTYPE html>
 <html>
 <head>
 <style> 
@@ -38,7 +39,8 @@ function myFunction() {
 </script>
 
 </body>
-</html>```
+</html>
+```
 
 **Ao clicar na opção "Cadastro Completo" ou "Cadastro Simples" adicona ou retira componentes (Exemplo: uma div, no caso a div CPF):**
 
@@ -69,7 +71,8 @@ function myFunction() {
     function functionRegisterComplete() {
     document.getElementById("divRecordTypec").style.display = "block";
     }
-</script>```
+</script>
+```
 
 **Ao abrir o formulario o campo CPF ja vem oculto, se clicar na opção "Completo | Basico" ele mostra o campo CPF e se clicar de novo ele oculta:**
 
@@ -115,6 +118,40 @@ function Mudarestado(el) {
 **Cursor do mouse focado no elemento:**
 ```<input type="text" class="form-control" placeholder="Enter ..." autofocus>```
 
-**Deixar elemento nao editavel:**
+**Deixar elemento nao preenchivel:**
 ```<input type="text" class="form-control" id="uf" placeholder="Enter ..." **disabled**>```
 
+**Exibir e ocultar campos de formulário do tipo radio, seleciona pessoa fisica ele troca o campo de pessoa juridica para fisica e vise-versa:**
+[Link](https://pt.stackoverflow.com/questions/60016/exibir-e-ocultar-campos-de-formul%c3%a1rio-do-tipo-radio)
+
+```
+ <!-- Tipo de Pessoa -->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>Tipo de Pessoa</label>
+                  <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="optionPhysicalPerson" name="tipopessoa" onclick="tipoPessoaSel();" checked="">
+                    <label for="optionPhysicalPerson" class="custom-control-label">Pessoa Física</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="optionPhysicalLegal" name="tipopessoa" onclick="tipoPessoaSel();">
+                    <label for="optionPhysicalLegal" class="custom-control-label">Pessoa Jurídica</label>
+                  </div>
+                </div>
+              </div>
+              <!-- Tipo de Pessoa -->
+			  
+			  <div id="physicalPerson" class="col-sm-2">
+                <div class="form-group">
+                  <label for="cpf">CPF</label>
+                  <input type="text" name="cpf" class="form-control" id="cpf" data-inputmask="'mask': ['999.999.999.99']" data-mask="" placeholder="Enter CPF">
+                </div>
+              </div>
+
+              <div id="physicalLegal" class="col-sm-2" style="display: none;">
+                <div class="form-group">
+                  <label for="cnpj">CNPJ</label>
+                  <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Entre com CNPJ">
+                </div>
+              </div>
+```

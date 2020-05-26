@@ -17,13 +17,23 @@ $route->get('/home', function() use ($blade) {
     echo $blade->render('home.home');
 });
 
+
 $route->get('/cadastro', function() use ($blade) {
     echo $blade->render('cadastro.cadastro');
 });
 
-$route->get('/cadastro2', function() use ($blade) {
-    echo $blade->render('cadastro.cadastro2');
+$route->post('/cadastrar', function() use ($blade) {
+    echo $blade->render('cadastro.cadastrar');
 });
+
+$route->get('/agenda', function() use ($blade) {
+    echo $blade->render('agenda.agenda');
+});
+
+$route->get('/agenda2', function() use ($blade) {
+    echo $blade->render('agenda.agenda2');
+});
+
 
 
 $route->on();

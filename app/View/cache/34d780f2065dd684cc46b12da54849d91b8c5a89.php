@@ -1,8 +1,5 @@
 
 
-<?php $__env->startSection('description', 'sistema ouse'); ?>
-<?php $__env->startSection('keywords', 'sistema, ousadia'); ?>
-
 <?php $__env->startSection('title', 'Cadastro'); ?>
 
 <?php $__env->startSection('css'); ?>
@@ -24,10 +21,23 @@
           <h3 class="card-title">Quick Example <small>jQuery Validation</small></h3>
         </div>
         <!-- form start -->
-        <form role="form" id="quickForm" novalidate="novalidate" autocomplete="off">
+        <form role="form" id="quickForm" action="/cadastrar" novalidate="novalidate" autocomplete="off" method="post">
           <div class="card-body">
             <div class="row">
 
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>Tipo de Cadastro</label>
+                  <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="optionRegisterBasic" name="typeregister" onclick="selTypeRegister();" checked="">
+                    <label for="optionRegisterBasic" class="custom-control-label">Basico</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="optionRegisterComplete" name="typeregister" onclick="selTypeRegister();">
+                    <label for="optionRegisterComplete" class="custom-control-label">Completo</label>
+                  </div>
+                </div>
+              </div>
 
 
               <div class="col-sm-2">
@@ -53,6 +63,13 @@
                 <div class="form-group">
                   <label for="exampleInputTelephone1">Telefone</label>
                   <input type="text" name="telephone" class="form-control" id="exampleInputTelephone1" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="19" placeholder="Entre com o Telefone">
+                </div>
+              </div>
+
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email</label>
+                  <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Entre com o Email">
                 </div>
               </div>
 
@@ -88,26 +105,42 @@
                 </div>
               </div>
 
+
               <div class="col-sm-2">
+                <div class="form-group">
+                  <label>Tipo de Residencia</label>
+                  <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="optionHome" name="typeresidence" onclick="selTypeResidence();">
+                    <label for="optionHome" class="custom-control-label">Casa</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="optionBuilding" name="typeresidence" onclick="selTypeResidence();">
+                    <label for="optionBuilding" class="custom-control-label">Apartamento</label>
+                  </div>
+                </div>
+              </div>
+
+
+              <div id="number" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label for="exampleInputNumber1">Número</label>
                   <input type="text" name="number" class="form-control" id="exampleInputNumber1" placeholder="Entre com o Número">
                 </div>
               </div>
 
-              <div class="col-sm-2">
+              <div id="edifice" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label for="exampleInputEdifice1">Edifício</label>
                   <input type="text" name="edifice" class="form-control" id="exampleInputEdifice1" placeholder="Entre com o Edifício">
                 </div>
               </div>
-              <div class="col-sm-2">
+              <div id="block" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label for="exampleInputBlock1">Bloco</label>
                   <input type="text" name="block" class="form-control" id="exampleInputBlock1" placeholder="Entre com o Bloco">
                 </div>
               </div>
-              <div class="col-sm-2">
+              <div id="apartment" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label for="exampleInputApartment1">Apartamento</label>
                   <input type="text" name="apartment" class="form-control" id="exampleInputApartment1" placeholder="Entre com o Apartamento">
@@ -115,39 +148,23 @@
               </div>
 
 
-
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email</label>
-                  <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Entre com o Email">
-                </div>
-              </div>
-
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-              </div>
-
-
-              <!-- Tipo de Pessoa -->
-              <div class="col-sm-2">
+              <!-- Opção Tipo de Pessoa -->
+              <div id="optinPerson" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label>Tipo de Pessoa</label>
                   <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="optionPhysicalPerson" name="tipopessoa" onclick="tipoPessoaSel();" checked="">
+                    <input class="custom-control-input" type="radio" id="optionPhysicalPerson" name="typeperson" onclick="selTypePerson();" checked="">
                     <label for="optionPhysicalPerson" class="custom-control-label">Pessoa Física</label>
                   </div>
                   <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="optionPhysicalLegal" name="tipopessoa" onclick="tipoPessoaSel();">
+                    <input class="custom-control-input" type="radio" id="optionPhysicalLegal" name="typeperson" onclick="selTypePerson();">
                     <label for="optionPhysicalLegal" class="custom-control-label">Pessoa Jurídica</label>
                   </div>
                 </div>
               </div>
-              <!-- Tipo de Pessoa -->
 
-              <div id="physicalPerson" class="col-sm-2">
+              <!-- Tipo de Pessoa -->
+              <div id="physicalPerson" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label for="cpf">CPF</label>
                   <input type="text" name="cpf" class="form-control" id="cpf" data-inputmask="'mask': ['999.999.999.99']" data-mask="" placeholder="Enter CPF">
@@ -161,12 +178,13 @@
                 </div>
               </div>
 
-              <div class="form-group mb-0">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
-                  <label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
+              <div class="col-sm-1">
+                <div class="form-group">
+                  <label>Cadastro:</label>
+                  <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="<?php echo e(date('d/m/Y')); ?>">
                 </div>
               </div>
+
             </div>
           </div>
           <div class="card-footer">
@@ -175,32 +193,19 @@
         </form>
       </div>
     </div>
-
-    <!-- right column -->
-    <div class="col-md-6">
-
-    </div>
-
   </div>
   <!-- /.row -->
 </div>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
-<!-- Opção Pessoas Fisica ou Juridica -->
-<script>
-  function tipoPessoaSel() {
-    var physicalPerson = document.getElementById("optionPhysicalPerson").checked;
-    if (physicalPerson) {
-      document.getElementById("physicalPerson").style.display = "block";
-      document.getElementById("physicalLegal").style.display = "none";
-    } else {
-      document.getElementById("physicalPerson").style.display = "none";
-      document.getElementById("physicalLegal").style.display = "block";
-    }
-  }
-</script>
 
+<!-- Scripts para opçoes (simples, completo, pessoa fisica) -->
+<script src="<?= DIRPLUGINS . 'cadastro-cliente/options-cadastro-cliente.js' ?>"></script>
+
+<!-- InputMask (MASCARAS) -->
+<script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
 <!-- Busca endereço pelo CEP -->
 <script src="<?= DIRJS . 'busca-cep.js' ?>"></script>
@@ -210,104 +215,16 @@
 <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
 
 <!-- Mensagem de validação -->
-<script type="text/javascript">
-  $(document).ready(function() {
-    $.validator.setDefaults({
-      submitHandler: function() {
-        alert("Form successful submitted!");
-      }
-    });
-    $('#quickForm').validate({
-      rules: {
-        name: {
-          required: true
-        },
-        surname: {
-          required: true
-        },
-        cellphone: {
-          required: true
-        },
-        telephone: {
-          required: true
-        },
-        cep: {
-          required: true
-        },
-        email: {
-          required: true,
-          email: true,
-        },
-        cnpj: {
-          required: true,
-          cnpjBR: true,
-        },
-        cpf: {
-          required: true,
-          cpfBR: true,
-        },
-        password: {
-          required: true,
-          minlength: 5
-        },
-        terms: {
-          required: true
-        },
-      },
-      messages: {
-        name: "Digite um Nome",
-        surname: "Digite um Sobrenome",
-        cellphone: "Digite um Celular",
-        telephone: "Digite um Telefone",
-        cep: "Digite um CEP",
-        email: {
-          required: "Digite um endereço de e-mail",
-          email: "Digite um endereço de e-mail válido"
-        },
-        cnpj: {
-          required: "Digite um CNPJ",
-          cnpjBR: "Digite um CNPJ válido"
-        },
-        cpf: {
-          required: "Digite um CPF",
-          cpfBR: "Digite um CPF válido"
-        },
-        password: {
-          required: "Please provide a password",
-          minlength: "Your password must be at least 5 characters long"
-        },
-        terms: "Please accept our terms"
-      },
-      errorElement: 'span',
-      errorPlacement: function(error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
-      },
-      highlight: function(element, errorClass, validClass) {
-        $(element).addClass('is-invalid');
-      },
-      unhighlight: function(element, errorClass, validClass) {
-        $(element).removeClass('is-invalid');
-      }
-    });
-  });
-</script>
+<script src="<?= DIRPLUGINS . 'cadastro-cliente/msg-validacao.js' ?>"></script>
 
-<!-- InputMask (MASCARAS) -->
-<script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
-
-<!-- Page script -->
+<!-- Page script (mascaras) -->
 <script>
   $(function() {
     //Datemask dd/mm/yyyy
     $('#datemask').inputmask('dd/mm/yyyy', {
       'placeholder': 'dd/mm/yyyy'
     })
-    //Datemask2 mm/dd/yyyy
-    $('#datemask2').inputmask('mm/dd/yyyy', {
-      'placeholder': 'mm/dd/yyyy'
-    })
+
     //Money Euro E AS MACARAS TAMBEM SAI SE VC TIRAR
     $('[data-mask]').inputmask()
 

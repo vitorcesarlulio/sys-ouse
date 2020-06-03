@@ -75,11 +75,23 @@ $(function () {
 
         //Evento ao clicar no no evento ele abre o modal para exibir infos
         eventClick: function (info) {
+            $("#apagar_evento").attr("href", "/agenda/apagar/" +"?id="+ info.event.id);
+            //$("#apagar_evento").attr("href", "/agenda/apagar/{id:\d+}"+ info.event.id);
             info.jsEvent.preventDefault();
+
+            //Visualizar
             $('#visualizar #id').text(info.event.id);
             $('#visualizar #title').text(info.event.title);
             $('#visualizar #start').text(info.event.start.toLocaleString());
             $('#visualizar #end').text(info.event.end.toLocaleString());
+
+            //Editar
+            $('#visualizar #id').val(info.event.id);
+            $('#visualizar #title').val(info.event.title);
+            $('#visualizar #start').val(info.event.start.toLocaleString());
+            $('#visualizar #end').val(info.event.end.toLocaleString());
+            $('#visualizar #color').val(info.event.backgroundColor);
+
             $('#visualizar').modal('show');
         },
 
@@ -205,5 +217,36 @@ $(document).ready(function () {
             }
         })
     });
+
+    //Botão Cancelar
+    $('.btn-canc-vis').on("click", function(){
+        $('.visevent').slideToggle();
+        $('.formedit').slideToggle();
+    }); 
+    //Botão Editar
+    $('.btn-canc-edit').on("click", function(){
+        $('.formedit').slideToggle();
+        $('.visevent').slideToggle();
+    }); 
+
+    $("#editevent").on("submit", function (event) {
+        event.preventDefault(); //para nao atualizar a pagina
+       $.ajax({
+            method: "POST",
+            url: "/agenda/editar",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (retorna) {
+                if (retorna['sit']) {
+                    //$("#msg-cad").html(retorna['msg']);
+                    location.reload();
+                } else {
+                    $("#msg-edit").html(retorna['msg']);
+                }
+            }
+        })
+    });
+   
 });
 

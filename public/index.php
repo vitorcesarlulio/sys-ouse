@@ -43,6 +43,18 @@ $route->post('/agenda/cadastar', function() {
     include '../app/View/agenda/cad_event.php';
 });
 
+$route->post('/agenda/editar', function() {
+    include '../app/View/agenda/edit_event.php';
+});
+
+$route->get('/agenda/apagar/', function() {
+    include '../app/View/agenda/proc_apagar_evento.php';
+});
+
+//$route->delete('/agenda/apagar/{id:\d+}', function() {
+//    include '../app/View/agenda/proc_apagar_evento.php';
+//});
+
 
 $route->on();
 

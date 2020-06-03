@@ -6,13 +6,10 @@
 <!-- fullCalendar -->
 <link href="<?= DIRPLUGINS . 'packages/core/main.css' ?>" rel="stylesheet" >
 <link href="<?= DIRPLUGINS . 'packages/daygrid/main.css' ?>" rel="stylesheet" >
-<link href="<?= DIRPLUGINS . 'packages/list/main.css' ?>" rel='stylesheet' />
 
 <script src="<?= DIRPLUGINS . 'packages/core/main.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'packages/interaction/main.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'packages/daygrid/main.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'packages/list/main.js' ?>"></script>
-
 
 
 <script>

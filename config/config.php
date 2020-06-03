@@ -28,8 +28,8 @@ define('DIRJS',      "js/");
 /**
  * Acesso ao banco de dados
  */
-define('HOST', "localhost");
-define('DB', "");
-define('USER', "root");
-define('PASS', "");
+//define('HOST', "localhost");
+//define('DB', "");
+//define('USER', "root");
+//define('PASS', "");
 

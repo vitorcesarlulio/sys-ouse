@@ -4,12 +4,11 @@
 
 @section('css')
 <style>
-  .not-allowed {
-    cursor: not-allowed;
+  .line-title{
+    border-bottom: 2px solid red;
   }
 </style>
 @endsection
-
 @section('content')
 <div class="container-fluid">
   <div class="row">
@@ -56,7 +55,7 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="exampleInputCellPhone1">Celular</label>
-                  <input type="text" name="cellphone" class="form-control" id="exampleInputCellPhone1" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-99999&quot;" data-mask="" value="19" placeholder="Entre com o Celular">
+                  <input type="text" name="cellphone" class="form-control" id="exampleInputCellPhone1" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="19" placeholder="Entre com o Celular">
                 </div>
               </div>
               <div class="col-sm-2">
@@ -83,25 +82,25 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="logradouro">Logradouro</label>
-                  <input type="text" name="street" class="form-control not-allowed" id="logradouro" placeholder="Entre com o Logradouro" disabled>
+                  <input type="text" name="street" class="form-control" style="cursor: not-allowed;" id="logradouro" placeholder="Entre com o Logradouro" disabled>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="bairro">Bairro</label>
-                  <input type="text" name="neighborhood" class="form-control not-allowed" id="bairro" placeholder="Entre com o Bairro" disabled>
+                  <input type="text" name="neighborhood" class="form-control" style="cursor: not-allowed;" id="bairro" placeholder="Entre com o Bairro" disabled>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="localidade">Cidade</label>
-                  <input type="text" name="city" class="form-control not-allowed" id="localidade" placeholder="Entre com a Cidade" disabled>
+                  <input type="text" name="city" class="form-control" style="cursor: not-allowed;" id="localidade" placeholder="Entre com a Cidade" disabled>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="uf">Estado</label>
-                  <input type="text" name="surname" class="form-control not-allowed" id="uf" placeholder="Entre com o Estado" disabled>
+                  <input type="text" name="surname" class="form-control" style="cursor: not-allowed;" id="uf" placeholder="Entre com o Estado" disabled>
                 </div>
               </div>
 
@@ -177,6 +176,15 @@
                   <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Entre com CNPJ">
                 </div>
               </div>
+
+              <h3 class="line-title"><b>Contato</b></h3>
+
+              <div class="col-sm-12">
+              <div class="card-header">
+                <h3 class="card-title"><b>Contato</b></h3>
+              </div>
+              </div>
+
 
               <div class="col-sm-1">
                 <div class="form-group">

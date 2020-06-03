@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 @extends('templates.default')
 
 @section('title', 'Agenda')
@@ -14,6 +17,13 @@
 @endsection
 
 @section('content')
+<?php
+if (isset($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
+?>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
@@ -83,6 +93,98 @@
         </div>
     </div>
     <!-- /.row -->
+
+    <div class="modal fade" id="visualizar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detalhes do Evento</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID do Evento</dt>
+                        <dd class="col-sm-9" id="id"></dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Titulo do Evento</dt>
+                        <dd class="col-sm-9" id="title"></dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Inicio do Evento</dt>
+                        <dd class="col-sm-9" id="start"></dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Fim do Evento</dt>
+                        <dd class="col-sm-9" id="end"></dd>
+                    </dl>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cadastrar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cadastrar Evento</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span id="msg-cad"></span>
+                    <form id="addevent" method="POST" enctype="multipart/form-data">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Titulo</label>
+                                <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Select</label>
+                                <select name="color" class="form-control" id="color">
+                                    <option value="">Selecione</option>
+                                    <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
+                                    <option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
+                                    <option style="color:#FF4500;" value="#FF4500">Laranja</option>
+                                    <option style="color:#8B4513;" value="#8B4513">Marrom</option>
+                                    <option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
+                                    <option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
+                                    <option style="color:#A020F0;" value="#A020F0">Roxo</option>
+                                    <option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
+                                    <option style="color:#228B22;" value="#228B22">Verde</option>
+                                    <option style="color:#8B0000;" value="#8B0000">Vermelho</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <label>Inicio do Evento</label>
+                                <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <label>Fim do Evento</label>
+                                <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-between">
+                            <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-success">Cadastrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -91,179 +193,12 @@
 <!-- fullCalendar 2.2.5 -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar/main.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'fullcalendar/locales/pt-br.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-interaction/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
 
 <!-- Page specific script -->
-<script>
-    $(function() {
-
-        /* initialize the external events
-         -----------------------------------------------------------------*/
-        function ini_events(ele) {
-            ele.each(function() {
-
-                // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-                // it doesn't need to have a start or end
-                var eventObject = {
-                    title: $.trim($(this).text()) // use the element's text as the event title
-                }
-
-                // store the Event Object in the DOM element so we can get to it later
-                $(this).data('eventObject', eventObject)
-
-                // make the event draggable using jQuery UI
-                $(this).draggable({
-                    zIndex: 1070,
-                    revert: true, // will cause the event to go back to its
-                    revertDuration: 0 //  original position after the drag
-                })
-
-            })
-        }
-
-        ini_events($('#external-events div.external-event'))
-
-        /* initialize the calendar
-         -----------------------------------------------------------------*/
-        //Date for the calendar events (dummy data)
-        var date = new Date()
-        var d = date.getDate(),
-            m = date.getMonth(),
-            y = date.getFullYear()
-
-        var Calendar = FullCalendar.Calendar;
-        var Draggable = FullCalendarInteraction.Draggable;
-
-        var containerEl = document.getElementById('external-events');
-        var checkbox = document.getElementById('drop-remove');
-        var calendarEl = document.getElementById('calendar');
-
-        // initialize the external events
-        // -----------------------------------------------------------------
-
-        new Draggable(containerEl, {
-            itemSelector: '.external-event',
-            eventData: function(eventEl) {
-                console.log(eventEl);
-                return {
-                    title: eventEl.innerText,
-                    backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
-                    borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
-                    textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
-                };
-            }
-        });
-
-        var calendar = new Calendar(calendarEl, {
-            plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid'],
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            'themeSystem': 'bootstrap',
-            //Random default events
-            events: [{
-                    title: 'All Day Event',
-                    start: new Date(y, m, 1),
-                    backgroundColor: '#f56954', //red
-                    borderColor: '#f56954', //red
-                    allDay: true
-                },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, d - 5),
-                    end: new Date(y, m, d - 2),
-                    backgroundColor: '#f39c12', //yellow
-                    borderColor: '#f39c12' //yellow
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
-                    allDay: false,
-                    backgroundColor: '#0073b7', //Blue
-                    borderColor: '#0073b7' //Blue
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false,
-                    backgroundColor: '#00c0ef', //Info (aqua)
-                    borderColor: '#00c0ef' //Info (aqua)
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
-                    allDay: false,
-                    backgroundColor: '#00a65a', //Success (green)
-                    borderColor: '#00a65a' //Success (green)
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    url: 'http://google.com/',
-                    backgroundColor: '#3c8dbc', //Primary (light-blue)
-                    borderColor: '#3c8dbc' //Primary (light-blue)
-                }
-            ],
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar !!!
-            drop: function(info) {
-                // is the "remove after drop" checkbox checked?
-                if (checkbox.checked) {
-                    // if so, remove the element from the "Draggable Events" list
-                    info.draggedEl.parentNode.removeChild(info.draggedEl);
-                }
-            }
-        });
-
-        calendar.render();
-        // $('#calendar').fullCalendar()
-
-        /* ADDING EVENTS */
-        var currColor = '#3c8dbc' //Red by default
-        //Color chooser button
-        var colorChooser = $('#color-chooser-btn')
-        $('#color-chooser > li > a').click(function(e) {
-            e.preventDefault()
-            //Save color
-            currColor = $(this).css('color')
-            //Add color effect to button
-            $('#add-new-event').css({
-                'background-color': currColor,
-                'border-color': currColor
-            })
-        })
-        $('#add-new-event').click(function(e) {
-            e.preventDefault()
-            //Get value and make sure it is not null
-            var val = $('#new-event').val()
-            if (val.length == 0) {
-                return
-            }
-
-            //Create events
-            var event = $('<div />')
-            event.css({
-                'background-color': currColor,
-                'border-color': currColor,
-                'color': '#fff'
-            }).addClass('external-event')
-            event.html(val)
-            $('#external-events').prepend(event)
-
-            //Add draggable funtionality
-            ini_events(event)
-
-            //Remove event from text input
-            $('#new-event').val('')
-        })
-    })
-</script>
+<script src="<?= DIRPLUGINS . 'agenda/agenda.js' ?>"></script>
 @endsection

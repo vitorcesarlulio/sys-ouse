@@ -17,7 +17,9 @@ $route->get('/home', function() use ($blade) {
     echo $blade->render('home.home');
 });
 
-
+/**
+ * Rotas Cadastro
+ */
 $route->get('/cadastro', function() use ($blade) {
     echo $blade->render('cadastro.cadastro');
 });
@@ -26,14 +28,20 @@ $route->post('/cadastrar', function() use ($blade) {
     echo $blade->render('cadastro.cadastrar');
 });
 
+/**
+ * Rotas Agenda
+ */
 $route->get('/agenda', function() use ($blade) {
     echo $blade->render('agenda.agenda');
 });
 
-$route->get('/agenda2', function() use ($blade) {
-    echo $blade->render('agenda.agenda2');
+$route->get('/agenda/listar', function() {
+    include '../app/View/agenda/list_eventos.php';
 });
 
+$route->post('/agenda/cadastar', function() {
+    include '../app/View/agenda/cad_event.php';
+});
 
 
 $route->on();

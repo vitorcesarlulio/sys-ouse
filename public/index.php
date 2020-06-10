@@ -12,6 +12,9 @@ $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 $route->notFound(function() use ($blade){
     echo $blade->render('errors.404');
 });
+$route->getNotFound(function() use ($blade){
+    echo $blade->render('errors.404');
+});
 
 $route->get('/home', function() use ($blade) {
     echo $blade->render('home.home');
@@ -54,7 +57,6 @@ $route->get('/agenda/apagar/', function() {
 //$route->delete('/agenda/apagar/{id:\d+}', function() {
 //    include '../app/View/agenda/proc_apagar_evento.php';
 //});
-
 
 $route->on();
 

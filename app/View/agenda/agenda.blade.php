@@ -1,6 +1,12 @@
 <?php
 session_start();
+
+require_once '../app/Model/conexao2.php';
+
+$sql = "SELECT id, nombre from t_paises";
+$result = mysqli_query($conn, $sql);
 ?>
+
 @extends('templates.default')
 
 @section('title', 'Agenda')
@@ -11,6 +17,9 @@ session_start();
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.css' ?>">
+<link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
+<!-- Select2 -->
+<link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
 @endsection
 
 @section('css')
@@ -93,113 +102,57 @@ if (isset($_SESSION['msg'])) {
         </div>
     </div>
     <!-- /.row -->
+</div>
 
-    <!-- Formulario Visualizar -->
-    <div class="modal fade" id="visualizar">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Detalhes do Evento</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="visevent">
-                        <dl class="row">
-                            <dt class="col-sm-3">ID do Evento</dt>
-                            <dd class="col-sm-9" id="id"></dd>
-                        </dl>
-                        <dl class="row">
-                            <dt class="col-sm-3">Titulo do Evento</dt>
-                            <dd class="col-sm-9" id="title"></dd>
-                        </dl>
-                        <dl class="row">
-                            <dt class="col-sm-3">Inicio do Evento</dt>
-                            <dd class="col-sm-9" id="start"></dd>
-                        </dl>
-                        <dl class="row">
-                            <dt class="col-sm-3">Fim do Evento</dt>
-                            <dd class="col-sm-9" id="end"></dd>
-                        </dl>
-                        <!--se mudar o botao vai caga tudo por causa desse btn-canc-vis -->
+<!-- Formulario Visualizar -->
+<div class="modal fade" id="visualizar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detalhes do Evento</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="visevent">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID do Evento</dt>
+                        <dd class="col-sm-9" id="id"></dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Titulo do Evento</dt>
+                        <dd class="col-sm-9" id="title"></dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Inicio do Evento</dt>
+                        <dd class="col-sm-9" id="start"></dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3">Fim do Evento</dt>
+                        <dd class="col-sm-9" id="end"></dd>
+                    </dl>
+                    <!--se mudar o botao vai caga tudo por causa desse btn-canc-vis -->
+                    <!-- Botões Editar e Apagar -->
+                    <div class="modal-footer" id="footer">
                         <button class="btn btn-warning btn-canc-vis">Editar</button>
                         <a href="" id="apagar_evento" class="btn btn-danger">Apagar</a>
                     </div>
-
-                    <!-- Formulario Editar -->
-                    <div class="formedit">
-                        <span id="msg-edit"></span>
-                        <form id="editevent" method="POST" enctype="multipart/form-data">
-                            <div class="col-sm-6">
-
-                                    <input type="hidden" name="id" id="id">
-                                
-
-                                <div class="form-group">
-                                    <label>Titulo</label>
-                                    <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Select</label>
-                                    <select name="color" class="form-control" id="color">
-                                        <option value="">Selecione</option>
-                                        <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
-                                        <option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
-                                        <option style="color:#FF4500;" value="#FF4500">Laranja</option>
-                                        <option style="color:#8B4513;" value="#8B4513">Marrom</option>
-                                        <option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
-                                        <option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
-                                        <option style="color:#A020F0;" value="#A020F0">Roxo</option>
-                                        <option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
-                                        <option style="color:#228B22;" value="#228B22">Verde</option>
-                                        <option style="color:#8B0000;" value="#8B0000">Vermelho</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-10">
-                                <div class="form-group">
-                                    <label>Inicio do Evento</label>
-                                    <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
-                                </div>
-                            </div>
-                            <div class="col-sm-10">
-                                <div class="form-group">
-                                    <label>Fim do Evento</label>
-                                    <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary btn-canc-edit">Cancelar</button>
-                            <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-warning">Salvar</button>
-                        </form>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Formulario Cadastrar -->
-    <div class="modal fade" id="cadastrar">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Cadastrar Evento</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <span id="msg-cad"></span>
-                    <form id="addevent" method="POST" enctype="multipart/form-data">
-                        <div class="col-sm-6">
+                <!-- Formulario Editar -->
+                <div class="formedit">
+                    <span id="msg-edit"></span>
+                    <form id="editevent" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="hidden" name="id" id="id">
                             <div class="form-group">
                                 <label>Titulo</label>
                                 <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Select</label>
                                 <select name="color" class="form-control" id="color">
@@ -217,28 +170,140 @@ if (isset($_SESSION['msg'])) {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-10">
+
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Inicio do Evento</label>
-                                <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
-                            </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="form-group">
-                                <label>Fim do Evento</label>
-                                <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="modal-footer justify-content-between">
-                            <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-success">Cadastrar</button>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Fim do Evento</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botões Cancelar e Salvar -->
+                        <div class="modal-footer" id="footer">
+                            <button type="button" class="btn btn-primary btn-canc-edit" onclick="hideButtons();">Cancelar</button>
+                            <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-warning">Salvar</button>
+                        </div>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
+
+<!-- Formulario Cadastrar -->
+<div class="modal fade" id="cadastrar">
+    <div class="modal-dialog">
+        <form id="addevent" method="POST" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cadastrar Evento</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span id="msg-cad"></span>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Titulo</label>
+                                <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Evento:</label>
+                                <select name="color" class="form-control" id="color">
+                                    <option value="">Titulo do Evento</option>
+                                    <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
+                                    <option style="color:#0071c5;" value="#0071c5">Azul</option>
+                                    <option style="color:#FF4500;" value="#FF4500">Laranja</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Minimal</label>
+                                <select class="form-control select2" style="width: 100%;">
+                                    <?php while ($ver = mysqli_fetch_row($result)) { ?>
+                                        <option value="<?php echo $ver[0] ?>">
+                                            <?php echo $ver[1] ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Inicio do Evento</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Fim do Evento</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-success toastrDefaultSuccess">Cadastrar</button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--so para nao dar erro no Js do Modal -->
+<div id="toast-container"> </div>
 @endsection
 
 
@@ -252,6 +317,13 @@ if (isset($_SESSION['msg'])) {
 <script src="<?= DIRPLUGINS . 'fullcalendar-interaction/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
 
-<!-- Page specific script -->
+<!-- Select2 -->
+<script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
+
+<!-- Script do Calendario -->
 <script src="<?= DIRPLUGINS . 'agenda/agenda.js' ?>"></script>
+
+<!-- Alerta de cadastro - Toastr Examples -->
+<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
+
 @endsection

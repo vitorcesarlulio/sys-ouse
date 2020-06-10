@@ -192,10 +192,26 @@
             </li>
 
             <li class="nav-item has-treeview">
-              <a href="/agenda" class="nav-link">
-                <i class="nav-icon fas fa-calendar-alt"></i>
-                <p> Agenda </p>
+              <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-calendar-alt"></i>
+                <p> Agenda <i class="right fas fa-angle-left"></i> </p>
               </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/agenda" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Calendario</p>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/agenda" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Agenda</p>
+                  </a>
+                </li>
+              </ul>
             </li>
 
           </ul>

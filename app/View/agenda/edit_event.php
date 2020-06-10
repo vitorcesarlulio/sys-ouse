@@ -22,14 +22,26 @@ $update_event->bindParam(':start', $data_start_conv);
 $update_event->bindParam(':end', $data_end_conv);
 $update_event->bindParam(':id', $dados['id']);
 
+$mesageSuccess =
+    '<div id="toast-container" class="toast-top-right">
+    <div class="toast toast-success" aria-live="polite" style="">
+        <div class="toast-message">Evento editado com sucesso!</div>
+    </div>
+</div>';
 
-if($update_event->execute()){
-    $retorna = ['sit' => true, 'msg' => '<div class="alert alert-success" role="alert"> Evento editado com Sucesso! </div>'];
-    $_SESSION['msg'] = '<div class="alert alert-success" role="alert"> Evento editado com Sucesso! </div>';
-}else{
-    $retorna = ['sit' => true, 'msg' => '<div class="alert alert-danger" role="alert">Errro: evento não editado! </div>'];
+$mesageError =
+    '<div id="toast-container" class="toast-top-right">
+    <div class="toast toast-error" aria-live="assertive" style="">
+        <div class="toast-message">Erro: o evento não foi editado com sucesso!</div>
+    </div>
+</div>';
+
+if ($update_event->execute()) {
+    $retorna = ['sit' => true, 'msg' => $mesageSuccess];
+    $_SESSION['msg'] = $mesageSuccess;
+} else {
+    $retorna = ['sit' => true, 'msg' => $mesageError];
 }
-
 
 header('Content-Type: application/json');
 echo json_encode($retorna);

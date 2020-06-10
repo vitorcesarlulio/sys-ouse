@@ -75,8 +75,8 @@ $(function () {
 
         //Evento ao clicar no no evento ele abre o modal para exibir infos
         eventClick: function (info) {
-            $("#apagar_evento").attr("href", "/agenda/apagar/" +"?id="+ info.event.id);
-            //$("#apagar_evento").attr("href", "/agenda/apagar/{id:\d+}"+ info.event.id);
+            $("#apagar_evento").attr("href", "/agenda/apagar/" + "?id=" + info.event.id);
+            //$("#apagar_evento").attr("href", "/agenda/apagar/"+ info.event.id);
             info.jsEvent.preventDefault();
 
             //Visualizar
@@ -96,14 +96,14 @@ $(function () {
         },
 
         selectable: true, //dia é clicavel
-        
+
         //traz os dados do dia selecionado (data)
-        select: function(info) {
+        select: function (info) {
             //alert('Inicio do Evento ' + info.start.toLocaleString());
             $('#cadastrar #start').val(info.start.toLocaleString());
             $('#cadastrar #end').val(info.end.toLocaleString());
             $('#cadastrar').modal('show');
-          },
+        },
 
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar !!!
@@ -201,7 +201,7 @@ function DataHora(evento, objeto) {
 $(document).ready(function () {
     $("#addevent").on("submit", function (event) {
         event.preventDefault();
-       $.ajax({
+        $.ajax({
             method: "POST",
             url: "/agenda/cadastar",
             data: new FormData(this),
@@ -219,19 +219,20 @@ $(document).ready(function () {
     });
 
     //Botão Cancelar
-    $('.btn-canc-vis').on("click", function(){
+    $('.btn-canc-vis').on("click", function () {
         $('.visevent').slideToggle();
         $('.formedit').slideToggle();
-    }); 
+    });
+    
     //Botão Editar
-    $('.btn-canc-edit').on("click", function(){
+    $('.btn-canc-edit').on("click", function () {
         $('.formedit').slideToggle();
         $('.visevent').slideToggle();
-    }); 
+    });   
 
     $("#editevent").on("submit", function (event) {
         event.preventDefault(); //para nao atualizar a pagina
-       $.ajax({
+        $.ajax({
             method: "POST",
             url: "/agenda/editar",
             data: new FormData(this),
@@ -247,6 +248,17 @@ $(document).ready(function () {
             }
         })
     });
-   
+
 });
 
+//Componente select (selecionar cliente)
+$(function() {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+});
+
+//Depois de um tempo ocultar o alerta de cadastro
+setTimeout(function () {
+    var a = document.getElementById("toast-container");
+    a.style.display = "none"
+}, 3000);

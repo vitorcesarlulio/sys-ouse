@@ -21,14 +21,27 @@ $insert_event->bindParam(':color', $dados['color']);
 $insert_event->bindParam(':start', $data_start_conv);
 $insert_event->bindParam(':end', $data_end_conv);
 
+$mesageSuccess =
+    '<div id="toast-container" class="toast-top-right">
+    <div class="toast toast-success" aria-live="polite" style="">
+        <div class="toast-message">Evento cadastrado com Sucesso!</div>
+    </div>
+</div>';
 
-if($insert_event->execute()){
-    $retorna = ['sit' => true, 'msg' => '<div class="alert alert-success" role="alert"> Evento cadastrado com Sucesso! </div>'];
-    $_SESSION['msg'] = '<div class="alert alert-success" role="alert"> Evento cadastrado com Sucesso! </div>';
-}else{
-    $retorna = ['sit' => true, 'msg' => '<div class="alert alert-danger" role="alert">Errro: evento não cadastrado! </div>'];
+$mesageError =
+    '<div id="toast-container" class="toast-top-right">
+    <div class="toast toast-error" aria-live="assertive" style="">
+        <div class="toast-message">Erro: evento não cadastrado com Sucesso!</div>
+    </div>
+</div>';
+
+if ($insert_event->execute()) {
+    $retorna = ['sit' => true, 'msg' => $mesageSuccess];
+    $_SESSION['msg'] = $mesageSuccess;
+    //ou <div class="alert alert-success" role="alert"> Evento cadastrado com Sucesso! </div>
+} else {
+    $retorna = ['sit' => true, 'msg' => $mesageError];
 }
-
 
 header('Content-Type: application/json');
 echo json_encode($retorna);

@@ -27,8 +27,8 @@ $route->get('/cadastro', function() use ($blade) {
     echo $blade->render('cadastro.cadastro');
 });
 
-$route->post('/cadastrar', function() use ($blade) {
-    echo $blade->render('cadastro.cadastrar');
+$route->post('/cadastrar', function() {
+    include '../app/View/cadastro/cadastrar.php';
 });
 
 /**

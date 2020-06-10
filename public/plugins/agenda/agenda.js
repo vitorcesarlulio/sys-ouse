@@ -198,6 +198,10 @@ function DataHora(evento, objeto) {
     }
 }
 
+/**
+ * Cadastrar Evento
+ * 
+ */
 $(document).ready(function () {
     $("#addevent").on("submit", function (event) {
         event.preventDefault();

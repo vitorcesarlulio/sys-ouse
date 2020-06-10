@@ -1,7 +1,7 @@
 <?php
 	$servidor = "localhost";
 	$usuario = "root";
-	$senha = "Panoramica9625*";
+	$senha = "";
 	$dbname = "celke";
 	
 	//Criar a conexao

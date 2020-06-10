@@ -8,11 +8,11 @@ $resultSelectClient = mysqli_query($conn, $selectClient);
 
 ?>
 
-@extends('templates.default')
 
-@section('title', 'Agenda')
 
-@section('head')
+<?php $__env->startSection('title', 'Agenda'); ?>
+
+<?php $__env->startSection('head'); ?>
 <!-- fullCalendar -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.css' ?>">
@@ -21,12 +21,12 @@ $resultSelectClient = mysqli_query($conn, $selectClient);
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
 <!-- Select2 -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('css')
-@endsection
+<?php $__env->startSection('css'); ?>
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <?php
 if (isset($_SESSION['msg'])) {
     echo $_SESSION['msg'];
@@ -367,10 +367,10 @@ if (isset($_SESSION['msg'])) {
 
 <!--so para nao dar erro no Js do Modal -->
 <div id="toast-container"> </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <!-- fullCalendar 2.2.5 -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar/main.min.js' ?>"></script>
@@ -389,4 +389,5 @@ if (isset($_SESSION['msg'])) {
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/agenda/agenda.blade.php ENDPATH**/ ?>

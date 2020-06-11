@@ -10,7 +10,7 @@ $resultSelectClient = mysqli_query($conn, $selectClient);
 
 @extends('templates.default')
 
-@section('title', 'Agenda')
+@section('title', 'Calendário')
 
 @section('head')
 <!-- fullCalendar -->
@@ -284,7 +284,7 @@ if (isset($_SESSION['msg'])) {
 
 
 
-
+                    <!--
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -298,7 +298,6 @@ if (isset($_SESSION['msg'])) {
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -313,7 +312,6 @@ if (isset($_SESSION['msg'])) {
                             </div>
                         </div>
                     </div>
-                     
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -342,7 +340,6 @@ if (isset($_SESSION['msg'])) {
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
@@ -351,8 +348,7 @@ if (isset($_SESSION['msg'])) {
                         </textarea>
                       </div>
                     </div>
-                    </div>
-                    
+                    </div>-->
                 </div>
 
                 <div class="modal-footer">
@@ -363,7 +359,7 @@ if (isset($_SESSION['msg'])) {
             </div>
         </form>
     </div>
-</div>
+</div> 
 
 <!--so para nao dar erro no Js do Modal -->
 <div id="toast-container"> </div>
@@ -384,7 +380,7 @@ if (isset($_SESSION['msg'])) {
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
 
 <!-- Script do Calendario -->
-<script src="<?= DIRPLUGINS . 'agenda/agenda.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'schedule/calendar.js' ?>"></script>
 
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>

@@ -34,29 +34,35 @@ $route->post('/cadastrar', function() {
 /**
  * Rotas Agenda
  */
-$route->get('/agenda', function() use ($blade) {
-    echo $blade->render('agenda.agenda');
+#Calendário
+$route->get('/calendario', function() use ($blade) {
+    echo $blade->render('schedule.calendar');
 });
 
-$route->get('/agenda/listar', function() {
-    include '../app/View/agenda/list_eventos.php';
+$route->get('/calendario/listar', function() {
+    include '../app/View/schedule/list_eventos.php';
 });
 
-$route->post('/agenda/cadastar', function() {
-    include '../app/View/agenda/cad_event.php';
+$route->post('/calendario/cadastar', function() {
+    include '../app/View/schedule/cad_event.php';
 });
 
-$route->post('/agenda/editar', function() {
-    include '../app/View/agenda/edit_event.php';
+$route->post('/calendario/editar', function() {
+    include '../app/View/schedule/edit_event.php';
 });
 
-$route->get('/agenda/apagar/', function() {
-    include '../app/View/agenda/proc_apagar_evento.php';
+$route->get('/calendario/apagar/', function() {
+    include '../app/View/schedule/proc_apagar_evento.php';
 });
 
 //$route->delete('/agenda/apagar/{id:\d+}', function() {
 //    include '../app/View/agenda/proc_apagar_evento.php';
 //});
+
+#Eventos
+$route->get('/eventos', function() use ($blade) {
+    echo $blade->render('schedule.schedule-events.schedule-events');
+});
 
 $route->on();
 

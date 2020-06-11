@@ -198,7 +198,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/agenda" class="nav-link">
+                  <a href="/calendario" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Calendario</p>
                   </a>
@@ -206,7 +206,7 @@
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/agenda" class="nav-link">
+                  <a href="/eventos" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Agenda</p>
                   </a>

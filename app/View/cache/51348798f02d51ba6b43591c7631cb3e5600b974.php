@@ -3,13 +3,14 @@ session_start();
 
 require_once '../app/Model/conexao2.php';
 
-$sql = "SELECT id, nombre from t_paises";
-$result = mysqli_query($conn, $sql);
+$selectClient = "SELECT cli_id, cli_nome from tb_clientes ORDER BY cli_id DESC";
+$resultSelectClient = mysqli_query($conn, $selectClient);
+
 ?>
 
 
 
-<?php $__env->startSection('title', 'Agenda'); ?>
+<?php $__env->startSection('title', 'Calendário'); ?>
 
 <?php $__env->startSection('head'); ?>
 <!-- fullCalendar -->
@@ -144,66 +145,66 @@ if (isset($_SESSION['msg'])) {
                 <div class="formedit">
                     <span id="msg-edit"></span>
                     <form id="editevent" method="POST" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <input type="hidden" name="id" id="id">
-                            <div class="form-group">
-                                <label>Titulo</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Select</label>
-                                <select name="color" class="form-control" id="color">
-                                    <option value="">Selecione</option>
-                                    <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
-                                    <option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
-                                    <option style="color:#FF4500;" value="#FF4500">Laranja</option>
-                                    <option style="color:#8B4513;" value="#8B4513">Marrom</option>
-                                    <option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
-                                    <option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
-                                    <option style="color:#A020F0;" value="#A020F0">Roxo</option>
-                                    <option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
-                                    <option style="color:#228B22;" value="#228B22">Verde</option>
-                                    <option style="color:#8B0000;" value="#8B0000">Vermelho</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Inicio do Evento</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input type="hidden" name="id" id="id">
+                                <div class="form-group">
+                                    <label>Titulo</label>
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Fim do Evento</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Select</label>
+                                    <select name="color" class="form-control" id="color">
+                                        <option value="">Selecione</option>
+                                        <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
+                                        <option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
+                                        <option style="color:#FF4500;" value="#FF4500">Laranja</option>
+                                        <option style="color:#8B4513;" value="#8B4513">Marrom</option>
+                                        <option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
+                                        <option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
+                                        <option style="color:#A020F0;" value="#A020F0">Roxo</option>
+                                        <option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
+                                        <option style="color:#228B22;" value="#228B22">Verde</option>
+                                        <option style="color:#8B0000;" value="#8B0000">Vermelho</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Botões Cancelar e Salvar -->
-                        <div class="modal-footer" id="footer">
-                            <button type="button" class="btn btn-primary btn-canc-edit" onclick="hideButtons();">Cancelar</button>
-                            <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-warning">Salvar</button>
-                        </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Inicio do Evento</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Fim do Evento</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botões Cancelar e Salvar -->
+                            <div class="modal-footer" id="footer">
+                                <button type="button" class="btn btn-primary btn-canc-edit" onclick="hideButtons();">Cancelar</button>
+                                <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-warning">Salvar</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -227,6 +228,8 @@ if (isset($_SESSION['msg'])) {
                 </div>
                 <div class="modal-body">
                     <span id="msg-cad"></span>
+
+
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -235,6 +238,7 @@ if (isset($_SESSION['msg'])) {
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -248,22 +252,7 @@ if (isset($_SESSION['msg'])) {
                             </div>
                         </div>
                     </div>
-                    <!--
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Minimal</label>
-                                <select class="form-control select2" style="width: 100%;">
-                                    <?php while ($ver = mysqli_fetch_row($result)) { ?>
-                                        <option value="<?php echo $ver[0] ?>">
-                                            <?php echo $ver[1] ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    -->
+                    
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -292,15 +281,85 @@ if (isset($_SESSION['msg'])) {
                             </div>
                         </div>
                     </div>
+
+
+
+                    <!--
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Evento:</label>
+                                <select name="MUDEI: registerEvent" class="form-control" id="MUDEI: registerEvent">
+                                    <option style="background-color: ;" value="">Orçamento</option>
+                                    <option style="background-color: ;" value="">Levar Material</option>
+                                    <option style="background-color: ;" value="">Início do Serviço</option>
+                                    <option style="background-color: ;" value="">Fim do Serviço</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Cliente:</label>
+                                <select class="form-control select2" style="width: 100%;" id="COLOQUEI: registerClient" name="COLOQUEI: registerClient">
+                                    <?php while ($showClient = mysqli_fetch_row($resultSelectClient)) { ?>
+                                        <option value="<?php echo $showClient[0] ?>">
+                                            <?php echo $showClient[1] ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Início:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="MUDEI: registerEventStart" id="MUDEI: registerEventStart" class="form-control" onkeypress="DataHora(event, this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Fim:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="MUDEI: registerEventEnd" id="MUDEI: registerEventEnd" class="form-control" onkeypress="DataHora(event, this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>Observações:</label>
+                        <textarea class="form-control" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 50px;" id="COLOQUEI: registerComments" name="COLOQUEI: registerComments">
+                        </textarea>
+                      </div>
+                    </div>
+                    </div>-->
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-success toastrDefaultSuccess">Cadastrar</button>
 
                 </div>
+
             </div>
         </form>
     </div>
-</div>
+</div> 
 
 <!--so para nao dar erro no Js do Modal -->
 <div id="toast-container"> </div>
@@ -321,10 +380,10 @@ if (isset($_SESSION['msg'])) {
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
 
 <!-- Script do Calendario -->
-<script src="<?= DIRPLUGINS . 'agenda/agenda.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'schedule/calendar.js' ?>"></script>
 
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Apache24\htdocs\sys-ouse\app\View/agenda/agenda.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/calendar.blade.php ENDPATH**/ ?>

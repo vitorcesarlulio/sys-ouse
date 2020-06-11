@@ -27,12 +27,12 @@ if (!empty($id)) {
 
     if ($delete_event->execute()) {
         $_SESSION['msg'] = $mesageSuccess;
-        header("Location: /agenda");
+        header("Location: /calendario");
     } else {
         $_SESSION['msg'] = $mesageError;
-        header("Location: /agenda");
+        header("Location: /calendario");
     }
 } else {
     $_SESSION['msg'] = $mesageError;
-    header("Location: /agenda");
+    header("Location: /calendario");
 }

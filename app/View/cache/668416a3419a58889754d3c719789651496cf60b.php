@@ -3,11 +3,6 @@
 <?php $__env->startSection('title', 'Cadastro'); ?>
 
 <?php $__env->startSection('css'); ?>
-<style>
-  .line-title{
-    border-bottom: 2px solid red;
-  }
-</style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid">
@@ -29,7 +24,7 @@
                   <label>Tipo de Cadastro</label>
                   <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="optionRegisterBasic" name="typeregister" onclick="selTypeRegister();" checked="">
-                    <label for="optionRegisterBasic" class="custom-control-label">Basico</label>
+                    <label for="optionRegisterBasic" class="custom-control-label">Básico</label>
                   </div>
                   <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="optionRegisterComplete" name="typeregister" onclick="selTypeRegister();">
@@ -42,7 +37,7 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="exampleInputNome1">Nome</label>
-                  <input type="text" name="name" class="form-control" id="exampleInputNome1" placeholder="Entre com o Nome">
+                  <input type="text" name="name" class="form-control" id="exampleInputNome1" autofocus placeholder="Entre com o Nome">
                 </div>
               </div>
               <div class="col-sm-2">
@@ -123,7 +118,7 @@
               <div id="number" class="col-sm-2" style="display:none">
                 <div class="form-group">
                   <label for="exampleInputNumber1">Número</label>
-                  <input type="text" name="number" class="form-control" id="exampleInputNumber1" placeholder="Entre com o Número">
+                  <input type="text" name="number" class="form-control" placeholder="Entre com o Número">
                 </div>
               </div>
 
@@ -175,29 +170,15 @@
                   <label for="cnpj">CNPJ</label>
                   <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Entre com CNPJ">
                 </div>
-              </div>
-
-              <h3 class="line-title"><b>Contato</b></h3>
-
-              <div class="col-sm-12">
-              <div class="card-header">
-                <h3 class="card-title"><b>Contato</b></h3>
-              </div>
-              </div>
-
-
-              <div class="col-sm-1">
-                <div class="form-group">
-                  <label>Cadastro:</label>
-                  <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="<?php echo e(date('d/m/Y')); ?>">
-                </div>
-              </div>
+              </div>              
 
             </div>
           </div>
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-default" value="Limpar formulário"><i class="fas fa-times"></i></button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button>
           </div>
+          
         </form>
       </div>
     </div>
@@ -216,7 +197,7 @@
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
 <!-- Busca endereço pelo CEP -->
-<script src="<?= DIRJS . 'busca-cep.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'search-zip/search-zip.js' ?>"></script>
 
 <!-- jquery-validation (PRECISO PARA DAR A MENSAGEM e validar CPF, CPNJ EMAIL etc) -->
 <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>

@@ -69,13 +69,13 @@ $(function () {
         'themeSystem': 'bootstrap',
 
         eventSources: [{
-            url: '/agenda/listar', //rota para listar
+            url: '/calendario/listar', //rota para listar
             type: 'POST'
         }],
 
         //Evento ao clicar no no evento ele abre o modal para exibir infos
         eventClick: function (info) {
-            $("#apagar_evento").attr("href", "/agenda/apagar/" + "?id=" + info.event.id);
+            $("#apagar_evento").attr("href", "/calendario/apagar/" + "?id=" + info.event.id);
             //$("#apagar_evento").attr("href", "/agenda/apagar/"+ info.event.id);
             info.jsEvent.preventDefault();
 
@@ -200,6 +200,8 @@ function DataHora(evento, objeto) {
 
 /**
  * Cadastrar Evento
+ * registerEvent = id do Formulario de cadastro
+ * event.preventDefault(); = não fecha o modal sem autorizar
  * 
  */
 $(document).ready(function () {
@@ -207,7 +209,7 @@ $(document).ready(function () {
         event.preventDefault();
         $.ajax({
             method: "POST",
-            url: "/agenda/cadastar",
+            url: "/calendario/cadastar",
             data: new FormData(this),
             contentType: false,
             processData: false,
@@ -238,7 +240,7 @@ $(document).ready(function () {
         event.preventDefault(); //para nao atualizar a pagina
         $.ajax({
             method: "POST",
-            url: "/agenda/editar",
+            url: "/calendario/editar",
             data: new FormData(this),
             contentType: false,
             processData: false,

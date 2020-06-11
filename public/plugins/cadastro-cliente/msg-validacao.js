@@ -19,12 +19,11 @@ $(document).ready(function() {
         telephone: {
           required: true
         },
+        email: {
+          email: true
+        },
         cep: {
           required: true
-        },
-        email: {
-          required: true,
-          email: true,
         },
         cnpj: {
           required: true,
@@ -34,6 +33,18 @@ $(document).ready(function() {
           required: true,
           cpfBR: true,
         },
+        number: {
+          required: true,
+        },
+        edifice: {
+          required: true,
+        },
+        block: {
+          required: true,
+        },
+        apartment: {
+          required: true,
+        },
       },
       messages: {
         name: "Digite um Nome",
@@ -42,7 +53,6 @@ $(document).ready(function() {
         telephone: "Digite um Telefone",
         cep: "Digite um CEP",
         email: {
-          required: "Digite um endereço de e-mail",
           email: "Digite um endereço de e-mail válido"
         },
         cnpj: {
@@ -52,6 +62,18 @@ $(document).ready(function() {
         cpf: {
           required: "Digite um CPF",
           cpfBR: "Digite um CPF válido"
+        },
+        number: {
+          required: "Digite um Número"
+        },
+        edifice: {
+          required: "Digite um Edifício"
+        },
+        block: {
+          required: "Digite um Bloco"
+        },
+        apartment: {
+          required: "Digite um Apartamento"
         },
       },
       errorElement: 'span',

@@ -3,9 +3,9 @@ session_start();
 require_once '../app/Model/connection-mysqli.php';
 ?>
 
-@extends('templates.default')
-@section('title', 'Calendário')
-@section('head')
+
+<?php $__env->startSection('title', 'Calendário'); ?>
+<?php $__env->startSection('head'); ?>
 <!-- fullCalendar -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.css' ?>">
@@ -14,9 +14,9 @@ require_once '../app/Model/connection-mysqli.php';
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
 <!-- Select2 -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
     .fc-today {
         background: #228B22 !important;
@@ -26,9 +26,9 @@ require_once '../app/Model/connection-mysqli.php';
         opacity: 0.5 !important;
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <?php
 if (isset($_SESSION['msg'])) {
     echo $_SESSION['msg'];
@@ -227,7 +227,7 @@ if (isset($_SESSION['msg'])) {
 
 <div class="modal fade" id="modalRegisterEvent">
     <div class="modal-dialog">
-        <form id="formRegisterEvent" method="POST" autocomplete="off" enctype="multipart/form-data">
+        <form id="formRegisterEvent" method="POST"  autocomplete="off" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Cadastrar Evento</h4>
@@ -442,10 +442,10 @@ if (isset($_SESSION['msg'])) {
 
 <!--so para nao dar erro no Js do Modal -->
 <div id="toast-container"> </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <!-- fullCalendar 2.2.5 -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar/main.min.js' ?>"></script>
@@ -529,4 +529,5 @@ if (isset($_SESSION['msg'])) {
     })
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/schedule-calendar/schedule-calendar.blade.php ENDPATH**/ ?>

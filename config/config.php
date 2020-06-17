@@ -20,16 +20,26 @@ if (substr($_SERVER['DOCUMENT_ROOT'], -1) == '/') {
 /**
  * Diretórios Específicos
  */
-define('DIRIMG',     "img/");
-define('DIRCSS',     "css/");
-define('DIRPLUGINS', "plugins/");
-define('DIRJS',      "js/");
+define('DIRIMG',     "../img/");
+define('DIRCSS',     "../css/");
+define('DIRPLUGINS', "../plugins/");
+define('DIRJS',      "../js/");
 
 /**
  * Acesso ao banco de dados
  */
-//define('HOST', "localhost");
-//define('DB', "");
+//define('HOST', "127.0.0.1");
+//define('DATABASE', "celke");
 //define('USER', "root");
-//define('PASS', "");
+//define('PASSWORD', "");
+
+/*outra dica que eu dou é você usar o $_SERVER['HTTP_HOST'] caso o arquivo fique numa public igual o laravel ele não precisa entrar na pasta só no host direto.
+
+function asset($value) {
+       return $_SERVER['HTTP_HOST'].DIRECTORY_SEPARATOR.$value;
+}
+ai quando quiser usar uma imagem, css e js só chama asset('css/style.css'); 
+asset('js/script.js');
+asset('img/image.png');
+*/
 

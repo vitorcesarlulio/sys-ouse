@@ -63,7 +63,8 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-                <img src=<?= DIRIMG . 'user1-128x128.jpg' ?> alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              
+                <img src="<?= DIRIMG . 'user1-128x128.jpg' ?>" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     Brad Diesel
@@ -79,7 +80,8 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-                <img src=<?= DIRIMG . 'user8-128x128.jpg' ?> alt="User Avatar" class="img-size-50 img-circle mr-3">
+                <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     John Pierce
@@ -141,13 +143,13 @@
         </li>
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" class="user-image img-circle elevation-2" alt="User Image">
             <span class="d-none d-md-inline">Alexander Pierce</span> 
-            <img src="img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
             <!-- User image -->
             <li class="user-header bg-primary">
-              <img src="img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+              <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" class="img-circle elevation-2" alt="User Image">
               <p> Alexander Pierce - Web Developer <small>Membro Desde </small> </p>
             </li>
             <!-- Menu Footer-->
@@ -198,7 +200,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/calendario" class="nav-link">
+                  <a href="/agenda/calendario" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Calendario</p>
                   </a>
@@ -206,9 +208,9 @@
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/eventos" class="nav-link">
+                  <a href="/agenda/eventos" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Agenda</p>
+                    <p>Eventos</p>
                   </a>
                 </li>
               </ul>

@@ -12,56 +12,53 @@ $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 $route->notFound(function() use ($blade){
     echo $blade->render('errors.404');
 });
-$route->getNotFound(function() use ($blade){
-    echo $blade->render('errors.404');
-});
+
 
 $route->get('/home', function() use ($blade) {
     echo $blade->render('home.home');
 });
 
-/**
- * Rotas Cadastro
- */
 $route->get('/cadastro', function() use ($blade) {
     echo $blade->render('cadastro.cadastro');
 });
 
-$route->post('/cadastrar', function() {
-    include '../app/View/cadastro/cadastrar.php';
-});
+#Eventos
+#$route->get('/agenda/eventos', function() use ($blade) {
+#    echo $blade->render('schedule.schedule-events.schedule-events');
+#});
 
 /**
  * Rotas Agenda
  */
-#Calendário
-$route->get('/calendario', function() use ($blade) {
-    echo $blade->render('schedule.calendar');
-});
+$route->group(['prefix' => '/agenda'], function($route) use ($blade){
 
-$route->get('/calendario/listar', function() {
-    include '../app/View/schedule/list_eventos.php';
-});
+    #Calendario
+    $route->get('/calendario', function() use ($blade){
+        echo $blade->render('schedule.schedule-calendar.schedule-calendar');
+    });
 
-$route->post('/calendario/cadastar', function() {
-    include '../app/View/schedule/cad_event.php';
-});
+    $route->get('/calendario/listar', function() {
+        include '../app/View/schedule/schedule-calendar/list-event.php';
+    });
+    
+    $route->post('/calendario/cadastar', function() {
+        include '../app/View/schedule/schedule-calendar/register-event.php';
+    });
 
-$route->post('/calendario/editar', function() {
-    include '../app/View/schedule/edit_event.php';
-});
+    $route->post('/calendario/editar', function() {
+        include '../app/View/schedule/schedule-calendar/edit-event.php';
+    });
+    
+    $route->get('/calendario/apagar/', function() {
+        include '../app/View/schedule/schedule-calendar/delete-events.php';
+    });
 
-$route->get('/calendario/apagar/', function() {
-    include '../app/View/schedule/proc_apagar_evento.php';
-});
+    #Calendario
+    $route->get('/eventos', function() use ($blade){
+        echo $blade->render('schedule.schedule-events.schedule-events');
+    });
 
-//$route->delete('/agenda/apagar/{id:\d+}', function() {
-//    include '../app/View/agenda/proc_apagar_evento.php';
-//});
-
-#Eventos
-$route->get('/eventos', function() use ($blade) {
-    echo $blade->render('schedule.schedule-events.schedule-events');
+    
 });
 
 $route->on();

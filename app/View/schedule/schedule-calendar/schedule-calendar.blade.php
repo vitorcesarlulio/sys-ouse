@@ -38,54 +38,6 @@ if (isset($_SESSION['msg'])) {
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
-            <div class="sticky-top mb-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Draggable Events</h4>
-                    </div>
-                    <div class="card-body">
-                        <div id="external-events">
-                            <div class="external-event bg-success ui-draggable ui-draggable-handle" style="position: relative;">Lunch</div>
-                            <div class="external-event bg-warning ui-draggable ui-draggable-handle" style="position: relative;">Go home</div>
-                            <div class="external-event bg-info ui-draggable ui-draggable-handle" style="position: relative;">Do homework</div>
-                            <div class="external-event bg-primary ui-draggable ui-draggable-handle" style="position: relative;">Work on UI design</div>
-                            <div class="external-event bg-danger ui-draggable ui-draggable-handle" style="position: relative;">Sleep tight</div>
-                            <div class="checkbox">
-                                <label for="drop-remove">
-                                    <input type="checkbox" id="drop-remove">
-                                    remove after drop
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Create Event</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                            <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
-                            <ul class="fc-color-picker" id="color-chooser">
-                                <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
-                                <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
-                                <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
-                                <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                                <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="input-group">
-                            <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                            <div class="input-group-append">
-                                <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="col-md-9">
             <div class="card card-primary">
                 <div class="card-body p-0">
@@ -110,30 +62,35 @@ if (isset($_SESSION['msg'])) {
             <div class="modal-body">
                 <div class="visevent">
                     <dl class="row">
-                        <dt class="col-sm-4">ID:</dt>
+                        <dt class="col-sm-3">ID:</dt>
                         <dd class="col-sm-8" id="id"></dd>
 
-                        <dt class="col-sm-4">Evento:</dt>
-                        <dd class="col-sm-8">A description list is perfect for defining terms.</dd>
+                        <dt class="col-sm-3">Titulo:</dt>
+                        <dd class="col-sm-8" id="title"></dd>
 
-                        <dt class="col-sm-4">Cliente:</dt>
-                        <dd class="col-sm-8">Vitor Cesar</dd>
-
-                        <dt class="col-sm-4">Endereço:</dt>
-                        <dd class="col-sm-8">Rua maceio 670, cidade nova, sbo</dd>
-
-                        <dt class="col-sm-4">Celular:</dt>
-                        <dd class="col-sm-8"> <a href="tel:+55-19-99625-8494"> 19 99625-8494 </a></dd>
-
-                        <dt class="col-sm-4">Inicío:</dt>
+                        <dt class="col-sm-3">Inicío:</dt>
                         <dd class="col-sm-8" id="start"></dd>
 
-                        <dt class="col-sm-4">Fim:</dt>
+                        <dt class="col-sm-3">Fim:</dt>
                         <dd class="col-sm-8" id="end"></dd>
 
-                        <dt class="col-sm-4">Observação:</dt>
-                        <dd class="col-sm-8" id="observation"></dd>
-                    </dl>
+
+
+                        <dt class="col-sm-3">Cliente:</dt>
+                        <dd class="col-sm-8" id="client"></dd>
+
+                        <dt class="col-sm-3">Endereço:</dt>
+                        <dd class="col-sm-8"><a href="" id="address"></a></dd>
+
+                        <dt class="col-sm-3">Celular:</dt>
+                        <dd class="col-sm-8"><a href="" id="phone"></a></dd>
+
+                        <dt class="col-sm-3">Observação:</dt>
+                        <dd class="col-sm-8" id="observation"> hdfhdfhdfhdfhdfhdfhdhdfhdfh</dd>
+
+                        <dt class="col-sm-3"> Observação: </dt>
+                            <textarea class="form-control" id="observation" rows="2" disabled="" style="width: 70%;"> </textarea>
+                        </dl>
 
                     <!--se mudar o botao vai caga tudo por causa desse btn-canc-vis -->
                     <!-- Botões Editar e Apagar -->
@@ -143,9 +100,6 @@ if (isset($_SESSION['msg'])) {
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 </div>
@@ -361,7 +315,7 @@ if (isset($_SESSION['msg'])) {
                                 <div class="form-group">
                                     <label>Observações:</label>
                                     <textarea class="form-control" rows="3" style="height: 50px;">
-                        </textarea>
+                                    </textarea>
                                 </div>
                             </div>
 
@@ -428,6 +382,20 @@ if (isset($_SESSION['msg'])) {
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Hora</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" id="startTime" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

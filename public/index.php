@@ -53,9 +53,21 @@ $route->group(['prefix' => '/agenda'], function($route) use ($blade){
         include '../app/View/schedule/schedule-calendar/delete-events.php';
     });
 
-    #Calendario
+    #Eventos
     $route->get('/eventos', function() use ($blade){
         echo $blade->render('schedule.schedule-events.schedule-events');
+    });
+
+    $route->post('/eventos/listar', function() {
+        include '../app/View/schedule/schedule-events/list-events.php';
+    });
+
+    $route->post('/eventos/apagar', function() {
+        include '../app/View/schedule/schedule-events/delete-event.php';
+    });
+
+    $route->get('/eventos/editar', function() {
+        include '../app/View/schedule/schedule-events/edit-event.php';
     });
 
     

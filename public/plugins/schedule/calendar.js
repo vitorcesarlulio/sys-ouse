@@ -12,11 +12,12 @@ $(function () {
             //Armazene o objeto de evento no elemento DOM para que possamos acessá-lo mais tarde
             $(this).data('eventObject', eventObject)
             //Tornar o evento arrastável usando a interface do usuário do jQuery
+            /*
             $(this).draggable({
                 zIndex: 1070,
                 revert: true, //Fará com que o evento volte a eles
                 revertDuration: 0 //Posição original após o arrasto
-            })
+            })*/
         })
     }
 
@@ -32,15 +33,15 @@ $(function () {
         y = date.getFullYear()
 
     var Calendar = FullCalendar.Calendar;
-    var Draggable = FullCalendarInteraction.Draggable;
+    //var Draggable = FullCalendarInteraction.Draggable;
 
     var containerEl = document.getElementById('external-events');
-    var checkbox = document.getElementById('drop-remove');
+    //var checkbox = document.getElementById('drop-remove');
     var calendarEl = document.getElementById('calendar');
 
     /*
     * inicializar os eventos externos
-    */
+    
     new Draggable(containerEl, {
         itemSelector: '.external-event',
         eventData: function (eventEl) {
@@ -52,40 +53,64 @@ $(function () {
                 textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
             };
         }
-    });
+    });*/
 
-    var calendar = new Calendar(calendarEl, {
+    var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'pt-br',
-        plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid'],
+        plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay, listDay, listWeek'
         },
+
+        views: {
+            listDay: { buttonText: 'Lista Dia' },
+            listWeek: { buttonText: 'Lista Semana' }
+        },
+
+        navLinks: true,
+        defaultView: 'timeGridDay', //quando abrir calendario abrir no dia
+        allDaySlot: false, //evento dia todo, tanto na hora de trazer o horario quanto na hr de visualizar no dia 
+        //weekends: false, //se deseja incluir colunas de sábado / domingo em qualquer uma das visualizações de calendário.
 
         eventLimit: true, //Somente 3 eventos por dia serão visualizados
         'themeSystem': 'bootstrap',
-
-        eventSources: [{
-            url: '/agenda/calendario/listar', //Rota para listar os eventos 
-            type: 'POST',
-            backgroundColor: '#FF4500', //Cor padrão ao cadastrar um evento
-            borderColor:     '#FF4500', //Cor padrão ao cadastrar um evento
-        }],
-
-        /*//defaultTimedEventDuration:'02:00:00',
+        //defaultTimedEventDuration: '00:50:00',
+        //forceEventDuration: true,
+        //defaultEventMinutes: 40,
+        /*//
+        
         eventTimeFormat: { // like '14:30:00'
             hour: '2-digit',
             minute: '2-digit',
-        },
+        },*/
 
         businessHours: {
             //Dias da semana. uma matriz de números inteiros do dia da semana com base em zero (0 = domingo)
             daysOfWeek: [1, 2, 3, 4, 5, 6], //Segunda, Terça...
 
-            startTime: '8:00', //Uma hora de início 
-            endTime: '16:00', //um horário de término
-        }, */
+            startTime: '08:00', //se colocar 08 mas nao colocar mintime ele vai mostrar o horario 07h mas nao vai deixar clicar
+            endTime: '17:00',
+        },
+
+        //selectConstraint: "businessHours", //se ativado n da pra clicar no dia pelo calendario 
+
+        minTime: "08:00:00", //ocultar do calendario as horas que n devem ser preenchidas
+        maxTime: "17:00:00", //nao deixa clicar nas horas n permitidas
+
+        //slotDuration: '2:00:00', //de quanto em quanto tempo a agenda (2 em 2 horas).
+
+        eventSources: [{
+            url: '/agenda/calendario/listar', //Rota para listar os eventos 
+            type: 'POST',
+            backgroundColor: '#FF4500', //Cor padrão ao cadastrar um evento
+            borderColor: '#FF4500', //Cor padrão ao cadastrar um evento
+
+            error: function () {
+                alert('there was an error while fetching events!');
+            },
+        }],
 
         /*
         * EventClick - ao clicar no evento abre um modal para exibir as informações do evento
@@ -99,8 +124,11 @@ $(function () {
             $('#modalViewEvent #title').text(info.event.title);
             $('#modalViewEvent #start').text(info.event.start.toLocaleString());
             $('#modalViewEvent #end').text(info.event.end.toLocaleString());
-            //$('#visualizar #description').text(info.event.extendedProps.description);
-            //$('#visualizar #tel').text(info.event.extendedProps.tel);
+
+            $('#modalViewEvent #client').text(info.event.extendedProps.client); //add sobre
+            $('#modalViewEvent #phone').attr('href', `tel: +55 ${info.event.extendedProps.phone}`);
+            $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${info.event.extendedProps.address}`);
+            $('#modalViewEvent #observation').text(info.event.extendedProps.observation);
 
             $('#modalViewEvent').modal('show');
             //$('#modalEdit').modal('hide');
@@ -112,11 +140,13 @@ $(function () {
         select: function (info) {
             $('#modalRegisterEvent #start').val(info.start.toLocaleString());
             $('#modalRegisterEvent #end').val(info.end.toLocaleString());
+
             $('#modalRegisterEvent').modal('show');
         },
 
         editable: true,
 
+        /*
         droppable: true, //Isso permite que as coisas sejam colocadas no calendário!!!
 
         drop: function (info) {
@@ -125,7 +155,7 @@ $(function () {
                 //Se sim, remova o elemento da lista "Eventos arrastáveis"
                 info.draggedEl.parentNode.removeChild(info.draggedEl);
             }
-        },
+        }, */
 
         extraParams: function () {
             return {
@@ -136,45 +166,6 @@ $(function () {
 
     calendar.render();
     // $('#calendar').fullCalendar()
-
-    /* Adiconar Eventos */
-    var currColor = '#3c8dbc' //Vermelho por padrão
-    //Botão seletor de cores
-    var colorChooser = $('#color-chooser-btn')
-    $('#color-chooser > li > a').click(function (e) {
-        e.preventDefault()
-        //Salvar cor
-        currColor = $(this).css('color')
-        //Adicione efeito de cor ao botão
-        $('#add-new-event').css({
-            'background-color': currColor,
-            'border-color': currColor
-        })
-    })
-    $('#add-new-event').click(function (e) {
-        e.preventDefault()
-        //Obtenha valor e verifique se não é nulo
-        var val = $('#new-event').val()
-        if (val.length == 0) {
-            return
-        }
-
-        //Criar eventos
-        var event = $('<div />')
-        event.css({
-            'background-color': currColor,
-            'border-color': currColor,
-            'color': '#fff'
-        }).addClass('external-event')
-        event.html(val)
-        $('#external-events').prepend(event)
-
-        //Adicionar funcionalidade arrastável
-        ini_events(event)
-
-        //Remover evento da entrada de texto
-        $('#new-event').val('')
-    })
 })
 
 /**
@@ -184,7 +175,7 @@ $(function () {
  * 
  */
 $(document).ready(function () {
-    
+
     $("#formRegisterEvent").on("submit", function (event) {
         event.preventDefault();
         $.ajax({
@@ -202,9 +193,9 @@ $(document).ready(function () {
                 }
             }
         })
-    }); 
+    });
 
-    
+
     //Efeito botão Cancelar do modal Visualizar
     $('.btn-canc-vis').on("click", function () {
         $('.visevent').slideToggle();
@@ -215,7 +206,7 @@ $(document).ready(function () {
     $('.btn-canc-edit').on("click", function () {
         $('.formedit').slideToggle();
         $('.visevent').slideToggle();
-    }); 
+    });
 
     /*
     $('.btn-canc-vis').on('click', function(){
@@ -227,11 +218,10 @@ $(document).ready(function () {
 
 //Mascara para o campo data e hora
 
-
 /*
 * Depois de um tempo ocultar o alerta de cadastro/apagado/editado
 */
 setTimeout(function () {
     var a = document.getElementById("toast-container");
     a.style.display = "none"
-}, 3000);
+}, 4000);

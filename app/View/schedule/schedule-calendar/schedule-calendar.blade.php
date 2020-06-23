@@ -12,6 +12,10 @@ require_once '../app/Model/connection-mysqli.php';
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
+
+<link rel="stylesheet" href="<?= DIRPLUGINS . 'list/main.css' ?>">
+
+
 <!-- Select2 -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
 @endsection
@@ -89,8 +93,8 @@ if (isset($_SESSION['msg'])) {
                         <dd class="col-sm-8" id="observation"> hdfhdfhdfhdfhdfhdfhdhdfhdfh</dd>
 
                         <dt class="col-sm-3"> Observação: </dt>
-                            <textarea class="form-control" id="observation" rows="2" disabled="" style="width: 70%;"> </textarea>
-                        </dl>
+                        <div class="col-sm-9"> <textarea class="form-control" id="observation" rows="2" disabled="" style="width: 100%;"> </textarea></div>
+                    </dl>
 
                     <!--se mudar o botao vai caga tudo por causa desse btn-canc-vis -->
                     <!-- Botões Editar e Apagar -->
@@ -211,39 +215,39 @@ if (isset($_SESSION['msg'])) {
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Nome</label>
-                                    <input type="text" name="name" class="form-control" autofocus placeholder="Entre com o Nome">
+                                    <input type="text" name="name" id="name" class="form-control" autofocus placeholder="Entre com o Nome">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Sobrenome</label>
-                                    <input type="text" name="surname" class="form-control" placeholder="Entre com o Sobrenome">
+                                    <input type="text" name="surname" id="surname" class="form-control" placeholder="Entre com o Sobrenome">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Celular</label>
-                                    <input type="tel" inputmode="decimal" name="cellphone" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="19" placeholder="Entre com o Celular">
+                                    <input type="tel" name="cellphone" id="cellphone" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="19" placeholder="Entre com o Celular">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Telefone</label>
-                                    <input type="tel" inputmode="decimal" name="telephone" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="19" placeholder="Entre com o Telefone">
+                                    <input type="tel" class="form-control" name="telephone" id="telephone" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="19" placeholder="Entre com o Telefone">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Email</label>
-                                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Entre com o Email">
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="Entre com o Email">
                                 </div>
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>CEP</label>
                                     <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
-                                    <input type="tel" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Entre com o CEP" value="13">
+                                    <input type="text" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Entre com o CEP" value="13">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -264,7 +268,7 @@ if (isset($_SESSION['msg'])) {
                                     <input type="text" name="city" class="form-control" style="cursor: not-allowed;" id="localidade" placeholder="Entre com a Cidade" disabled>
                                 </div>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="uf">Estado</label>
                                     <input type="text" name="surname" class="form-control" style="cursor: not-allowed;" id="uf" placeholder="Entre com o Estado" disabled>
@@ -282,6 +286,10 @@ if (isset($_SESSION['msg'])) {
                                         <input class="custom-control-input" type="radio" id="optionBuilding" name="typeresidence" onclick="selTypeResidence();">
                                         <label for="optionBuilding" class="custom-control-label">Apartamento</label>
                                     </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="optionCondominium" name="typeresidence" onclick="selTypeResidence();">
+                                        <label for="optionCondominium" class="custom-control-label">Condominio</label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -289,32 +297,40 @@ if (isset($_SESSION['msg'])) {
                             <div id="number" class="col-sm-2" style="display:none">
                                 <div class="form-group">
                                     <label>Número</label>
-                                    <input type="text" name="number" class="form-control" placeholder="Entre com o Número">
+                                    <input type="text" name="number" id="number" class="form-control" placeholder="Entre com o Número">
                                 </div>
                             </div>
+
+                            <div id="streetCondominium" class="col-sm-5" style="display:none">
+                                <div class="form-group">
+                                    <label>Rua do Condominio</label>
+                                    <input type="text" name="streetCondominium" id="streetCondominium" class="form-control" placeholder="Entre com o Número">
+                                </div>
+                            </div>
+
 
                             <div id="edifice" class="col-sm-7" style="display:none">
                                 <div class="form-group">
                                     <label>Edifício</label>
-                                    <input type="text" name="edifice" class="form-control" placeholder="Entre com o Edifício">
+                                    <input type="text" name="edifice" id="edifice" class="form-control" placeholder="Entre com o Edifício">
                                 </div>
                             </div>
                             <div id="block" class="col-sm-2" style="display:none">
                                 <div class="form-group">
                                     <label>Bloco</label>
-                                    <input type="text" name="block" class="form-control" placeholder="Entre com o Bloco">
+                                    <input type="text" name="block" id="block" class="form-control" placeholder="Entre com o Bloco">
                                 </div>
                             </div>
                             <div id="apartment" class="col-sm-3" style="display:none">
                                 <div class="form-group">
                                     <label>Apartamento</label>
-                                    <input type="text" name="apartment" class="form-control" placeholder="Entre com o Apartamento">
+                                    <input type="text" name="apartment" id="apartment" class="form-control" placeholder="Entre com o Apartamento">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Observações:</label>
-                                    <textarea class="form-control" rows="3" style="height: 50px;">
+                                    <textarea class="form-control" name="observation" id="observation" rows="3" style="height: 50px;">
                                     </textarea>
                                 </div>
                             </div>
@@ -419,6 +435,7 @@ if (isset($_SESSION['msg'])) {
 <script src="<?= DIRPLUGINS . 'fullcalendar/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar/locales/pt-br.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'list/main.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-interaction/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
@@ -472,16 +489,27 @@ if (isset($_SESSION['msg'])) {
 
     function selTypeResidence() {
         var optionHome = document.getElementById("optionHome").checked;
+        var optionCondominium = document.getElementById("optionCondominium").checked;
         if (optionHome) {
             document.getElementById("edifice").style.display = "none";
             document.getElementById("block").style.display = "none";
             document.getElementById("apartment").style.display = "none";
+            document.getElementById("streetCondominium").style.display = "none";
             document.getElementById("number").style.display = "block";
+        } else if (optionCondominium) {
+            document.getElementById("edifice").style.display = "none";
+            document.getElementById("block").style.display = "none";
+            document.getElementById("apartment").style.display = "none";
+            document.getElementById("streetCondominium").style.display = "block";
+            document.getElementById("number").style.display = "block";
+
         } else {
+            document.getElementById("number").style.display = "none";
+            document.getElementById("streetCondominium").style.display = "none";
             document.getElementById("edifice").style.display = "block";
             document.getElementById("block").style.display = "block";
             document.getElementById("apartment").style.display = "block";
-            document.getElementById("number").style.display = "none";
+
         }
     }
 

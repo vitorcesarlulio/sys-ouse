@@ -6,97 +6,83 @@
 <!-- DataTables -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-bs4/css/dataTables.bootstrap4.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-responsive/css/responsive.bootstrap4.min.css' ?>">
+<link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('breadcrumb'); ?>
+<li class="breadcrumb-item">Agenda</li>
+<li class="breadcrumb-item">Eventos</li>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="container-fluid">
-    <div class="card card-default">
-        <div class="card-header" style="background-color:#FF4500">
-            <h3 class="card-title">Select2 (Default Theme)</h3>
+<div id="alertMessageDelete"></div>
 
+<div class="container-fluid">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Filtros</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <!-- /.card-header -->
         <div class="card-body">
             <div class="row">
-                <form role="form" id="quickForm" action="/cadastrar" novalidate="novalidate" autocomplete="off" method="post">
-
+                <form role="form" id="" action="/agenda/eventos/listar" novalidate="novalidate" autocomplete="off" method="POST">
                     <div class="row">
-                        <div class="col-sm-2">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Data de:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    <input type="text" class="form-control" name="start_date" id="start_date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Até:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    <input type="text" class="form-control" name="end_date" id="end_date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
                                 </div>
-                                <!-- /.input group -->
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <!--<div class="col-sm-3">
                             <div class="form-group">
-                                <label>Evento:</label>
-                                <select name="color" class="form-control">
+                                <label>Status:</label>
+                                <select name="status" class="form-control" id="color">
                                     <option value="">Todos</option>
-                                    <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
-                                    <option style="color:#0071c5;" value="#0071c5">Azul</option>
-                                    <option style="color:#FF4500;" value="#FF4500">Laranja</option>
+                                    <option style="background-color:#008000;" value="R">Realizado</option>
+                                    <option style="background-color:#ffff00;" value="A">A fazer</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <label>Ralizado:</label>
-                                <select name="color" class="form-control" id="color">
-                                    <option value="">Todos</option>
-                                    <option value="">Sim</option>
-                                    <option value="">Não</option>
-                                </select>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
-
                 </form>
             </div>
-            <!-- /.row -->
-
-
         </div>
-        <!-- /.card-body -->
         <div class="card-footer">
             <button type="reset" class="btn btn-default" value="Limpar formulário"><i class="fas fa-times"></i></button>
-            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button>
+            <button type="button" class="btn btn-primary" name="search" id="search" value="Search"><i class="fas fa-check"></i></button>
         </div>
     </div>
-    <!-- /.card -->
 
     <div class="row">
         <div class="col-12">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                    <h3 class="card-title">Resultado do Filtro</h3>
                 </div>
-                <!-- /.card-header -->
                 <div class="card-body">
-                    <table id="listar-usuario" class="table table-bordered table-hover">
+                    <table id="listEvents" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="background-color:#FF4500; color: #fff ;border: #FF4500">Cliente</th>
+                                <th>Cliente</th>
                                 <th>Endereço</th>
                                 <th>Celular</th>
                                 <th>Ações</th>
@@ -117,105 +103,8 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="modalEdit">
-        <div class="modal-dialog">
-            <form id="editEvent" method="POST" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Editar Evento</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-sm-12">
-                            <input type="hidden" name="id" id="id">
-                            <div class="form-group">
-                                <label>Titulo</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Select</label>
-                                <select name="color" class="form-control" id="color">
-                                    <option value="">Selecione</option>
-                                    <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
-                                    <option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
-                                    <option style="color:#FF4500;" value="#FF4500">Laranja</option>
-                                    <option style="color:#8B4513;" value="#8B4513">Marrom</option>
-                                    <option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
-                                    <option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
-                                    <option style="color:#A020F0;" value="#A020F0">Roxo</option>
-                                    <option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
-                                    <option style="color:#228B22;" value="#228B22">Verde</option>
-                                    <option style="color:#8B0000;" value="#8B0000">Vermelho</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Inicio do Evento</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Fim do Evento</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-warning">Salvar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal modal-warning fade" id="modal_edit">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Language</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="language_name">Language Name</label>
-                        <input name="language_name" id="language_name" type="text" value="" class="form-control" placeholder="Language Name">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
-                    <button id="edit_action" type="button" class="btn btn-outline">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 <?php $__env->stopSection(); ?>
-
 
 <?php $__env->startSection('script'); ?>
 <!-- DataTables -->
@@ -223,6 +112,9 @@
 <script src="<?= DIRPLUGINS . 'datatables-bs4/js/dataTables.bootstrap4.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
+
+<!-- Alerta de cadastro - Toastr Examples -->
+<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
@@ -234,23 +126,21 @@
         fetch_data();
 
         function fetch_data() {
-            var dataTable = $("#listar-usuario").DataTable({
+            var dataTable = $("#listEvents").DataTable({
                 "autoWidth": false,
                 "responsive": true,
-
                 "processing": true,
                 "serverSide": true,
-
-                "paging": true,
-                "lengthChange": false,
+                //"paging": true,
+                //"lengthChange": false,
                 //"searching": false,
-                "ordering": true,
+                //"ordering": true,
                 //"info": true,
-
 
                 "ajax": {
                     "url": "/agenda/eventos/listar",
-                    "type": "POST"
+                    "type": "POST",
+                    //"data":
                 },
 
                 /*Tirar ordenação da coluna que não desejo*/
@@ -287,6 +177,7 @@
             });
         }
 
+        /*Excluir Evnto */
         $(document).on('click', '.btn-danger', function() {
             var id = $(this).attr("id");
             if (confirm("Deseja mesmo excluir?")) {
@@ -297,18 +188,25 @@
                         id: id
                     },
                     success: function(data) {
-                        $('#alert_message').html('<div class="alert alert-success"> Evnto excluido </div>');
-                        $("#listar-usuario").DataTable().destroy();
+                        $('#alertMessageDelete').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Evento apagado com sucesso!</div></div></div>');
+                        $("#listEvents").DataTable().destroy();
                         fetch_data();
                     }
                 })
             }
         });
-
     });
+
+    /*
+     * Depois de um tempo ocultar o alerta de cadastro/apagado/editado
+     */
+    setTimeout(function() {
+        var a = document.getElementById("alertMessageDelete");
+        a.style.display = "none"
+    }, 8000);
 </script>
 
-<!-- Page script (mascaras) -->
+<!-- Page script (mascaras)
 <script>
     $(function() {
         //Datemask dd/mm/yyyy
@@ -320,6 +218,6 @@
         $('[data-mask]').inputmask()
 
     })
-</script>
+</script> -->
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/schedule-events/schedule-events.blade.php ENDPATH**/ ?>

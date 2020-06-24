@@ -38,22 +38,7 @@
         <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="/home" class="nav-link">Home</a>
-        </li>
       </ul>
-
-      <!-- SEARCH FORM -->
-      <form class="form-inline ml-3">
-        <div class="input-group input-group-sm">
-          <input class="form-control form-control-navbar" type="search" placeholder="Pesquisar" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-navbar" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
-      </form>
 
       <!-- Right navbar links -->
       <ul class="navbar-nav ml-auto">
@@ -166,7 +151,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="/home" class="brand-link">
+      <a href="/" class="brand-link">
         <img src=<?= DIRIMG . 'maior-128.png' ?> alt="AdminLTE Logo" class="brand-image " style="opacity: .8">
         <span class="brand-text font-weight-light">OUSE</span>
       </a>
@@ -202,7 +187,7 @@
                 <li class="nav-item">
                   <a href="/agenda/calendario" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Calendario</p>
+                    <p>Calendário</p>
                   </a>
                 </li>
               </ul>
@@ -234,7 +219,8 @@
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <?php echo $__env->yieldContent('breadcrumb'); ?>
               </ol>
             </div>
           </div>

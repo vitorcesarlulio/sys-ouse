@@ -94,7 +94,7 @@ $(function () {
             endTime: '17:00',
         },
 
-        //selectConstraint: "businessHours", //se ativado n da pra clicar no dia pelo calendario 
+        selectConstraint: "businessHours", //se ativado n da pra clicar no dia pelo calendario 
 
         minTime: "08:00:00", //ocultar do calendario as horas que n devem ser preenchidas
         maxTime: "17:00:00", //nao deixa clicar nas horas n permitidas
@@ -106,8 +106,9 @@ $(function () {
             type: 'POST',
             backgroundColor: '#FF4500', //Cor padrão ao cadastrar um evento
             borderColor: '#FF4500', //Cor padrão ao cadastrar um evento
+            //textColor:,
 
-            error: function () {
+            failure: function () {
                 alert('there was an error while fetching events!');
             },
         }],
@@ -138,8 +139,7 @@ $(function () {
 
         //Traz os dados do dia selecionado (data e hora do dia)
         select: function (info) {
-            $('#modalRegisterEvent #start').val(info.start.toLocaleString());
-            $('#modalRegisterEvent #end').val(info.end.toLocaleString());
+            
 
             $('#modalRegisterEvent').modal('show');
         },

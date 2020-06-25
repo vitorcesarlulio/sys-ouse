@@ -88,8 +88,6 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
                         <tfoot>
                             <tr>
                                 <th>Cliente</th>
@@ -204,10 +202,7 @@
         var a = document.getElementById("alertMessageDelete");
         a.style.display = "none"
     }, 8000);
-</script>
 
-<!-- Page script (mascaras)
-<script>
     $(function() {
         //Datemask dd/mm/yyyy
         $('#datemask').inputmask('dd/mm/yyyy', {
@@ -218,5 +213,5 @@
         $('[data-mask]').inputmask()
 
     })
-</script> -->
+</script>
 @endsection

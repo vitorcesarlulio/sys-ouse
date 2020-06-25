@@ -88,8 +88,6 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
                         <tfoot>
                             <tr>
                                 <th>Cliente</th>
@@ -204,10 +202,7 @@
         var a = document.getElementById("alertMessageDelete");
         a.style.display = "none"
     }, 8000);
-</script>
 
-<!-- Page script (mascaras)
-<script>
     $(function() {
         //Datemask dd/mm/yyyy
         $('#datemask').inputmask('dd/mm/yyyy', {
@@ -218,6 +213,6 @@
         $('[data-mask]').inputmask()
 
     })
-</script> -->
+</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/schedule-events/schedule-events.blade.php ENDPATH**/ ?>

@@ -23,11 +23,14 @@ require_once '../app/Model/connection-mysqli.php';
 <?php $__env->startSection('css'); ?>
 <style>
     .fc-today {
-        background: #228B22 !important;
+        background: #dff7fa !important;
         border: none !important;
         border-top: 1px solid #ddd !important;
-        font-weight: bold;
-        opacity: 0.5 !important;
+        font-weight: bold !important;        
+        /*opacity: 0.5 !important;*/
+    }
+    .fc-day-number{
+        color: #212529 !important;
     }
 </style>
 <?php $__env->stopSection(); ?>
@@ -416,7 +419,7 @@ if (isset($_SESSION['msg'])) {
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="hidden" class="btn toastrDefaultSuccess"></button>
+                <button type="reset" class="btn btn-default" value="Limpar formulário"><i class="fas fa-times"></i></button>
                     <button type="submit" class="btn btn-success toastrDefaultSuccess">Cadastrar</button>
                 </div>
             </div>

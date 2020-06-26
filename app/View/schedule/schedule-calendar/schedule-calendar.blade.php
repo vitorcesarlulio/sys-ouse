@@ -2,7 +2,6 @@
 session_start();
 require_once '../app/Model/connection-mysqli.php';
 ?>
-
 @extends('templates.default')
 @section('title', 'Calendário')
 @section('head')
@@ -12,12 +11,13 @@ require_once '../app/Model/connection-mysqli.php';
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
-
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'list/main.css' ?>">
 
-
-<!-- Select2 -->
+<!-- Select 2 -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
+
+<!-- Timer Picker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
 @endsection
 
 @section('css')
@@ -26,10 +26,11 @@ require_once '../app/Model/connection-mysqli.php';
         background: #dff7fa !important;
         border: none !important;
         border-top: 1px solid #ddd !important;
-        font-weight: bold !important;        
+        font-weight: bold !important;
         /*opacity: 0.5 !important;*/
     }
-    .fc-day-number{
+
+    .fc-day-number {
         color: #212529 !important;
     }
 </style>
@@ -250,7 +251,7 @@ if (isset($_SESSION['msg'])) {
                                 <div class="form-group">
                                     <label>CEP</label>
                                     <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
-                                    <input type="text" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Entre com o CEP" value="13">
+                                    <input type="tel" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Entre com o CEP" value="13">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -375,51 +376,75 @@ if (isset($_SESSION['msg'])) {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6" id="divStartEvent">
+                            <div class="col-sm-5" id="divStartEvent">
                                 <div class="form-group">
-                                    <label>Inicio do Evento</label>
+                                    <label>Data Inicial</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <i class="far fa-calendar-alt"></i>
                                             </span>
                                         </div>
-                                        <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6" id="divEndEvent">
-                                <div class="form-group">
-                                    <label>Fim do Evento</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="far fa-calendar-alt"></i>
-                                            </span>
-                                        </div>
-                                        <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Hora</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="far fa-calendar-alt"></i>
-                                            </span>
-                                        </div>
-                                        <input type="text" id="startTime" class="form-control">
+                                        <input type="text" name="startDate" id="startDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Hora Fim</label>
+                                    <div class="input-group date" id="divStartTime" data-target-input="nearest">
+                                        <div class="input-group-append" data-target="#divStartTime" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            <input type="tel" class="form-control datetimepicker-input" data-target="#divStartTime" name="startTime" id="startTime" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Hora Fim</label>
+                                    <div class="input-group date" id="divEndTime" data-target-input="nearest">
+                                        <div class="input-group-append" data-target="#divEndTime" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            <input type="tel" class="form-control datetimepicker-input" data-target="#divEndTime" name="endTime" id="endTime" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Hora Fim</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="endTime" id="endTime" class="form-control">
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="col-sm-5" id="divEndEvent">
+                                <div class="form-group">
+                                    <label>Data final</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="endDate" id="endDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    </div>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                <button type="reset" class="btn btn-default" value="Limpar formulário"><i class="fas fa-times"></i></button>
                     <button type="submit" class="btn btn-success toastrDefaultSuccess">Cadastrar</button>
                 </div>
             </div>
@@ -430,7 +455,6 @@ if (isset($_SESSION['msg'])) {
 <!--so para nao dar erro no Js do Modal -->
 <div id="toast-container"> </div>
 @endsection
-
 
 @section('script')
 <!-- fullCalendar 2.2.5 -->
@@ -443,89 +467,65 @@ if (isset($_SESSION['msg'])) {
 <script src="<?= DIRPLUGINS . 'fullcalendar-interaction/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
 
-<!-- Select2 -->
-<script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
-
-<!-- Script do Calendario -->
+<!-- Script do Calendário -->
 <script src="<?= DIRPLUGINS . 'schedule/calendar.js' ?>"></script>
 
-<!-- Alerta de cadastro - Toastr Examples -->
-<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
-
-<!-- InputMask (MASCARAS) -->
+<!-- InputMask -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
 <!-- Busca endereço pelo CEP -->
 <script src="<?= DIRPLUGINS . 'search-zip/search-zip.js' ?>"></script>
 
-<!-- jquery-validation (PRECISO PARA DAR A MENSAGEM e validar CPF, CPNJ EMAIL etc) -->
+<!-- JQuery validation -->
 <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
 
+<!-- Select2 -->
+<script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
 
-<!-- Bootstrap Switch -->
-<script src="<?= DIRPLUGINS . 'bootstrap-switch/js/bootstrap-switch.min.js' ?>"></script>
-<script>
+<!-- Date Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+<!-- Timer Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Alerta de cadastro - Toastr Examples -->
+<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
+
+<script type="text/javascript">
+    /* Datemask */
+    $('#datemask').inputmask('dd/mm/yyyy', {
+        'placeholder': 'dd/mm/yyyy'
+    });
+    /* Datemask */
+    $('[data-mask]').inputmask();
+
+    /* Tradução Date Picker */
+    $.fn.datepicker.dates['pt-BR'] = {
+        days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+        daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+        daysMin: ["Do", "2ª", "3ª", "4ª", "5ª", "6ª", "Sá"],
+        months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+        monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+        titleFormat: "MM yyyy",
+        /* Leverages same syntax as 'format' */
+        weekStart: 0
+    };
+
+    /*Bloquear horarios nao permitidos*/
     $(function() {
-        $("input[data-bootstrap-switch]").each(function() {
-            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        $('#divEndTime').datetimepicker({
+            format: 'HH:mm',
+            enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        });
+
+        $('#divStartTime').datetimepicker({
+            format: 'HH:mm',
+            enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
         });
     });
-
-    function selTypeRegister() {
-        var optionRegisterBasic = document.getElementById("optionRegisterBasic").checked;
-        if (optionRegisterBasic) {
-            document.getElementById("divTitleEvent").style.display = "block";
-            document.getElementById("divColorEvent").style.display = "block";
-            document.getElementById("divStartEvent").style.display = "block";
-            document.getElementById("divEndEvent").style.display = "block";
-            document.getElementById("start").value = "";
-            document.getElementById("end").value = "";
-        } else {
-            document.getElementById("divTitleEvent").style.display = "none";
-            document.getElementById("divColorEvent").style.display = "none";
-            document.getElementById("divStartEvent").style.display = "none";
-            document.getElementById("divEndEvent").style.display = "none";
-        }
-    }
-
-    function selTypeResidence() {
-        var optionHome = document.getElementById("optionHome").checked;
-        var optionCondominium = document.getElementById("optionCondominium").checked;
-        if (optionHome) {
-            document.getElementById("edifice").style.display = "none";
-            document.getElementById("block").style.display = "none";
-            document.getElementById("apartment").style.display = "none";
-            document.getElementById("streetCondominium").style.display = "none";
-            document.getElementById("number").style.display = "block";
-        } else if (optionCondominium) {
-            document.getElementById("edifice").style.display = "none";
-            document.getElementById("block").style.display = "none";
-            document.getElementById("apartment").style.display = "none";
-            document.getElementById("streetCondominium").style.display = "block";
-            document.getElementById("number").style.display = "block";
-
-        } else {
-            document.getElementById("number").style.display = "none";
-            document.getElementById("streetCondominium").style.display = "none";
-            document.getElementById("edifice").style.display = "block";
-            document.getElementById("block").style.display = "block";
-            document.getElementById("apartment").style.display = "block";
-
-        }
-    }
-
-    $(function() {
-        //Datemask dd/mm/yyyy
-        $('#datemask').inputmask('dd/mm/yyyy', {
-            'placeholder': 'dd/mm/yyyy'
-        })
-
-        //Money Euro E AS MACARAS TAMBEM SAI SE VC TIRAR
-        $('[data-mask]').inputmask()
-
-    })
 </script>
 
 @endsection

@@ -7,11 +7,17 @@ include_once '../app/Model/connection-pdo.php';
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
 //Converter a data e hora do formato brasileiro para o formato do Banco de Dados
-$dateStart = str_replace('/', '-', $dados['start']);
-$convertDateStart = date("Y-m-d H:i:s", strtotime($dateStart));
+$dateStart = str_replace('/', '-', $dados['startDate']);
+$convertDateStart = date("Y-m-d", strtotime($dateStart));
 
-$dateEnd = str_replace('/', '-', $dados['end']);
-$convertDateEnd = date("Y-m-d H:i:s", strtotime($dateEnd));
+$hourStart = $dados['startTime'];
+$joinDataHourStart = $convertDateStart . " " . $hourStart;
+
+$dateEnd = str_replace('/', '-', $dados['endDate']);
+$convertDateEnd = date("Y-m-d", strtotime($dateEnd));
+
+$hourEnd = $dados['endTime'];
+$joinDataHourEnd = $convertDateStart . " " . $hourEnd;
 
 $queryInsertEvent = "INSERT INTO events (title, cor, start, end) VALUES (:title, :cor, :start, :end)";//observation
 /*$queryInsertClient = "INSERT INTO tb_clientes 
@@ -23,8 +29,8 @@ $queryInsertEvent = "INSERT INTO events (title, cor, start, end) VALUES (:title,
 $insertEvent = $conn->prepare($queryInsertEvent);
 $insertEvent->bindParam(':title', $dados['title']);
 $insertEvent->bindParam(':cor', $dados['color']);
-$insertEvent->bindParam(':start', $convertDateStart);
-$insertEvent->bindParam(':end', $convertDateEnd);
+$insertEvent->bindParam(':start', $joinDataHourStart);
+$insertEvent->bindParam(':end', $joinDataHourEnd);
 //$insertEvent->bindParam(':observation', $dados['observation']);
 
 /*

@@ -11,13 +11,6 @@ $(function () {
             }
             //Armazene o objeto de evento no elemento DOM para que possamos acessá-lo mais tarde
             $(this).data('eventObject', eventObject)
-            //Tornar o evento arrastável usando a interface do usuário do jQuery
-            /*
-            $(this).draggable({
-                zIndex: 1070,
-                revert: true, //Fará com que o evento volte a eles
-                revertDuration: 0 //Posição original após o arrasto
-            })*/
         })
     }
 
@@ -39,21 +32,6 @@ $(function () {
     //var checkbox = document.getElementById('drop-remove');
     var calendarEl = document.getElementById('calendar');
 
-    /*
-    * inicializar os eventos externos
-    
-    new Draggable(containerEl, {
-        itemSelector: '.external-event',
-        eventData: function (eventEl) {
-            console.log(eventEl);
-            return {
-                title: eventEl.innerText,
-                backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
-                borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
-                textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
-            };
-        }
-    });*/
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'pt-br',
@@ -65,8 +43,11 @@ $(function () {
         },
 
         views: {
+            dayGridMonth: { buttonText: 'M' },
+            timeGridWeek: { buttonText: 'S' },
+            timeGridDay: { buttonText: 'D' },
             listDay: { buttonText: 'Lista Dia' },
-            listWeek: { buttonText: 'Lista Semana' }
+            listWeek: { buttonText: 'Lista Semana'}
         },
 
         navLinks: true,
@@ -88,7 +69,7 @@ $(function () {
 
         businessHours: {
             //Dias da semana. uma matriz de números inteiros do dia da semana com base em zero (0 = domingo)
-            daysOfWeek: [1, 2, 3, 4, 5, 6], //Segunda, Terça...
+            daysOfWeek: [1, 2, 3, 4, 5], //Segunda, Terça...
 
             startTime: '08:00', //se colocar 08 mas nao colocar mintime ele vai mostrar o horario 07h mas nao vai deixar clicar
             endTime: '17:00',
@@ -99,7 +80,7 @@ $(function () {
         minTime: "08:00:00", //ocultar do calendario as horas que n devem ser preenchidas
         maxTime: "17:00:00", //nao deixa clicar nas horas n permitidas
 
-        //slotDuration: '2:00:00', //de quanto em quanto tempo a agenda (2 em 2 horas).
+        //slotDuration: '00:25:00', //de quanto em quanto tempo a agenda (2 em 2 horas).
 
         eventSources: [{
             url: '/agenda/calendario/listar', //Rota para listar os eventos 
@@ -113,9 +94,8 @@ $(function () {
             },
         }],
 
-        /*
-        * EventClick - ao clicar no evento abre um modal para exibir as informações do evento
-        */
+        /* EventClick - ao clicar no evento abre um modal para exibir as informações do evento */
+        
         eventClick: function (info) {
             $("#deleteEvent").attr("href", "/agenda/calendario/apagar/" + "?id=" + info.event.id);
             info.jsEvent.preventDefault();
@@ -139,23 +119,12 @@ $(function () {
 
         //Traz os dados do dia selecionado (data e hora do dia)
         select: function (info) {
-            
+
 
             $('#modalRegisterEvent').modal('show');
         },
 
         editable: true,
-
-        /*
-        droppable: true, //Isso permite que as coisas sejam colocadas no calendário!!!
-
-        drop: function (info) {
-            //A caixa de seleção "remover após soltar" está marcada?
-            if (checkbox.checked) {
-                //Se sim, remova o elemento da lista "Eventos arrastáveis"
-                info.draggedEl.parentNode.removeChild(info.draggedEl);
-            }
-        }, */
 
         extraParams: function () {
             return {
@@ -168,11 +137,10 @@ $(function () {
     // $('#calendar').fullCalendar()
 })
 
-/**
+/*
  * Cadastrar um Evento
  * registerEvent = id do Formulario de cadastro
  * event.preventDefault(); = não fecha o modal sem autorizar
- * 
  */
 $(document).ready(function () {
 
@@ -216,11 +184,101 @@ $(document).ready(function () {
 
 });
 
-//Mascara para o campo data e hora
+/* Função para mostrar ou ocultar campo de acordo com seleção (Marcar horário?) */
+function selTypeRegister() {
+    var optionRegisterBasic = document.getElementById("optionRegisterBasic").checked;
+    if (optionRegisterBasic) {
+        document.getElementById("divTitleEvent").style.display = "block";
+        document.getElementById("divColorEvent").style.display = "block";
+        document.getElementById("divStartEvent").style.display = "block";
+        document.getElementById("divEndEvent").style.display = "block";
+        document.getElementById("start").value = "";
+        document.getElementById("end").value = "";
+    } else {
+        document.getElementById("divTitleEvent").style.display = "none";
+        document.getElementById("divColorEvent").style.display = "none";
+        document.getElementById("divStartEvent").style.display = "none";
+        document.getElementById("divEndEvent").style.display = "none";
+    }
+}
 
-/*
-* Depois de um tempo ocultar o alerta de cadastro/apagado/editado
-*/
+/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de residencia) */
+function selTypeResidence() {
+    var optionHome = document.getElementById("optionHome").checked;
+    var optionCondominium = document.getElementById("optionCondominium").checked;
+    if (optionHome) {
+        document.getElementById("edifice").style.display = "none";
+        document.getElementById("block").style.display = "none";
+        document.getElementById("apartment").style.display = "none";
+        document.getElementById("streetCondominium").style.display = "none";
+        document.getElementById("number").style.display = "block";
+    } else if (optionCondominium) {
+        document.getElementById("edifice").style.display = "none";
+        document.getElementById("block").style.display = "none";
+        document.getElementById("apartment").style.display = "none";
+        document.getElementById("streetCondominium").style.display = "block";
+        document.getElementById("number").style.display = "block";
+
+    } else {
+        document.getElementById("number").style.display = "none";
+        document.getElementById("streetCondominium").style.display = "none";
+        document.getElementById("edifice").style.display = "block";
+        document.getElementById("block").style.display = "block";
+        document.getElementById("apartment").style.display = "block";
+
+    }
+}
+
+
+/* Date Picker */
+$(document).ready(function() {
+    //var inputEndDate = $('input[name="endDate"]'); //our date input has the name "date"
+    var inputStartDate = $('input[name="startDate"]'); //our date input has the name "date"
+    var container = $('.form-group form').length > 0 ? $('.form-group form').parent() : "body";
+
+    /* inputEndDate.datepicker({
+         format: 'dd/mm/yyyy',
+         container: container,
+         todayHighlight: true,
+         autoclose: true,
+         startDate: 'd',
+         language: 'pt-BR',
+         daysOfWeekDisabled: [0, 6],
+     })*/
+
+    inputStartDate.datepicker({
+        format: 'dd/mm/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+        startDate: 'd',
+        language: 'pt-BR',
+        daysOfWeekDisabled: [0, 6],
+    })
+});
+
+/*Ao clicar nos campos, esconder teclado mobile */
+(function($) {
+    // Create plugin that prevents showing the keyboard
+    $.fn.preventKeyboard = function() {
+        return this
+            .filter('input')
+            .on('focus', function() {
+                $(this)
+                    .attr('readonly', 'readonly')
+                    .blur()
+                    .removeAttr('readonly');
+            });
+    };
+
+    $(document).ready(function($) {
+        // Prevent showing keyboard for the date field.
+        //$('input[name=endDate]').preventKeyboard();
+        $('input[name=startDate]').preventKeyboard();
+    });
+}(jQuery));
+
+/* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
 setTimeout(function () {
     var a = document.getElementById("toast-container");
     a.style.display = "none"

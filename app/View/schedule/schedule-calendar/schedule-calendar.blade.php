@@ -36,6 +36,11 @@ require_once '../app/Model/connection-mysqli.php';
 </style>
 @endsection
 
+@section('breadcrumb')
+<li class="breadcrumb-item">Agenda</li>
+<li class="breadcrumb-item">Calendário</li>
+@endsection
+
 @section('content')
 <?php
 if (isset($_SESSION['msg'])) {
@@ -494,13 +499,16 @@ if (isset($_SESSION['msg'])) {
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function () {
     /* Datemask */
     $('#datemask').inputmask('dd/mm/yyyy', {
         'placeholder': 'dd/mm/yyyy'
     });
     /* Datemask */
-    $('[data-mask]').inputmask();
+    $('[data-mask]').inputmask(); 
+});
 
     /* Tradução Date Picker */
     $.fn.datepicker.dates['pt-BR'] = {
@@ -514,6 +522,7 @@ if (isset($_SESSION['msg'])) {
         weekStart: 0
     };
 
+    $(document).ready(function () {
     /*Bloquear horarios nao permitidos*/
     $(function() {
         $('#divEndTime').datetimepicker({
@@ -526,6 +535,8 @@ if (isset($_SESSION['msg'])) {
             enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
         });
     });
+});
+
 </script>
 
 @endsection

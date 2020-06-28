@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 include_once '../app/Model/connection-pdo.php';
 include_once '../app/Model/connection-mysqli.php';
 

@@ -22,7 +22,8 @@
   @yield('css')
 </head>
 
-<body class="hold-transition pace-primary pace-done sidebar-mini  sidebar-collapse "> <!--layout-navbar-fixed-->
+<body class="hold-transition pace-primary pace-done sidebar-mini  sidebar-collapse ">
+  <!--layout-navbar-fixed-->
   <div class="pace pace-inactive">
     <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
       <div class="pace-progress-inner"></div>
@@ -48,7 +49,7 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-              
+
                 <img src="<?= DIRIMG . 'user1-128x128.jpg' ?>" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
@@ -66,7 +67,7 @@
               <!-- Message Start -->
               <div class="media">
                 <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                
+
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     John Pierce
@@ -129,7 +130,7 @@
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" class="user-image img-circle elevation-2" alt="User Image">
-            <span class="d-none d-md-inline">Alexander Pierce</span> 
+            <span class="d-none d-md-inline">Alexander Pierce</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
             <!-- User image -->
@@ -180,7 +181,7 @@
 
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-calendar-alt"></i>
+                <i class="nav-icon fas fa-calendar-alt"></i>
                 <p> Agenda <i class="right fas fa-angle-left"></i> </p>
               </a>
               <ul class="nav nav-treeview">
@@ -247,21 +248,34 @@
   <!-- Scripts, JavaScript (efeitos, validaçoes), jQuery -->
   <!-- PADRÃO jQuery -->
   <script src="<?= DIRPLUGINS . 'jquery/jquery.min.js' ?>"></script>
-  
+
   <!-- Bootstrap 4 (nao sei o que é) -->
   <script src="<?= DIRPLUGINS . 'bootstrap/js/bootstrap.bundle.min.js' ?>"></script>
 
   <!-- jQuery UI -->
-<script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
 
   <!-- AdminLTE App (nao sei o que é)-->
   <script src="<?= DIRJS . 'adminlte.min.js' ?>"></script>
-  
+
   <!-- AdminLTE for demo purposes (nao sei o que é) -->
   <script src="<?= DIRJS . 'demo.js' ?>"></script>
 
   @yield('script')
 
+  <script>
+    $(document).ready(function() {
+      $(document).keypress(function(e) {
+        if (e.wich == 67 || e.keyCode == 67) {
+          //window.location.replace("/agenda/calendario");
+          window.location.href = "/agenda/calendario";
+        }
+        if (e.wich == 69 || e.keyCode == 69) {
+          window.location.href = "/agenda/eventos";
+        }
+      });
+    });
+  </script>
   <!-- PADRÃO pace-progress (ao carregar a pagina faz o efeito na barra de favoritos)-->
   <script src="<?= DIRPLUGINS . 'pace-progress/pace.min.js' ?>"></script>
 

@@ -79,20 +79,26 @@
                     <h3 class="card-title">Resultado do Filtro</h3>
                 </div>
                 <div class="card-body">
-                    <table id="listEvents" class="table table-bordered table-hover">
+                    <table id="listEvents" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Cliente</th>
-                                <th>Endereço</th>
-                                <th>Celular</th>
+                                <th>ID</th>
+                                <th>Titulo</th>
+                                <th>cor</th>
+                                <th>start</th>
+                                <th>end</th>
+                                <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Cliente</th>
-                                <th>Endereço</th>
-                                <th>Celular</th>
+                                <th>ID</th>
+                                <th>Titulo</th>
+                                <th>cor</th>
+                                <th>start</th>
+                                <th>end</th>
+                                <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </tfoot>
@@ -119,11 +125,11 @@
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
 <!-- page script -->
-<script>
+<script type="text/javascript" language="javascript">
     $(document).ready(function() {
-        fetch_data();
+        fetch_data('no');
 
-        function fetch_data() {
+        function fetch_data(is_date_search, start_date='', end_date='') {
             var dataTable = $("#listEvents").DataTable({
                 "autoWidth": false,
                 "responsive": true,
@@ -138,15 +144,18 @@
                 "ajax": {
                     "url": "/agenda/eventos/listar",
                     "type": "POST",
-                    //"data":
+                    "data": {
+                        is_date_search:is_date_search, start_date:start_date, end_date:end_date
+                    }
                 },
 
-                /*Tirar ordenação da coluna que não desejo*/
+                /* Tirar ordenação da coluna que não desejo 
                 "columnDefs": [{
                     "targets": [3],
                     "orderable": false
-                }],
+                }],*/
 
+                /* Tradução */
                 "language": {
                     "lengthMenu": "Mostrando _MENU_ resgistros por página",
                     "zeroRecords": "Nenhum registro encontrado",
@@ -175,7 +184,7 @@
             });
         }
 
-        /*Excluir Evnto */
+        /* Excluir Evnto */
         $(document).on('click', '.btn-danger', function() {
             var id = $(this).attr("id");
             if (confirm("Deseja mesmo excluir?")) {
@@ -193,11 +202,23 @@
                 })
             }
         });
+
+        $('#search').click(function() {
+            var start_date = $('#start_date').val();
+            var end_date = $('#end_date').val();
+            if (start_date != '' && end_date != '') {
+                $('#listEvents').DataTable().destroy();
+                fetch_data('yes', start_date, end_date);
+            } else {
+                alert("Data é necessária!");
+            }
+        });
+
     });
 
-    /*
-     * Depois de um tempo ocultar o alerta de cadastro/apagado/editado
-     */
+
+
+    /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado 
     setTimeout(function() {
         var a = document.getElementById("alertMessageDelete");
         a.style.display = "none"
@@ -212,6 +233,6 @@
         //Money Euro E AS MACARAS TAMBEM SAI SE VC TIRAR
         $('[data-mask]').inputmask()
 
-    })
+    })*/
 </script>
 @endsection

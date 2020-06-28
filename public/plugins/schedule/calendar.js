@@ -37,7 +37,7 @@ $(function () {
         locale: 'pt-br',
         plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
         header: {
-            left: 'prev,next today',
+            left: 'prev,next', //, today botao para quando clicar ir ate o dia
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay, listDay, listWeek'
         },
@@ -75,7 +75,7 @@ $(function () {
             endTime: '17:00',
         },
 
-        selectConstraint: "businessHours", //se ativado n da pra clicar no dia pelo calendario 
+        //selectConstraint: "businessHours", //se ativado n da pra clicar no dia pelo calendario 
 
         minTime: "08:00:00", //ocultar do calendario as horas que n devem ser preenchidas
         maxTime: "17:00:00", //nao deixa clicar nas horas n permitidas
@@ -85,8 +85,8 @@ $(function () {
         eventSources: [{
             url: '/agenda/calendario/listar', //Rota para listar os eventos 
             type: 'POST',
-            backgroundColor: '#FF4500', //Cor padrão ao cadastrar um evento
-            borderColor: '#FF4500', //Cor padrão ao cadastrar um evento
+            backgroundColor: '#FFC107', //Cor padrão ao cadastrar um evento
+            borderColor: '#FFC107', //Cor padrão ao cadastrar um evento
             //textColor:,
 
             failure: function () {
@@ -229,7 +229,6 @@ function selTypeResidence() {
     }
 }
 
-
 /* Date Picker */
 $(document).ready(function() {
     //var inputEndDate = $('input[name="endDate"]'); //our date input has the name "date"
@@ -257,6 +256,7 @@ $(document).ready(function() {
     })
 });
 
+$(document).ready(function () {
 /*Ao clicar nos campos, esconder teclado mobile */
 (function($) {
     // Create plugin that prevents showing the keyboard
@@ -277,6 +277,7 @@ $(document).ready(function() {
         $('input[name=startDate]').preventKeyboard();
     });
 }(jQuery));
+});
 
 /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
 setTimeout(function () {

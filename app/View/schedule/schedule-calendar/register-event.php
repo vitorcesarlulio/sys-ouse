@@ -6,20 +6,24 @@ include_once '../app/Model/connection-pdo.php';
 //var que recebe os dados que o Js esta enviando                
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-//Converter a data e hora do formato brasileiro para o formato do Banco de Dados
+/* Converter a Data em americano */
 $dateStart = str_replace('/', '-', $dados['startDate']);
 $convertDateStart = date("Y-m-d", strtotime($dateStart));
 
+/* Unir a Data Inicial e a Hora Inicial*/
 $hourStart = $dados['startTime'];
 $joinDataHourStart = $convertDateStart . " " . $hourStart;
 
-$dateEnd = str_replace('/', '-', $dados['endDate']);
-$convertDateEnd = date("Y-m-d", strtotime($dateEnd));
+//$dateEnd = str_replace('/', '-', $dados['endTime']);
+//$convertDateEnd = date("Y-m-d", strtotime($dateEnd));
 
+/* Unir a Data Inicial e a Hora Final*/
 $hourEnd = $dados['endTime'];
 $joinDataHourEnd = $convertDateStart . " " . $hourEnd;
 
-$queryInsertEvent = "INSERT INTO events (title, cor, start, end) VALUES (:title, :cor, :start, :end)";//observation
+$valueStatus= "A";
+
+$queryInsertEvent = "INSERT INTO events (title, cor, start, end, status) VALUES (:title, :cor, :start, :end, :status)";//observation
 /*$queryInsertClient = "INSERT INTO tb_clientes 
                         (name, surname, cellphone, telephone, email, cep, street, neighborhood, city, state, number, edifice, block, apartment) 
                     VALUES
@@ -31,6 +35,7 @@ $insertEvent->bindParam(':title', $dados['title']);
 $insertEvent->bindParam(':cor', $dados['color']);
 $insertEvent->bindParam(':start', $joinDataHourStart);
 $insertEvent->bindParam(':end', $joinDataHourEnd);
+$insertEvent->bindParam(':status', $valueStatus);
 //$insertEvent->bindParam(':observation', $dados['observation']);
 
 /*
@@ -50,23 +55,6 @@ $insertClient->bindParam(':block', $dados['block']);
 $insertClient->bindParam(':apartment', $dados['apartment']);
 v
 */
-
-/*
-name  
-surname 
-cellphone
- telephone 
- email 
- cep 
- street 
- neighborhood
-  city 
-  state 
-  number 
-  edifice 
-  block 
-  apartment
- */
 
 $mesageSuccess =
     '<div id="toast-container" class="toast-top-right">

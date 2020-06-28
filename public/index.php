@@ -9,8 +9,8 @@ $blade = new Blade('../app/View/', '../app/View/cache');
 
 $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 
-$route->notFound(function () use ($blade) {
-    echo $blade->render('errors.404');
+$route->notFound(function () {
+    include '../app/View/errors/404.php';
 });
 
 
@@ -63,6 +63,10 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
 
     $route->get('/eventos/editar', function () {
         include '../app/View/schedule/schedule-events/edit-event.php';
+    });
+    
+    $route->get('/eventos/mudar-status', function () {
+        include '../app/View/schedule/schedule-events/update-status.php';
     });
 });
 

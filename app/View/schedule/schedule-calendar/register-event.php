@@ -3,79 +3,74 @@ session_start();
 
 include_once '../app/Model/connection-pdo.php';
 
-//var que recebe os dados que o Js esta enviando                
+/* Recebendo os dados que o Js esta enviando */
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-/* Converter a Data em americano */
-$dateStart = str_replace('/', '-', $dados['startDate']);
-$convertDateStart = date("Y-m-d", strtotime($dateStart));
+/* Verificando se a opção "Agendar Horario" foi marcada como "Sim" */
+if ($dados['scheduleTime'] == "timeYes") {
 
-/* Unir a Data Inicial e a Hora Inicial*/
-$hourStart = $dados['startTime'];
-$joinDataHourStart = $convertDateStart . " " . $hourStart;
+    /* Converter a Data em no padrão americano */
+    $dateStart = str_replace('/', '-', $dados['startDate']);
+    $convertDateStart = date("Y-m-d", strtotime($dateStart));
 
-//$dateEnd = str_replace('/', '-', $dados['endTime']);
-//$convertDateEnd = date("Y-m-d", strtotime($dateEnd));
+    /* Unir a Data Inicial e a Hora Inicial*/
+    $hourStart = $dados['startTime'];
+    $joinDataHourStart = $convertDateStart . " " . $hourStart;
 
-/* Unir a Data Inicial e a Hora Final*/
-$hourEnd = $dados['endTime'];
-$joinDataHourEnd = $convertDateStart . " " . $hourEnd;
+    /* Unir a Data Inicial e a Hora Final*/
+    $hourEnd = $dados['endTime'];
+    $joinDataHourEnd = $convertDateStart . " " . $hourEnd;
 
-$valueStatus= "A";
+    $queryInsertEvent = "INSERT INTO events (title, start, end, status, cor) VALUES (:title, :start, :end, :status, :cor)"; //observation
 
-$queryInsertEvent = "INSERT INTO events (title, cor, start, end, status) VALUES (:title, :cor, :start, :end, :status)";//observation
-/*$queryInsertClient = "INSERT INTO tb_clientes 
+    /*$queryInsertClient = "INSERT INTO tb_clientes 
                         (name, surname, cellphone, telephone, email, cep, street, neighborhood, city, state, number, edifice, block, apartment) 
                     VALUES
                         (:name, :surname, :cellphone, :telephone, :email, :cep, :street, :neighborhood, :city, :state, :number, :edifice, :block, :apartment)";
 */
 
-$insertEvent = $conn->prepare($queryInsertEvent);
-$insertEvent->bindParam(':title', $dados['title']);
-$insertEvent->bindParam(':cor', $dados['color']);
-$insertEvent->bindParam(':start', $joinDataHourStart);
-$insertEvent->bindParam(':end', $joinDataHourEnd);
-$insertEvent->bindParam(':status', $valueStatus);
-//$insertEvent->bindParam(':observation', $dados['observation']);
+    $valueStatus = "A";
+    $valueCor = "";
 
-/*
-$insertClient = $conn->prepare($queryInsertClient);
-$insertClient->bindParam(':name', $dados['name']);
-$insertClient->bindParam(':surname', $dados['surname']);
-$insertClient->bindParam(':cellphone', $dados['cellphone']);
-$insertClient->bindParam(':telephone', $dados['telephone']);
-$insertClient->bindParam(':email', $dados['email']);
-$insertClient->bindParam(':cep', $dados['cep']);
-$insertClient->bindParam(':street', $dados['street']);
-$insertClient->bindParam(':neighborhood', $dados['neighborhood']);
-$insertClient->bindParam(':city', $dados['city']);
-$insertClient->bindParam(':state', $dados['state']);
-$insertClient->bindParam(':edifice', $dados['edifice']);
-$insertClient->bindParam(':block', $dados['block']);
-$insertClient->bindParam(':apartment', $dados['apartment']);
-v
-*/
+    $insertEvent = $connectionDataBase->prepare($queryInsertEvent);
+    $insertEvent->bindParam(':title', $dados['title']);
+    $insertEvent->bindParam(':cor', $valueCor);
+    $insertEvent->bindParam(':start', $joinDataHourStart);
+    $insertEvent->bindParam(':end', $joinDataHourEnd);
+    $insertEvent->bindParam(':status', $valueStatus);
+    //$insertEvent->bindParam(':observation', $dados['observation']);
 
-$mesageSuccess =
-    '<div id="toast-container" class="toast-top-right">
-    <div class="toast toast-success" aria-live="polite" style="">
-        <div class="toast-message">Evento cadastrado com Sucesso!</div>
-    </div>
-</div>';
+    /*
+    $insertClient = $connectionDataBase->prepare($queryInsertClient);
+    $insertClient->bindParam(':name', $dados['name']);
+    $insertClient->bindParam(':surname', $dados['surname']);
+    $insertClient->bindParam(':cellphone', $dados['cellphone']);
+    $insertClient->bindParam(':telephone', $dados['telephone']);
+    $insertClient->bindParam(':email', $dados['email']);
+    $insertClient->bindParam(':cep', $dados['cep']);
+    $insertClient->bindParam(':street', $dados['street']);
+    $insertClient->bindParam(':neighborhood', $dados['neighborhood']);
+    $insertClient->bindParam(':city', $dados['city']);
+    $insertClient->bindParam(':state', $dados['state']);
+    $insertClient->bindParam(':edifice', $dados['edifice']);
+    $insertClient->bindParam(':block', $dados['block']);
+    $insertClient->bindParam(':apartment', $dados['apartment']);
+    
+    */
 
-$mesageError =
-    '<div id="toast-container" class="toast-top-right">
-    <div class="toast toast-error" aria-live="assertive" style="">
-        <div class="toast-message">Erro: evento não cadastrado com Sucesso!</div>
-    </div>
-</div>';
+    $mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento e cliente cadastrados!</div></div></div>';
+    $mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: evento e cliente não cadastrados!</div></div></div>';
 
-if ($insertEvent->execute()) {
-    $retorna = ['sit' => true, 'msg' => $mesageSuccess];
-    $_SESSION['msg'] = $mesageSuccess;
-} else {
-    $retorna = ['sit' => true, 'msg' => $mesageError];
+    if ($insertEvent->execute()) {
+        $retorna = ['sit' => true, 'msg' => $mesageSuccess];
+        $_SESSION['msg'] = $mesageSuccess;
+    } else {
+        $retorna = ['sit' => true, 'msg' => $mesageError];
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($retorna);
+} else if ($dados['scheduleTime'] == "timeNo") {
+
+    //so cadastra a pessoa
 }
-
-header('Content-Type: application/json');
-echo json_encode($retorna);

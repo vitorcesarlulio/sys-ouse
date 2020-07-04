@@ -2,9 +2,9 @@
 session_start();
 require_once '../app/Model/connection-mysqli.php';
 ?>
-@extends('templates.default')
-@section('title', 'Calendário')
-@section('head')
+
+<?php $__env->startSection('title', 'Calendário'); ?>
+<?php $__env->startSection('head'); ?>
 <!-- fullCalendar -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.css' ?>">
@@ -18,9 +18,9 @@ require_once '../app/Model/connection-mysqli.php';
 
 <!-- Timer Picker -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
     .fc-today {
         background: #dff7fa !important;
@@ -34,14 +34,14 @@ require_once '../app/Model/connection-mysqli.php';
         color: #212529 !important;
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('breadcrumb')
+<?php $__env->startSection('breadcrumb'); ?>
 <li class="breadcrumb-item">Agenda</li>
 <li class="breadcrumb-item">Calendário</li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <?php
 if (isset($_SESSION['msg'])) {
     echo $_SESSION['msg'];
@@ -119,10 +119,55 @@ if (isset($_SESSION['msg'])) {
                         <div class="row">
                             <div class="col-sm-12">
                                 <input type="hidden" name="id" id="id">
-                                
                                 <div class="form-group">
                                     <label>Titulo</label>
                                     <input type="text" name="title" id="title" class="form-control" placeholder="Titulo do Evento">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Select</label>
+                                    <select name="color" class="form-control" id="color">
+                                        <option value="">Selecione</option>
+                                        <option style="color:#FFD700;" value="#FFD700">Amarelo</option>
+                                        <option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
+                                        <option style="color:#FF4500;" value="#FF4500">Laranja</option>
+                                        <option style="color:#8B4513;" value="#8B4513">Marrom</option>
+                                        <option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
+                                        <option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
+                                        <option style="color:#A020F0;" value="#A020F0">Roxo</option>
+                                        <option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
+                                        <option style="color:#228B22;" value="#228B22">Verde</option>
+                                        <option style="color:#8B0000;" value="#8B0000">Vermelho</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Inicio do Evento</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="start" id="start" class="form-control" onkeypress="DataHora(event, this)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Fim do Evento</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="end" id="end" class="form-control" onkeypress="DataHora(event, this)">
+                                    </div>
                                 </div>
                             </div>
 
@@ -419,9 +464,9 @@ if (isset($_SESSION['msg'])) {
 
 <!--so para nao dar erro no Js do Modal -->
 <div id="toast-container"> </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <!-- fullCalendar 2.2.5 -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar/main.min.js' ?>"></script>
@@ -526,4 +571,5 @@ if (isset($_SESSION['msg'])) {
     });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/schedule-calendar/schedule-calendar.blade.php ENDPATH**/ ?>

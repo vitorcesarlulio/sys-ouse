@@ -1,20 +1,20 @@
-@extends('templates.default')
 
-@section('title', 'Eventos')
 
-@section('head')
+<?php $__env->startSection('title', 'Eventos'); ?>
+
+<?php $__env->startSection('head'); ?>
 <!-- DataTables -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-bs4/css/dataTables.bootstrap4.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-responsive/css/responsive.bootstrap4.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('breadcrumb')
+<?php $__env->startSection('breadcrumb'); ?>
 <li class="breadcrumb-item">Agenda</li>
 <li class="breadcrumb-item">Eventos</li>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div id="alertMessageDelete"></div>
 
 <div class="container-fluid">
@@ -162,9 +162,9 @@
     </div>
 </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <!-- DataTables -->
 <script src="<?= DIRPLUGINS . 'datatables/jquery.dataTables.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-bs4/js/dataTables.bootstrap4.min.js' ?>"></script>
@@ -276,4 +276,5 @@
 
     })
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/schedule-events/schedule-events.blade.php ENDPATH**/ ?>

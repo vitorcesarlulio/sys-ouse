@@ -13,6 +13,6 @@ $sql = "update events set
 				where 
 					id = '$id'";
 								
-mysqli_query($conn, $sql) or die ("Erro na sql!") ;
+mysqli_query($connectionDataBase, $sql) or die ("Erro na sql!") ;
 
 header("Location: /agenda/eventos");

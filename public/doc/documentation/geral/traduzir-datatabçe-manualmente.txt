@@ -1,0 +1,54 @@
+/* Tradução */
+                "language": {
+                    "lengthMenu": "Mostrando _MENU_ resgistros por página",
+                    "zeroRecords": "Nenhum registro encontrado",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum resgistro disponível",
+                    "infoFiltered": "(Filtrado de _MAX_ registros no total)",
+                    "search": "Pesquisar:",
+                    "processing": "Processando...",
+                    "loadingRecords": "Loading...",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior"
+                    },
+
+                    /* "decimal":        "",
+                    "emptyTable":     "No data available in table",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "aria": {
+                        "sortAscending":  ": activate to sort column ascending",
+                        "sortDescending": ": activate to sort column descending"
+                    }*/
+                }
+
+{
+    "decimal":        "",
+    "emptyTable":     "No data available in table",
+    "info":           "Showing _START_ to _END_ of _TOTAL_ entries",
+    "infoEmpty":      "Showing 0 to 0 of 0 entries",
+    "infoFiltered":   "(filtered from _MAX_ total entries)",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "Show _MENU_ entries",
+    "loadingRecords": "Loading...",
+    "processing":     "Processing...",
+    "search":         "Search:",
+    "zeroRecords":    "No matching records found",
+    "paginate": {
+        "first":      "First",
+        "last":       "Last",
+        "next":       "Next",
+        "previous":   "Previous"
+    },
+    "aria": {
+        "sortAscending":  ": activate to sort column ascending",
+        "sortDescending": ": activate to sort column descending"
+    }
+}
+
+https://datatables.net/reference/option/language
+

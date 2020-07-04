@@ -21,7 +21,7 @@ $mesageError =
 
 if (!empty($id)) {
     $queryDeleteEvent = "DELETE FROM events WHERE id=:id";
-    $deleteEvent = $conn->prepare($queryDeleteEvent);
+    $deleteEvent = $connectionDataBase->prepare($queryDeleteEvent);
 
     $deleteEvent->bindParam("id", $id);
 

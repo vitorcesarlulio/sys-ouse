@@ -2,7 +2,7 @@
 include '../app/Model/connection-pdo.php';
 
 $querySelectEvent = "SELECT id, title, cor, start, end FROM events";
-$searchEvent = $conn->prepare($querySelectEvent);
+$searchEvent = $connectionDataBase->prepare($querySelectEvent);
 $searchEvent->execute();
 
 $eventos = [];

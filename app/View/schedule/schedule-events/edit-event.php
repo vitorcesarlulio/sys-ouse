@@ -9,7 +9,7 @@ $sql = "select *, date_format(start,'%d/%m/%Y') as data
 		from events 
 		where id = '$id'";
 		
-$sql = mysqli_query($conn, $sql) or die ("Erro na sql!") ;
+$sql = mysqli_query($connectionDataBase, $sql) or die ("Erro na sql!") ;
 
 $dados = mysqli_fetch_array($sql);
 ?>

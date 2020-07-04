@@ -28,10 +28,10 @@ define('DIRJS',      "../js/");
 /**
  * Acesso ao banco de dados
  */
-//define('HOST', "127.0.0.1");
-//define('DATABASE', "celke");
-//define('USER', "root");
-//define('PASSWORD', "");
+define('HOST', "127.0.0.1");
+define('DATABASE', "celke");
+define('USER', "root");
+define('PASSWORD', "");
 
 /*outra dica que eu dou é você usar o $_SERVER['HTTP_HOST'] caso o arquivo fique numa public igual o laravel ele não precisa entrar na pasta só no host direto.
 

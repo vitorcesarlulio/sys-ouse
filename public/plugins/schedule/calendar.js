@@ -38,9 +38,9 @@ $(function () {
         views: {
             dayGridMonth: { buttonText: 'M' },
             timeGridWeek: { buttonText: 'S' },
-            timeGridDay:  { buttonText: 'D' },
-            listDay:      { buttonText: 'Lista Dia' },
-            listWeek:     { buttonText: 'Lista Semana' }
+            timeGridDay: { buttonText: 'D' },
+            listDay: { buttonText: 'Lista Dia' },
+            listWeek: { buttonText: 'Lista Semana' }
         },
 
         navLinks: true,
@@ -76,16 +76,80 @@ $(function () {
             info.jsEvent.preventDefault();
 
             //Visualizar
-            $('#modalViewEvent #id').text(info.event.id);
+            //$('#modalViewEvent #id').text(info.event.id);
             $('#modalViewEvent #title').text(info.event.title);
             $('#modalViewEvent #start').text(info.event.start.toLocaleString());
             $('#modalViewEvent #end').text(info.event.end.toLocaleString());
+           
+            if (info.event.extendedProps.status == "P") {
+                $('#modalViewEvent #status').append(`<span class="badge badge-warning">Pendente</span>`);
+            }else{
+                $('#modalViewEvent #status').append(`<span class="badge badge-success">Realizado</span>`);
+            }
 
-            $('#modalViewEvent #client').text(info.event.extendedProps.client); //add sobre
-            $('#modalViewEvent #phone').attr('href', `tel: +55 ${info.event.extendedProps.phone}`);
-            $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${info.event.extendedProps.address}`);
-            $('#modalViewEvent #observation').text(info.event.extendedProps.observation);
+            $('#modalViewEvent #name').text(info.event.extendedProps.name + " " + info.event.extendedProps.surname); 
 
+            //Celular
+            if (info.event.extendedProps.cellphone != "") {
+                $('#modalViewEvent #cellphone').text(info.event.extendedProps.cellphone);
+                $('#modalViewEvent #cellphone').attr('href', `tel: +55${info.event.extendedProps.cellphone}`);
+            }else{
+                document.getElementById("dtCellphone").style.display = "none";
+                document.getElementById("ddCellphone").style.display = "none";
+            }
+
+            //Telefone
+            if (info.event.extendedProps.telephone != "") {
+                $('#modalViewEvent #telephone').text(info.event.extendedProps.telephone);
+                $('#modalViewEvent #telephone').attr('href', `tel: +55${info.event.extendedProps.telephone}`);
+            }else{
+                document.getElementById("dtTelephone").style.display = "none";
+                document.getElementById("ddTelephone").style.display = "none";
+            }
+
+            //Email
+            if (info.event.extendedProps.email != "") {
+                $('#modalViewEvent #email').attr('href', `malito:${info.event.extendedProps.email}`);
+            }else{
+                document.getElementById("dtEmail").style.display = "none";
+                document.getElementById("ddEmail").style.display = "none";
+            }
+
+            //Endereço
+            $('#modalViewEvent #address').text(info.event.extendedProps.logradouro + ", " + info.event.extendedProps.number + " - " + info.event.extendedProps.bairro + " " + info.event.extendedProps.localidade + " - " + info.event.extendedProps.uf + " " + info.event.extendedProps.cep);
+            $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${info.event.extendedProps.logradouro + "+" + info.event.extendedProps.number + "+" + info.event.extendedProps.bairro + "+" + info.event.extendedProps.localidade + "+" + info.event.extendedProps.uf + "+" + info.event.extendedProps.cep}`);
+            
+            //Edificio, bloco e Apartamento
+            if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
+                $('#modalViewEvent #edifice').text(info.event.extendedProps.edifice);
+                $('#modalViewEvent #block').text(info.event.extendedProps.block);
+                $('#modalViewEvent #apartment').text(info.event.extendedProps.apartment);
+            }else{
+                document.getElementById("dtEdifice").style.display = "none";
+                document.getElementById("edifice").style.display = "none";
+
+                document.getElementById("dtBlock").style.display = "none";
+                document.getElementById("block").style.display = "none";
+
+                document.getElementById("dtApartment").style.display = "none";
+                document.getElementById("apartment").style.display = "none";
+            } /* OU if (info.event.extendedProps.edifice != "") {$('#modalViewEvent #edifice').append(`<dt class="col-sm-3">Edificio:</dt>`);$('#modalViewEvent #edifice').append(`<dd class="col-sm-8">${info.event.extendedProps.edifice}</dd>`);} */
+
+            //Rua do Condominio
+            if (info.event.extendedProps.streetCondominium != "") {
+                $('#modalViewEvent #streetCondominium').text(info.event.extendedProps.streetCondominium);
+            }else{
+                document.getElementById("dtStreetCondominium").style.display = "none";
+                document.getElementById("streetCondominium").style.display = "none";
+            }
+
+            //Observação
+            if (info.event.extendedProps.observation != "") {
+                $('#modalViewEvent #observation').text(info.event.extendedProps.observation);
+            }else{
+                document.getElementById("divObservation").style.display = "none";
+                document.getElementById("dtObservation").style.display = "none";
+            }
 
             //Editar
             $('#modalViewEvent #id').val(info.event.id);
@@ -93,7 +157,8 @@ $(function () {
             $('#modalViewEvent #start').val(info.event.start.toLocaleString());
             $('#modalViewEvent #end').val(info.event.end.toLocaleString());
             $('#modalViewEvent #color').val(info.event.backgroundColor);
-            
+
+
             $('#modalViewEvent').modal('show');
         },
 
@@ -101,7 +166,7 @@ $(function () {
 
         //Traz os dados do dia selecionado (data e hora do dia)
         select: function (info) {
-            $('#modalRegisterEvent #startDate').val(info.start.toLocaleString());
+            $('#modalRegisterEvent #startDateRegister').val(info.start.toLocaleString());
             $('#modalRegisterEvent').modal('show');
         },
 
@@ -142,7 +207,7 @@ $(document).ready(function () {
         })
     });
 
-        //Botão Cancelar
+    //Botão Cancelar
     $('.btn-edit-event').on("click", function () {
         $('.divViewEvent').slideToggle();
         $('.formedit').slideToggle();
@@ -153,113 +218,137 @@ $(document).ready(function () {
         $('.formedit').slideToggle();
         $('.divViewEvent').slideToggle();
     });
-    
-        $("#formEditEvent").on("submit", function (event) {
-            //event.preventDefault(); //para nao atualizar a pagina
-            $.ajax({
-                method: "POST",
-                url: "/agenda/calendario/editar",
-                data: new FormData(this),
-                contentType: false,
-                processData: false,
-                success: function (retorna) {
-                    if (retorna['sit']) {
-                        //$("#msg-cad").html(retorna['msg']);
-                        location.reload();
-                    } else {
-                        $("#msg-edit").html(retorna['msg']);
-                    }
+
+    $("#formEditEvent").on("submit", function (event) {
+        //event.preventDefault(); //para nao atualizar a pagina
+        $.ajax({
+            method: "POST",
+            url: "/agenda/calendario/editar",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (retorna) {
+                if (retorna['sit']) {
+                    //$("#msg-cad").html(retorna['msg']);
+                    location.reload();
+                } else {
+                    $("#msg-edit").html(retorna['msg']);
                 }
-            })
-        });  
+            }
+        })
+    });
 });
 
-/* Função para mostrar ou ocultar campo de acordo com seleção (Marcar horário?) */
+/* Função para mostrar ou ocultar campos de acordo com seleção (Marcar horário?) */
 function optionsScheduleTime() {
     var optionScheduleTimeYes = document.getElementById("optionScheduleTimeYes").checked;
     if (optionScheduleTimeYes) {
-        document.getElementById("divTitleEvent").style.display = "block";
-        document.getElementById("divColorEvent").style.display = "block";
-        document.getElementById("divStartEvent").style.display = "block";
-        document.getElementById("divEndTimediv").style.display = "block";
-        document.getElementById("divStartTimediv").style.display = "block";
+        document.getElementById("divTitleRegister").style.display = "block";
+        document.getElementById("divStartDateRegister").style.display = "block";
+        document.getElementById("divStartTimeRegister").style.display = "block";
+        document.getElementById("divEndTimeRegister").style.display = "block";
     } else {
-        document.getElementById("divTitleEvent").style.display = "none";
-        document.getElementById("divColorEvent").style.display = "none";
-        document.getElementById("divStartEvent").style.display = "none";
-        document.getElementById("divEndTimediv").style.display = "none";
-        document.getElementById("divStartTimediv").style.display = "none";
+        document.getElementById("divTitleRegister").style.display = "none";
+        document.getElementById("divStartDateRegister").style.display = "none";
+        document.getElementById("divStartTimeRegister").style.display = "none";
+        document.getElementById("divEndTimeRegister").style.display = "none";
     }
+}
+
+/* Função para mostrar ou ocultar campos de acordo com seleção (Qual evento?) */
+window.onload = function () {
+    var select = document.getElementById("selectionTitleRegister").addEventListener('change', function () {
+        if (this.value == 'Voltar na Obra' || this.value == 'Início de Obra') {
+            document.getElementById('divClientRegister').style.display = 'block';
+
+            document.getElementById('divNameRegister').style.display = 'none';
+            document.getElementById('divSurnameRegister').style.display = 'none';
+            document.getElementById('divCellphoneRegister').style.display = 'none';
+            document.getElementById('divTelephoneRegister').style.display = 'none';
+            document.getElementById('divEmaileRegister').style.display = 'none';
+            document.getElementById('divCepRegister').style.display = 'none';
+            document.getElementById('divStreetRegister').style.display = 'none';
+            document.getElementById('divNeighBorhoodRegister').style.display = 'none';
+            document.getElementById('divCityRegister').style.display = 'none';
+            document.getElementById('divStateRegister').style.display = 'none';
+            document.getElementById('divTypeResidenceRegister').style.display = 'none';
+            document.getElementById("divEdificeRegister").style.display = "none";
+            document.getElementById("divBlockRegister").style.display = "none";
+            document.getElementById("divApartamentRegister").style.display = "none";
+            document.getElementById("divStreetCondominiumRegister").style.display = "none";
+            document.getElementById("divNumberRegister").style.display = "none";
+
+            document.getElementById("divScheduleTimeNo").style.display = "none";//quando clicar em realizar orçamento ele oculta "Não" na opção "Marcar Horario?"
+        } else {
+            document.getElementById('divClientRegister').style.display = 'none';
+
+            document.getElementById('divNameRegister').style.display = 'block';
+            document.getElementById('divSurnameRegister').style.display = 'block';
+            document.getElementById('divCellphoneRegister').style.display = 'block';
+            document.getElementById('divTelephoneRegister').style.display = 'block';
+            document.getElementById('divEmaileRegister').style.display = 'block';
+            document.getElementById('divCepRegister').style.display = 'block';
+            document.getElementById('divStreetRegister').style.display = 'block';
+            document.getElementById('divNeighBorhoodRegister').style.display = 'block';
+            document.getElementById('divCityRegister').style.display = 'block';
+            document.getElementById('divStateRegister').style.display = 'block';
+            document.getElementById('divTypeResidenceRegister').style.display = 'block';
+
+            document.getElementById("divScheduleTimeNo").style.display = "block";//quando clicar em realizar orçamento ele mostra "Não" na opção "Marcar Horario?"
+        }
+    });
 }
 
 /* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de residencia) */
-function selTypeResidence() {
-    var optionHome = document.getElementById("optionHome").checked;
-    var optionCondominium = document.getElementById("optionCondominium").checked;
-    if (optionHome) {
-        document.getElementById("edifice").style.display = "none";
-        document.getElementById("block").style.display = "none";
-        document.getElementById("apartment").style.display = "none";
-        document.getElementById("streetCondominium").style.display = "none";
-        document.getElementById("number").style.display = "block";
-
-    } else if (optionCondominium) {
-        document.getElementById("edifice").style.display = "none";
-        document.getElementById("block").style.display = "none";
-        document.getElementById("apartment").style.display = "none";
-        document.getElementById("streetCondominium").style.display = "block";
-        document.getElementById("number").style.display = "block";
-
+function optionTypeResidenceRegister() {
+    var optionHomeRegister = document.getElementById("optionHomeRegister").checked;
+    var optionCondominiumRegister = document.getElementById("optionCondominiumRegister").checked;
+    if (optionHomeRegister) {
+        document.getElementById("divEdificeRegister").style.display = "none";
+        document.getElementById("divBlockRegister").style.display = "none";
+        document.getElementById("divApartamentRegister").style.display = "none";
+        document.getElementById("divStreetCondominiumRegister").style.display = "none";
+        document.getElementById("divNumberRegister").style.display = "block";
+    } else if (optionCondominiumRegister) {
+        document.getElementById("divEdificeRegister").style.display = "none";
+        document.getElementById("divBlockRegister").style.display = "none";
+        document.getElementById("divApartamentRegister").style.display = "none";
+        document.getElementById("divStreetCondominiumRegister").style.display = "block";
+        document.getElementById("divNumberRegister").style.display = "block";
     } else {
-        document.getElementById("number").style.display = "none";
-        document.getElementById("streetCondominium").style.display = "none";
-        document.getElementById("edifice").style.display = "block";
-        document.getElementById("block").style.display = "block";
-        document.getElementById("apartment").style.display = "block";
-
+        document.getElementById("divEdificeRegister").style.display = "block";
+        document.getElementById("divBlockRegister").style.display = "block";
+        document.getElementById("divApartamentRegister").style.display = "block";
+        document.getElementById("divStreetCondominiumRegister").style.display = "none";
+        document.getElementById("divNumberRegister").style.display = "none";
     }
 }
 
-/* Date Picker */
-$(document).ready(function () {
-    var inputStartDate = $('input[name="startDate"]'); //our date input has the name "date"
-    var container = $('.form-group form').length > 0 ? $('.form-group form').parent() : "body";
+/* Atalhos do Calendario 
 
-    inputStartDate.datepicker({
-        format: 'dd/mm/yyyy',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-        startDate: 'd',
-        language: 'pt-BR',
-        daysOfWeekDisabled: [0, 6],
-    })
-});
+$(document).keyup(function(e) { //O evento Kyeup é acionado quando as teclas são soltas
+    if (e.which == 16) pressedCtrl = false; //Quando qualuer tecla for solta é preciso informar que Crtl não está pressionada
+})*/
 
-/* Ao clicar nos campos, esconder teclado mobile */
-$(document).ready(function () {
-    (function ($) {
-        // Criar plug-in que impede a exibição do teclado
-        $.fn.preventKeyboard = function () {
-            return this
-                .filter('input')
-                .on('focus', function () {
-                    $(this)
-                        .attr('readonly', 'readonly')
-                        .blur()
-                        .removeAttr('readonly');
-                });
-        };
+/* Fechar form Visualizar com Shift+F 
+$(document).keydown(function(e) { //Quando uma tecla é pressionada
+    if (e.which == 67) pressedCtrl = true; //Informando que Crtl está acionado
+    if ((e.which == 67 || e.keyCode == 67) && pressedCtrl == true) { //Reconhecendo tecla Enter
+        $('#modalRegisterEvent').modal('show');
+    }
+});*/
 
-        $(document).ready(function ($) {
-            // Impedir a exibição do teclado para o campo de data.
-            $('input[name=startDate]').preventKeyboard();
-        });
-    }(jQuery));
-});
+/* 
+$(document).keydown(function(e) { //Quando uma tecla é pressionada
+    if (e.which == 27) pressedCtrl = true; //Informando que Crtl está acionado
+    if ((e.which == 27 || e.keyCode == 27) && pressedCtrl == true) { //Reconhecendo tecla Enter
+        $('#modalViewEvent').modal('hide');
+        $('#modalRegisterEvent').modal('hide');
+    }
+});*/
 
 /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
 setTimeout(function () {
     var a = document.getElementById("toast-container");
     a.style.display = "none"
-}, 4000);
+}, 5000);

@@ -29,7 +29,7 @@ define('DIRJS',      "../js/");
  * Acesso ao banco de dados
  */
 define('HOST', "127.0.0.1");
-define('DATABASE', "celke");
+define('DATABASE', "database_sys_ouse");
 define('USER', "root");
 define('PASSWORD', "");
 

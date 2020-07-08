@@ -263,7 +263,7 @@
 
   <?php echo $__env->yieldContent('script'); ?>
 
-  <script>
+ <!-- <script>
     $(document).ready(function() {
       $(document).keypress(function(e) {
         if (e.wich == 67 || e.keyCode == 67) {
@@ -275,7 +275,7 @@
         }
       });
     });
-  </script>
+  </script>-->
   <!-- PADRÃO pace-progress (ao carregar a pagina faz o efeito na barra de favoritos)-->
   <script src="<?= DIRPLUGINS . 'pace-progress/pace.min.js' ?>"></script>
 

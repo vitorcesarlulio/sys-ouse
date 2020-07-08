@@ -36,3 +36,6 @@ docs_html/
 TODO
 test.html
 ad.js
+
+// CACHE
+app/View/cache/*

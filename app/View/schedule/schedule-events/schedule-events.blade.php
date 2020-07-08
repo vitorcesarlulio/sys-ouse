@@ -18,11 +18,11 @@
 <div id="alertMessageDelete"></div>
 
 <div class="container-fluid">
-    <div class="card card-primary">
+    <div class="card card-primary collapsed-card">
         <div class="card-header">
             <h3 class="card-title">Filtros</h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
@@ -57,8 +57,8 @@
                                 <label>Status:</label>
                                 <select name="status" class="form-control" id="status">
                                     <option value="">Todos</option>
-                                    <option style="background-color:#28A745; color: #fff;" value="F">Realizado</option>
-                                    <option style="background-color:#FFC107; color: #fff;" value="A">A fazer</option>
+                                    <option style="background-color:#28A745; color: #fff;" value="R">Realizado</option>
+                                    <option style="background-color:#FFC107; color: #fff;" value="P">Pendente</option>
                                 </select>
                             </div>
                         </div> 
@@ -215,6 +215,7 @@
             });
         }
 
+        
         $('#search').click(function() {
             var start_date = $('#start_date').val();
             var end_date = $('#end_date').val();

@@ -72,7 +72,7 @@ $(function () {
 
         /* EventClick - ao clicar no evento abre um modal para exibir as informações do evento */
         eventClick: function (info) {
-            $("#deleteEvent").attr("href", "/agenda/calendario/apagar/" + "?id=" + info.event.id);
+            $("#deleteEvent").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id);
             info.jsEvent.preventDefault();
 
             //Visualizar
@@ -109,6 +109,7 @@ $(function () {
 
             //Email
             if (info.event.extendedProps.email != "") {
+                $('#modalViewEvent #email').text(info.event.extendedProps.email);
                 $('#modalViewEvent #email').attr('href', `malito:${info.event.extendedProps.email}`);
             }else{
                 document.getElementById("dtEmail").style.display = "none";
@@ -188,7 +189,7 @@ $(function () {
  */
 $(document).ready(function () {
 
-    $("#formRegisterEvent").on("submit", function (event) {
+    /*$("#formRegisterEvent").on("submit", function (event) {
         event.preventDefault();
         $.ajax({
             method: "POST",
@@ -205,7 +206,7 @@ $(document).ready(function () {
                 }
             }
         })
-    });
+    });*/
 
     //Botão Cancelar
     $('.btn-edit-event').on("click", function () {

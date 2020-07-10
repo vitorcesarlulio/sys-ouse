@@ -100,6 +100,14 @@ if (isset($_SESSION['msg'])) {
                         <dt class="col-sm-3">Endereço:</dt>
                         <dd class="col-sm-8"><a href="" target="_blank" id="address"></a></dd>
 
+                        <dt class="col-sm-3" id="dtEmail">Email:</dt>
+                        <dd class="col-sm-8" id="ddEmail"><a href="" id="email" target="_blank"></a></dd>
+
+                        <dt class="col-sm-3" id="dtCellphone">Celular:</dt>
+                        <dd class="col-sm-8" id="ddCellphone"><a href="" id="cellphone"></a></dd>
+
+                        <dt class="col-sm-3" id="dtTelephone">Telefone:</dt>
+                        <dd class="col-sm-8" id="ddTelephone"><a href="" id="telephone"></a></dd>
                         
                         <!--se usar a outra forma de ocultar tem que criar uma div que englobe os 2 campos abaixo-->
                         <dt class="col-sm-3" id="dtEdifice">Edificio:</dt>
@@ -113,15 +121,6 @@ if (isset($_SESSION['msg'])) {
 
                         <dt class="col-sm-3" id="dtStreetCondominium">Rua do Conominio:</dt>
                         <dd class="col-sm-8" id="streetCondominium"></dd>
-
-                        <dt class="col-sm-3" id="dtCellphone">Celular:</dt>
-                        <dd class="col-sm-8" id="ddCellphone"><a href="" id="cellphone"></a></dd>
-
-                        <dt class="col-sm-3" id="dtTelephone">Telefone:</dt>
-                        <dd class="col-sm-8" id="ddTelephone"><a href="" id="telephone"></a></dd>
-
-                        <dt class="col-sm-3" id="dtEmail">Email:</dt>
-                        <dd class="col-sm-8" id="ddEmail"><a href="" target="_blank" id="email"></a></dd>
 
                         <dt class="col-sm-3" id="dtObservation"> Observação: </dt>
                         <div class="col-sm-9" id="divObservation"> <textarea class="form-control" id="observation" rows="2" style="width: 100%;"> </textarea></div>
@@ -256,13 +255,13 @@ if (isset($_SESSION['msg'])) {
                             <div class="col-sm-6" id="divCellphoneRegister">
                                 <div class="form-group">
                                     <label>Celular</label>
-                                    <input type="tel" name="cellphoneRegister" id="cellphoneRegister" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="19">
+                                    <input type="tel" class="form-control contact" name="cellphoneRegister" id="cellphoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="">
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divTelephoneRegister">
                                 <div class="form-group">
                                     <label>Telefone</label>
-                                    <input type="tel" class="form-control" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="19">
+                                    <input type="tel" class="form-control contact" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="">
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divEmaileRegister">
@@ -283,25 +282,25 @@ if (isset($_SESSION['msg'])) {
                             <div class="col-sm-6" id="divStreetRegister">
                                 <div class="form-group">
                                     <label>Logradouro</label>
-                                    <input type="text" class="form-control" name="logradouro" id="logradouro" style="cursor: not-allowed;">
+                                    <input type="text" class="form-control" name="logradouro" id="logradouro" style="cursor: not-allowed;" readonly=“true” readonly=“true”> <!-- ou readonly="readonly"-->
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divNeighBorhoodRegister">
                                 <div class="form-group">
                                     <label>Bairro</label>
-                                    <input type="text" name="bairro" id="bairro" class="form-control" style="cursor: not-allowed;">
+                                    <input type="text" name="bairro" id="bairro" class="form-control" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divCityRegister">
                                 <div class="form-group">
                                     <label>Cidade</label>
-                                    <input type="text" name="localidade" id="localidade" class="form-control" style="cursor: not-allowed;">
+                                    <input type="text" name="localidade" id="localidade" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divStateRegister">
                                 <div class="form-group">
                                     <label>Estado</label>
-                                    <input type="text" name="uf" id="uf" class="form-control" style="cursor: not-allowed;">
+                                    <input type="text" name="uf" id="uf" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                                 </div>
                             </div>
 
@@ -361,7 +360,7 @@ if (isset($_SESSION['msg'])) {
                             <div class="col-sm-12" id="divClientRegister" style="display:none;">
                                 <div class="form-group">
                                     <label>Cliente:</label>
-                                    <select class="form-control select2" style="width: 100%;">
+                                    <select class="form-control select2" style="width: 100%;" id="clientRegister">
                                         <?php while ($showClient = mysqli_fetch_row($resultSelectClient)) { ?>
                                             <option value="<?php echo $showClient[0] ?>">
                                                 <?php echo $showClient[1] ?>
@@ -407,16 +406,17 @@ if (isset($_SESSION['msg'])) {
 <!-- Script do Calendário -->
 <script src="<?= DIRPLUGINS . 'schedule/calendar.js' ?>"></script>
 
+<!-- JQuery validation -->
+<script src="<?= DIRPLUGINS . 'schedule/calendar-validation.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
+
 <!-- InputMask -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
 <!-- Busca endereço pelo CEP -->
 <script src="<?= DIRPLUGINS . 'search-zip/search-zip.js' ?>"></script>
-
-<!-- JQuery validation -->
-<script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
 
 <!-- Date Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>

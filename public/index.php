@@ -9,8 +9,8 @@ $blade = new Blade('../app/View/', '../app/View/cache');
 
 $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 
-$route->notFound(function () {
-    include '../app/View/errors/404.php';
+$route->notFound(function () use ($blade) {
+    echo $blade->render('errors.404'); 
 });
 
 

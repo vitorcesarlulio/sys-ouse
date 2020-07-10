@@ -3,27 +3,17 @@ session_start();
 
 include_once '../app/Model/connection-pdo.php';
 
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$idEvent = filter_input(INPUT_GET, 'idEvent', FILTER_SANITIZE_NUMBER_INT);
 
-$mesageSuccess =
-    '<div id="toast-container" class="toast-top-right">
-    <div class="toast toast-success" aria-live="polite" style="">
-        <div class="toast-message">Evento apagado com sucesso!</div>
-    </div>
-</div>';
+$mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Evento apagado com sucesso!</div></div></div>';
 
-$mesageError =
-    '<div id="toast-container" class="toast-top-right">
-    <div class="toast toast-error" aria-live="assertive" style="">
-        <div class="toast-message">Erro: o evento não foi apagado com sucesso!</div>
-    </div>
-</div>';
+$mesageError = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: o evento não foi apagado com sucesso!</div></div></div>';
 
-if (!empty($id)) {
-    $queryDeleteEvent = "DELETE FROM events WHERE id=:id";
+if (!empty($idEvent)) {
+    $queryDeleteEvent = "DELETE FROM tb_eventos WHERE even_codigo=:even_codigo";
     $deleteEvent = $connectionDataBase->prepare($queryDeleteEvent);
 
-    $deleteEvent->bindParam("id", $id);
+    $deleteEvent->bindParam("even_codigo", $idEvent);
 
     if ($deleteEvent->execute()) {
         $_SESSION['msg'] = $mesageSuccess;

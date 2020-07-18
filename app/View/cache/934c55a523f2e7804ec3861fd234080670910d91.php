@@ -79,8 +79,6 @@ if (isset($_SESSION['msg'])) {
             <div class="modal-body">
                 <div class="divViewEvent">
                     <dl class="row">
-                        <!--<dt class="col-sm-3">ID:</dt>
-                        <dd class="col-sm-8" id="id"></dd>-->
 
                         <dt class="col-sm-3">Evento:</dt>
                         <dd class="col-sm-8" id="title"></dd>
@@ -93,6 +91,8 @@ if (isset($_SESSION['msg'])) {
 
                         <dt class="col-sm-3">Status:</dt>
                         <dd class="col-sm-8" id="status"></dd>
+                        <div id="P" style="display:none"></div>
+                        <div id="R" style="display:none"></div>
 
                         <dt class="col-sm-3">Pessoa:</dt>
                         <dd class="col-sm-8" id="name"></dd>
@@ -100,15 +100,15 @@ if (isset($_SESSION['msg'])) {
                         <dt class="col-sm-3">Endereço:</dt>
                         <dd class="col-sm-8"><a href="" target="_blank" id="address"></a></dd>
 
-                        <dt class="col-sm-3" id="dtEmail">Email:</dt>
-                        <dd class="col-sm-8" id="ddEmail"><a href="" id="email" target="_blank"></a></dd>
-
                         <dt class="col-sm-3" id="dtCellphone">Celular:</dt>
                         <dd class="col-sm-8" id="ddCellphone"><a href="" id="cellphone"></a></dd>
 
                         <dt class="col-sm-3" id="dtTelephone">Telefone:</dt>
                         <dd class="col-sm-8" id="ddTelephone"><a href="" id="telephone"></a></dd>
-                        
+
+                        <dt class="col-sm-3" id="dtEmail">Email:</dt>
+                        <dd class="col-sm-8" id="ddEmail"><a href="" id="email" target="_blank"></a></dd>
+
                         <!--se usar a outra forma de ocultar tem que criar uma div que englobe os 2 campos abaixo-->
                         <dt class="col-sm-3" id="dtEdifice">Edificio:</dt>
                         <dd class="col-sm-8" id="edifice"></dd>
@@ -255,13 +255,13 @@ if (isset($_SESSION['msg'])) {
                             <div class="col-sm-6" id="divCellphoneRegister">
                                 <div class="form-group">
                                     <label>Celular</label>
-                                    <input type="tel" class="form-control contact" name="cellphoneRegister" id="cellphoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="">
+                                    <input type="tel" class="form-control contact" name="cellphoneRegister" id="cellphoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="19">
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divTelephoneRegister">
                                 <div class="form-group">
                                     <label>Telefone</label>
-                                    <input type="tel" class="form-control contact" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="">
+                                    <input type="tel" class="form-control contact" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="19">
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divEmaileRegister">
@@ -360,10 +360,10 @@ if (isset($_SESSION['msg'])) {
                             <div class="col-sm-12" id="divClientRegister" style="display:none;">
                                 <div class="form-group">
                                     <label>Cliente:</label>
-                                    <select class="form-control select2" style="width: 100%;" id="clientRegister">
+                                    <select class="form-control select2" name="clientRegister" id="clientRegister" style="width: 100%;">
                                         <?php while ($showClient = mysqli_fetch_row($resultSelectClient)) { ?>
                                             <option value="<?php echo $showClient[0] ?>">
-                                                <?php echo $showClient[1] ?>
+                                                <?php echo $showClient[1] . " " . $showClient[2]  ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -402,31 +402,23 @@ if (isset($_SESSION['msg'])) {
 <script src="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-interaction/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
-
 <!-- Script do Calendário -->
-<script src="<?= DIRPLUGINS . 'schedule/calendar.js' ?>"></script>
-
+<script src="<?= DIRJS . 'schedule/schedule-calendar/calendar.js' ?>"></script>
 <!-- JQuery validation -->
-<script src="<?= DIRPLUGINS . 'schedule/calendar-validation.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-calendar/calendar-validation.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
-
 <!-- InputMask -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
-
 <!-- Busca endereço pelo CEP -->
-<script src="<?= DIRPLUGINS . 'search-zip/search-zip.js' ?>"></script>
-
+<script src="<?= DIRJS . 'search-zip/search-zip.js' ?>"></script>
 <!-- Date Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-
 <!-- Timer Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-
 <!-- Select2 -->
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
-
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
@@ -515,6 +507,9 @@ if (isset($_SESSION['msg'])) {
             });
         });
     });
+
+    //Initialize Select2 Elements
+    $('.select2').select2();
 </script>
 
 <?php $__env->stopSection(); ?>

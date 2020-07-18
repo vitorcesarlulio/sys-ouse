@@ -76,24 +76,27 @@ $(function () {
             info.jsEvent.preventDefault();
 
             //Visualizar
-            //$('#modalViewEvent #id').text(info.event.id);
             $('#modalViewEvent #title').text(info.event.title);
             $('#modalViewEvent #start').text(info.event.start.toLocaleString());
             $('#modalViewEvent #end').text(info.event.end.toLocaleString());
-           
+
+            document.getElementById('P').remove();
+            document.getElementById('R').remove();
+
             if (info.event.extendedProps.status == "P") {
-                $('#modalViewEvent #status').append(`<span class="badge badge-warning">Pendente</span>`);
-            }else{
-                $('#modalViewEvent #status').append(`<span class="badge badge-success">Realizado</span>`);
+                $('#modalViewEvent #status').append(`<span id="P" class="badge badge-warning">Pendente</span> <span id="R" class="badge badge-success" style="display:none">Realizado</span>`);
+            } else {
+                $('#modalViewEvent #status').append(`<span id="R" class="badge badge-success">Realizado</span> <span id="P" class="badge badge-warning" style="display:none">Pendente</span>`);
             }
 
-            $('#modalViewEvent #name').text(info.event.extendedProps.name + " " + info.event.extendedProps.surname); 
+
+            $('#modalViewEvent #name').text(info.event.extendedProps.name + " " + info.event.extendedProps.surname);
 
             //Celular
             if (info.event.extendedProps.cellphone != "") {
                 $('#modalViewEvent #cellphone').text(info.event.extendedProps.cellphone);
                 $('#modalViewEvent #cellphone').attr('href', `tel: +55${info.event.extendedProps.cellphone}`);
-            }else{
+            } else {
                 document.getElementById("dtCellphone").style.display = "none";
                 document.getElementById("ddCellphone").style.display = "none";
             }
@@ -102,7 +105,7 @@ $(function () {
             if (info.event.extendedProps.telephone != "") {
                 $('#modalViewEvent #telephone').text(info.event.extendedProps.telephone);
                 $('#modalViewEvent #telephone').attr('href', `tel: +55${info.event.extendedProps.telephone}`);
-            }else{
+            } else {
                 document.getElementById("dtTelephone").style.display = "none";
                 document.getElementById("ddTelephone").style.display = "none";
             }
@@ -111,7 +114,7 @@ $(function () {
             if (info.event.extendedProps.email != "") {
                 $('#modalViewEvent #email').text(info.event.extendedProps.email);
                 $('#modalViewEvent #email').attr('href', `malito:${info.event.extendedProps.email}`);
-            }else{
+            } else {
                 document.getElementById("dtEmail").style.display = "none";
                 document.getElementById("ddEmail").style.display = "none";
             }
@@ -119,13 +122,13 @@ $(function () {
             //Endereço
             $('#modalViewEvent #address').text(info.event.extendedProps.logradouro + ", " + info.event.extendedProps.number + " - " + info.event.extendedProps.bairro + " " + info.event.extendedProps.localidade + " - " + info.event.extendedProps.uf + " " + info.event.extendedProps.cep);
             $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${info.event.extendedProps.logradouro + "+" + info.event.extendedProps.number + "+" + info.event.extendedProps.bairro + "+" + info.event.extendedProps.localidade + "+" + info.event.extendedProps.uf + "+" + info.event.extendedProps.cep}`);
-            
+
             //Edificio, bloco e Apartamento
             if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
                 $('#modalViewEvent #edifice').text(info.event.extendedProps.edifice);
                 $('#modalViewEvent #block').text(info.event.extendedProps.block);
                 $('#modalViewEvent #apartment').text(info.event.extendedProps.apartment);
-            }else{
+            } else {
                 document.getElementById("dtEdifice").style.display = "none";
                 document.getElementById("edifice").style.display = "none";
 
@@ -139,7 +142,7 @@ $(function () {
             //Rua do Condominio
             if (info.event.extendedProps.streetCondominium != "") {
                 $('#modalViewEvent #streetCondominium').text(info.event.extendedProps.streetCondominium);
-            }else{
+            } else {
                 document.getElementById("dtStreetCondominium").style.display = "none";
                 document.getElementById("streetCondominium").style.display = "none";
             }
@@ -147,10 +150,11 @@ $(function () {
             //Observação
             if (info.event.extendedProps.observation != "") {
                 $('#modalViewEvent #observation').text(info.event.extendedProps.observation);
-            }else{
+            } else {
                 document.getElementById("divObservation").style.display = "none";
                 document.getElementById("dtObservation").style.display = "none";
             }
+
 
             //Editar
             $('#modalViewEvent #id').val(info.event.id);
@@ -305,18 +309,34 @@ function optionTypeResidenceRegister() {
     var optionHomeRegister = document.getElementById("optionHomeRegister").checked;
     var optionCondominiumRegister = document.getElementById("optionCondominiumRegister").checked;
     if (optionHomeRegister) {
+        $('#edificeRegister').val("");
+        $('#blockRegister').val("");
+        $('#apartamentRegister').val("");
+        $('#streetCondominiumRegister').val("");
+        $('#numberRegister').val("");
+
         document.getElementById("divEdificeRegister").style.display = "none";
         document.getElementById("divBlockRegister").style.display = "none";
         document.getElementById("divApartamentRegister").style.display = "none";
         document.getElementById("divStreetCondominiumRegister").style.display = "none";
         document.getElementById("divNumberRegister").style.display = "block";
     } else if (optionCondominiumRegister) {
+        $('#edificeRegister').val("");
+        $('#blockRegister').val("");
+        $('#apartamentRegister').val("");
+        $('#streetCondominiumRegister').val("");
+        $('#numberRegister').val("");
         document.getElementById("divEdificeRegister").style.display = "none";
         document.getElementById("divBlockRegister").style.display = "none";
         document.getElementById("divApartamentRegister").style.display = "none";
         document.getElementById("divStreetCondominiumRegister").style.display = "block";
         document.getElementById("divNumberRegister").style.display = "block";
     } else {
+        $('#edificeRegister').val("");
+        $('#blockRegister').val("");
+        $('#apartamentRegister').val("");
+        $('#streetCondominiumRegister').val("");
+        $('#numberRegister').val("");
         document.getElementById("divEdificeRegister").style.display = "block";
         document.getElementById("divBlockRegister").style.display = "block";
         document.getElementById("divApartamentRegister").style.display = "block";

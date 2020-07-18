@@ -5,9 +5,6 @@ include_once '../app/Model/connection-pdo.php';
 /* Recebendo os dados que o Js esta enviando */
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-$mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento e cliente cadastrados!</div></div></div>';
-$mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: evento e cliente não cadastrados!</div></div></div>';
-
 # Tirar mascara do Celular
 $subject = ['(', ')', '-', ' '];
 $cellphone = str_replace($subject, '',  $dados['cellphoneRegister']);
@@ -89,6 +86,9 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
     $insertEvent->bindParam(':even_observacao', $dados['observationRegister']);
     $insertEvent->bindParam(':orca_numero',     $idBudget);
 
+    $mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento e orçamento cadastrados!</div></div></div>';
+    $mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: evento e orçamento não cadastrados!</div></div></div>';
+
     # Se inserir exibe a mensagem
     if ($insertEvent->execute()) {
         $retorna = ['sit' => true, 'msg' => $mesageSuccess];
@@ -100,7 +100,57 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
     header('Content-Type: application/json');
     echo json_encode($retorna);
 }
-/* Verificando se a opção "Agendar Horario" foi marcada como "Não" */ 
-else if ($dados['scheduleTime'] == "scheduleTimeNo") {
-    echo 'oi';
+/* Verificando se a opção "Agendar Horario" foi marcada como "Não" */ else if ($dados['scheduleTime'] == "scheduleTimeNo") {
+    # Query insert na tb_orcamento
+    $queryInsertBudget = "INSERT INTO tb_orcamento 
+     (orca_nome, 
+     orca_sobrenome, 
+     orca_tel, 
+     orca_cel, 
+     orca_email, 
+     orca_logradouro, 
+     orca_log_numero, 
+     orca_bairro, 
+     orca_cidade, 
+     orca_estado, 
+     orca_edificio, 
+     orca_bloco, 
+     orca_apartamento, 
+     orca_logradouro_condominio, 
+     orca_cep,
+     orca_observacao) 
+     VALUES (:orca_nome, :orca_sobrenome, :orca_tel, :orca_cel, :orca_email, :orca_logradouro, :orca_log_numero, :orca_bairro, :orca_cidade, :orca_estado, :orca_edificio, :orca_bloco, :orca_apartamento, :orca_logradouro_condominio, :orca_cep, :orca_observacao)";
+
+
+    $insertBudget = $connectionDataBase->prepare($queryInsertBudget);
+    $insertBudget->bindParam(':orca_nome',                  $dados['nameRegister']);
+    $insertBudget->bindParam(':orca_sobrenome',             $dados['surnameRegister']);
+    $insertBudget->bindParam(':orca_tel',                   $telephone);
+    $insertBudget->bindParam(':orca_cel',                   $cellphone);
+    $insertBudget->bindParam(':orca_email',                 $dados['emailRegister']);
+    $insertBudget->bindParam(':orca_logradouro',            $dados['logradouro']);
+    $insertBudget->bindParam(':orca_log_numero',            $dados['numberRegister']);
+    $insertBudget->bindParam(':orca_bairro',                $dados['bairro']);
+    $insertBudget->bindParam(':orca_cidade',                $dados['localidade']);
+    $insertBudget->bindParam(':orca_estado',                $dados['uf']);
+    $insertBudget->bindParam(':orca_edificio',              $dados['edificeRegister']);
+    $insertBudget->bindParam(':orca_bloco',                 $dados['blockRegister']);
+    $insertBudget->bindParam(':orca_apartamento',           $dados['apartmentRegister']);
+    $insertBudget->bindParam(':orca_logradouro_condominio', $dados['streetCondominiumRegister']);
+    $insertBudget->bindParam(':orca_cep',                   $cep);
+    $insertBudget->bindParam(':orca_observacao', $dados['observationRegister']);
+
+    $mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: orçamento cadastrados!</div></div></div>';
+    $mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: orçamento não cadastrado!</div></div></div>';
+
+    # Se inserir exibe a mensagem
+    if ($insertBudget->execute()) {
+        $retorna = ['sit' => true, 'msg' => $mesageSuccess];
+        $_SESSION['msg'] = $mesageSuccess;
+    } else {
+        $retorna = ['sit' => true, 'msg' => $mesageError];
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($retorna);
 }

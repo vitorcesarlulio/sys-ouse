@@ -6,7 +6,43 @@
 <!-- DataTables -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-bs4/css/dataTables.bootstrap4.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-responsive/css/responsive.bootstrap4.min.css' ?>">
+
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('css'); ?>
+<style>
+    /* div.dt-buttons {
+        position: relative;
+        float: right;
+    }
+
+    div.dataTables_filter {
+        padding-top: .5rem;
+    }
+
+
+    div.dropdown-menu {
+        background-color: #FE5000;
+        border: #FE5000;
+    }
+    .buttons-print,
+    .buttons-excel {
+        color: #FFF;
+        background-color: #FE5000;
+        border: #FE5000;
+    }
+    .buttons-print:hover,
+    .buttons-excel:hover {
+        background-color: #FE5000;
+        border: #FE5000;
+    } 
+
+    .badge{
+        border-color: #FFC107;
+        color: #fff;
+    }*/
+</style>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('breadcrumb'); ?>
@@ -15,7 +51,7 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<div id="alertMessageDelete"></div>
+<div id="alertMessage"></div>
 
 <div class="container-fluid">
     <div class="card card-primary collapsed-card">
@@ -61,7 +97,7 @@
                                     <option style="background-color:#FFC107; color: #fff;" value="P">Pendente</option>
                                 </select>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </form>
             </div>
@@ -82,22 +118,18 @@
                     <table id="listEvents" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Titulo</th>
-                                <th>cor</th>
-                                <th>start</th>
-                                <th>end</th>
+                                <th>Evento</th>
+                                <th>Nome</th>
+                                <th>Inicio</th>
                                 <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>ID</th>
-                                <th>Titulo</th>
-                                <th>cor</th>
-                                <th>start</th>
-                                <th>end</th>
+                                <th>Evento</th>
+                                <th>Nome</th>
+                                <th>Inicio</th>
                                 <th>Status</th>
                                 <th>Ações</th>
                             </tr>
@@ -108,22 +140,21 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalViewEvent">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Detalhes do Evento</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="visevent">
-                    <dl class="row">
-                        <dt class="col-sm-3">ID:</dt>
-                        <dd class="col-sm-8" id="id"></dd>
 
-                        <dt class="col-sm-3">Titulo:</dt>
+
+    
+    <div class="modal fade" id="modalViewEvent" data-toggle="modal" data-target="#modalViewEvent">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detalhes do Evento</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <dl class="row">
+                    <dt class="col-sm-3">Evento:</dt>
                         <dd class="col-sm-8" id="title"></dd>
 
                         <dt class="col-sm-3">Inicío:</dt>
@@ -132,35 +163,71 @@
                         <dt class="col-sm-3">Fim:</dt>
                         <dd class="col-sm-8" id="end"></dd>
 
+                        <dt class="col-sm-3">Status:</dt>
+                        <dd class="col-sm-8" id="status"></dd>
+                        <div id="P" style="display:none"></div>
+                        <div id="R" style="display:none"></div>
 
-
-                        <dt class="col-sm-3">Cliente:</dt>
-                        <dd class="col-sm-8" id="client"></dd>
+                        <dt class="col-sm-3">Pessoa:</dt>
+                        <dd class="col-sm-8" id="name"></dd>
 
                         <dt class="col-sm-3">Endereço:</dt>
-                        <dd class="col-sm-8"><a href="" id="address"></a></dd>
+                        <dd class="col-sm-8"><a href="" target="_blank" id="address"></a></dd>
 
-                        <dt class="col-sm-3">Celular:</dt>
-                        <dd class="col-sm-8"><a href="" id="phone"></a></dd>
+                        <dt class="col-sm-3" id="dtCellphone">Celular:</dt>
+                        <dd class="col-sm-8" id="ddCellphone"><a href="" id="cellphone"></a></dd>
 
-                        <dt class="col-sm-3">Observação:</dt>
-                        <dd class="col-sm-8" id="observation"> hdfhdfhdfhdfhdfhdfhdhdfhdfh</dd>
+                        <dt class="col-sm-3" id="dtTelephone">Telefone:</dt>
+                        <dd class="col-sm-8" id="ddTelephone"><a href="" id="telephone"></a></dd>
 
-                        <dt class="col-sm-3"> Observação: </dt>
-                        <div class="col-sm-9"> <textarea class="form-control" id="observation" rows="2" disabled="" style="width: 100%;"> </textarea></div>
+                        <dt class="col-sm-3" id="dtEmail">Email:</dt>
+                        <dd class="col-sm-8" id="ddEmail"><a href="" id="email" target="_blank"></a></dd>
+
+                        <!--se usar a outra forma de ocultar tem que criar uma div que englobe os 2 campos abaixo-->
+                        <dt class="col-sm-3" id="dtEdifice">Edificio:</dt>
+                        <dd class="col-sm-8" id="edifice"></dd>
+
+                        <dt class="col-sm-3" id="dtBlock">Bloco:</dt>
+                        <dd class="col-sm-8" id="block"></dd>
+
+                        <dt class="col-sm-3" id="dtApartment">Apartamento:</dt>
+                        <dd class="col-sm-8" id="apartment"></dd>
+
+                        <dt class="col-sm-3" id="dtStreetCondominium">Rua do Conominio:</dt>
+                        <dd class="col-sm-8" id="streetCondominium"></dd>
+
+                        <dt class="col-sm-3" id="dtObservation"> Observação: </dt>
+                        <div class="col-sm-9" id="divObservation"> <textarea class="form-control" id="observation" rows="2" style="width: 100%;"> </textarea></div>
                     </dl>
-
-                    <!--se mudar o botao vai caga tudo por causa desse btn-canc-vis -->
-                    <!-- Botões Editar e Apagar -->
-                    <div class="modal-footer" id="footer">
-                        <button class="btn btn-warning btn-canc-vis">Editar</button>
-                        <a href="" id="deleteEvent" class="btn btn-danger">Apagar</a>
-                    </div>
+                </div>
+                <div class="modal-footer" id="footer">
+                    <button class="btn btn-warning btn-canc-vis">Editar</button>
+                    <a href="" id="deleteEvent" class="btn btn-danger">Apagar</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="modalDeleteEvent" data-toggle="modal" data-target="#modalDeleteEvent">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="titulo"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="texto"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnCancelDelete">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmaExclusao">Sim</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <?php $__env->stopSection(); ?>
 
@@ -171,6 +238,8 @@
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
+<script src="<?= DIRJS . 'schedule/schedule-events/events.js' ?>"></script>
+
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
@@ -178,104 +247,20 @@
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
-<!-- page script -->
-<script type="text/javascript" language="javascript">
-    $(document).ready(function() {
-        fetch_data('no');
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fh-3.1.7/kt-2.5.2/datatables.min.css" />
 
-        function fetch_data(is_date_search, start_date='', end_date='', status='') {
-            var dataTable = $("#listEvents").DataTable({
-                "autoWidth": false,
-                "responsive": true,
-                "processing": true,
-                "serverSide": true,
-                //"paging": true,
-                //"lengthChange": false,
-                //"searching": false,
-                //"ordering": true,
-                //"info": true,
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fh-3.1.7/kt-2.5.2/datatables.min.js"></script>
 
-                "ajax": {
-                    "url": "/agenda/eventos/listar",
-                    "type": "POST",
-                    "data": {
-                        is_date_search:is_date_search, start_date:start_date, end_date:end_date, status:status,
-                    }
-                },
+<!-- Botões Data table -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
-                /* Tirar ordenação da coluna que não desejo 
-                "columnDefs": [{
-                    "targets": [3],
-                    "orderable": false
-                }],*/
-
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
-                }
-            });
-        }
-
-        
-        $('#search').click(function() {
-            var start_date = $('#start_date').val();
-            var end_date = $('#end_date').val();
-            var status = $('#status').val();
-            
-            if (start_date == '' && end_date == '') {
-                $('#listEvents').DataTable().destroy();
-                fetch_data('yes', start_date, end_date, status);
-            } else {
-                alert("Data é necessária!");
-            }
-        });
-
-    });
-
-    /* Excluir Evnto */
-    $(document).on('click', '.btn-danger', function() {
-            var id = $(this).attr("id");
-            if (confirm("Deseja mesmo excluir?")) {
-                $.ajax({
-                    url: "/agenda/eventos/apagar",
-                    method: "POST",
-                    data: {
-                        id: id
-                    },
-                    success: function(data) {
-                        $('#alertMessageDelete').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Evento apagado com sucesso!</div></div></div>');
-                        $("#listEvents").DataTable().destroy();
-                        fetch_data();
-                    }
-                })
-            }
-        });
-        
-
-        /* Visualizar Evnto */
-    $(document).on('click', '.btn-info', function() {
-            var id = $(this).attr("id");
-            $('#modalViewEvent #id').text(id);
-            $('#modalViewEvent').modal('show');
-    });
-
-
-
-    /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
-    setTimeout(function() {
-        var a = document.getElementById("alertMessageDelete");
-        a.style.display = "none"
-    }, 8000);
-
-    $(function() {
-        //Datemask dd/mm/yyyy
-        $('#datemask').inputmask('dd/mm/yyyy', {
-            'placeholder': 'dd/mm/yyyy'
-        })
-
-        //Money Euro E AS MACARAS TAMBEM SAI SE VC TIRAR
-        $('[data-mask]').inputmask()
-
-    })
-</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/schedule/schedule-events/schedule-events.blade.php ENDPATH**/ ?>

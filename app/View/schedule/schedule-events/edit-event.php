@@ -5,9 +5,7 @@ include_once '../app/Model/connection-mysqli.php';
 //var que recebe os dados que o Js esta enviando                
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
-$sql = "select *, date_format(start,'%d/%m/%Y') as data  
-		from events 
-		where id = '$id'";
+$sql = "SELECT * FROM tb_eventos WHERE even_codigo = '$id'";
 		
 $sql = mysqli_query($connectionDataBase, $sql) or die ("Erro na sql!") ;
 
@@ -27,12 +25,9 @@ $dados = mysqli_fetch_array($sql);
   <h1> Atualizar Clientes </h1>
 
     <label> Código </label>
-    <input name="txt_codigo" type="text" class="input_01" value="<?php echo $dados['id']; ?>">
+    <input name="txt_codigo" type="text" class="input_01" value="<?php echo $id; ?>">
 
-    <label> Nome </label>
-    <input name="txt_nome" type="text" class="input_01" value="<?php echo $dados['start']; ?>">
-    <label> Nome </label>
-    <input name="txt_nome" type="text" class="input_01" value="<?php echo $dados['end']; ?>">
+    
     
     <input name="btn_enviar" type="submit" value="Enviar" class="btn">
 </div>

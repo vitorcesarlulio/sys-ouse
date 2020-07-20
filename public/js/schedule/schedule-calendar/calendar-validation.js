@@ -8,6 +8,7 @@ $(document).ready(function () {
       surnameRegister: { required: true },
       cellphoneRegister: { require_from_group: [1, ".contact"] },
       telephoneRegister: { require_from_group: [1, ".contact"] },
+      emailRegister: { email: true },
       cep: { required: true, postalcodeBR: true },
       logradouro: { required: true },
       bairro: { required: true },
@@ -20,7 +21,7 @@ $(document).ready(function () {
       blockRegister: { required: true },
       apartmentRegister: { required: true },
       bairro: { required: true },
-      clientRegister: { required: true },
+      clientRegister: { required: true }
       //digits: true somente numeros
     },
 
@@ -32,6 +33,7 @@ $(document).ready(function () {
       surnameRegister: { required: "Digite um Sobrenome." },
       cellphoneRegister: { require_from_group: "Digite um Celuar ou Telefone." },
       telephoneRegister: { require_from_group: "Digite um Celuar ou Telefone." },
+      emailRegister: { email: "Digite um endereço de e-mail válido." },
       cep: { required: "Digite um CEP." },
       logradouro: { required: "Digite o Logradouro." },
       bairro: { required: "Digite o Bairro." },
@@ -45,7 +47,7 @@ $(document).ready(function () {
       apartmentRegister: { required: "Digite o Apartamento." },
       bairro: { required: "Digite o Bairro" },
 
-      clientRegister: { required: "Selecione uma Pessoa." },
+      clientRegister: { required: "Selecione uma Pessoa." }
     },
 
     errorElement: 'span',

@@ -44,7 +44,7 @@ $(function () {
         },
 
         navLinks: true,
-        defaultView: 'timeGridDay', //quando abrir calendario abrir no dia
+        defaultView: 'dayGridMonth', //quando abrir calendario abrir no dia
         allDaySlot: false, //evento dia todo, tanto na hora de trazer o horario quanto na hr de visualizar no dia 
 
         eventLimit: true, //Somente 3 eventos por dia serão visualizados
@@ -72,7 +72,13 @@ $(function () {
 
         /* EventClick - ao clicar no evento abre um modal para exibir as informações do evento */
         eventClick: function (info) {
-            $("#deleteEvent").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id);
+
+            /* Modal confirma excluir evento */
+            $(document).on('click', '#deleteEvent', function () {
+                $('#modalViewEvent').modal('hide');
+                showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?', function () { $("#btnConfirm").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id); });
+            });
+            
             info.jsEvent.preventDefault();
 
             //Visualizar
@@ -97,8 +103,8 @@ $(function () {
                 $('#modalViewEvent #cellphone').text(info.event.extendedProps.cellphone);
                 $('#modalViewEvent #cellphone').attr('href', `tel: +55${info.event.extendedProps.cellphone}`);
             } else {
-                document.getElementById("dtCellphone").style.display = "none";
-                document.getElementById("ddCellphone").style.display = "none";
+                $("#modalViewEvent #dtCellphone").hide();
+                $("#modalViewEvent #ddCellphone").hide();
             }
 
             //Telefone
@@ -106,8 +112,8 @@ $(function () {
                 $('#modalViewEvent #telephone').text(info.event.extendedProps.telephone);
                 $('#modalViewEvent #telephone').attr('href', `tel: +55${info.event.extendedProps.telephone}`);
             } else {
-                document.getElementById("dtTelephone").style.display = "none";
-                document.getElementById("ddTelephone").style.display = "none";
+                $("#modalViewEvent #dtTelephone").hide();
+                $("#modalViewEvent #ddTelephone").hide();
             }
 
             //Email
@@ -115,8 +121,8 @@ $(function () {
                 $('#modalViewEvent #email').text(info.event.extendedProps.email);
                 $('#modalViewEvent #email').attr('href', `malito:${info.event.extendedProps.email}`);
             } else {
-                document.getElementById("dtEmail").style.display = "none";
-                document.getElementById("ddEmail").style.display = "none";
+                $("#modalViewEvent #dtEmail").hide();
+                $("#modalViewEvent #ddEmail").hide();
             }
 
             //Endereço
@@ -129,30 +135,28 @@ $(function () {
                 $('#modalViewEvent #block').text(info.event.extendedProps.block);
                 $('#modalViewEvent #apartment').text(info.event.extendedProps.apartment);
             } else {
-                document.getElementById("dtEdifice").style.display = "none";
-                document.getElementById("edifice").style.display = "none";
-
-                document.getElementById("dtBlock").style.display = "none";
-                document.getElementById("block").style.display = "none";
-
-                document.getElementById("dtApartment").style.display = "none";
-                document.getElementById("apartment").style.display = "none";
+                $("#modalViewEvent #dtEdifice").hide();
+                $("#modalViewEvent #edifice").hide();
+                $("#modalViewEvent #dtBlock").hide();
+                $("#modalViewEvent #block").hide();
+                $("#modalViewEvent #dtApartment").hide();
+                $("#modalViewEvent #apartment").hide();
             } /* OU if (info.event.extendedProps.edifice != "") {$('#modalViewEvent #edifice').append(`<dt class="col-sm-3">Edificio:</dt>`);$('#modalViewEvent #edifice').append(`<dd class="col-sm-8">${info.event.extendedProps.edifice}</dd>`);} */
 
             //Rua do Condominio
             if (info.event.extendedProps.streetCondominium != "") {
                 $('#modalViewEvent #streetCondominium').text(info.event.extendedProps.streetCondominium);
             } else {
-                document.getElementById("dtStreetCondominium").style.display = "none";
-                document.getElementById("streetCondominium").style.display = "none";
+                $("#modalViewEvent #dtStreetCondominium").hide();
+                $("#modalViewEvent #streetCondominium").hide();
             }
 
             //Observação
             if (info.event.extendedProps.observation != "") {
                 $('#modalViewEvent #observation').text(info.event.extendedProps.observation);
             } else {
-                document.getElementById("divObservation").style.display = "none";
-                document.getElementById("dtObservation").style.display = "none";
+                $("#modalViewEvent #divObservation").hide();
+                $("#modalViewEvent #dtObservation").hide();
             }
 
 
@@ -187,30 +191,27 @@ $(function () {
     calendar.render();
 });
 
+function showModal(id, titulo, texto, callback) {
+    $(id).find('#titulo').text(titulo);
+    $(id).find('#texto').text(texto);
+    $(id).modal('show');
+    if (typeof callback === 'function') {
+        $(id).find('#btnConfirm').click(function () { $(id).modal('hide'); });
+        $(id).find('#btnConfirm').click(function () { callback(); }); //dado que vai confirmar exclusao
+
+    }
+}
+
+/* Se clicar no cancelar da confirmação exibe o modal de visualizar */
+$(document).on('click', '#btnCancelDelete', function () {
+    $('#modalViewEvent').modal('show');
+});
+
 /*
  * Cadastrar um Evento
  * event.preventDefault(); = não fecha o modal sem autorizar
  */
 $(document).ready(function () {
-
-    /*$("#formRegisterEvent").on("submit", function (event) {
-        event.preventDefault();
-        $.ajax({
-            method: "POST",
-            url: "/agenda/calendario/cadastar",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (retorna) {
-                if (retorna['sit']) {
-                    //$("#msg-cad").html(retorna['msg']);
-                    location.reload();
-                } else {
-                    $("#msg-cad").html(retorna['msg']);
-                }
-            }
-        })
-    });*/
 
     //Botão Cancelar
     $('.btn-edit-event').on("click", function () {
@@ -372,4 +373,4 @@ $(document).keydown(function(e) { //Quando uma tecla é pressionada
 setTimeout(function () {
     var a = document.getElementById("toast-container");
     a.style.display = "none"
-}, 5000);
+}, 8000);

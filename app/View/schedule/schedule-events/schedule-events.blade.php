@@ -64,37 +64,50 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <form role="form" id="" action="/agenda/eventos/listar" novalidate="novalidate" autocomplete="off" method="POST">
+                <form role="form" id="formFilters" autocomplete="off" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Data de:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" name="start_date" id="start_date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    <input type="text" class="form-control" name="startDate" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Até:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" name="end_date" id="end_date" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    <input type="text" class="form-control" name="endDate" id="endDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Status:</label>
                                 <select name="status" class="form-control" id="status">
                                     <option value="">Todos</option>
-                                    <option style="background-color:#28A745; color: #fff;" value="R">Realizado</option>
                                     <option style="background-color:#FFC107; color: #fff;" value="P">Pendente</option>
+                                    <option style="background-color:#28A745; color: #fff;" value="R">Realizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Evento:</label>
+                                <select name="event" class="form-control" id="event">
+                                    <option value="">Todos</option>
+                                    <option value="Realizar Orçamento">Realizar Orçamento</option>
+                                    <option value="Voltar na Obra">Voltar na Obra</option>
+                                    <option value="Início de Obra">Início de Obra</option>
                                 </select>
                             </div>
                         </div>
@@ -103,8 +116,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <button type="reset" class="btn btn-default" value="Limpar formulário"><i class="fas fa-times"></i></button>
-            <button type="button" class="btn btn-primary" name="search" id="search" value="Search"><i class="fas fa-check"></i></button>
+            <button type="reset" class="btn btn-default" value="Reset"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
@@ -116,6 +128,7 @@
                 </div>
                 <div class="card-body">
                     <table id="listEvents" class="table table-hover">
+                        <!--table table-bordered table-striped dataTable dtr-inline-->
                         <thead>
                             <tr>
                                 <th>Evento</th>
@@ -140,10 +153,8 @@
         </div>
     </div>
 
-
-
-    
-    <div class="modal fade" id="modalViewEvent" data-toggle="modal" data-target="#modalViewEvent">
+    <!-- Modal de Visualizar Evento -->
+    <div class="modal fade" id="modalViewEvent" data-toggle="modal" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -154,7 +165,7 @@
                 </div>
                 <div class="modal-body">
                     <dl class="row">
-                    <dt class="col-sm-3">Evento:</dt>
+                        <dt class="col-sm-3">Evento:</dt>
                         <dd class="col-sm-8" id="title"></dd>
 
                         <dt class="col-sm-3">Inicío:</dt>
@@ -183,7 +194,6 @@
                         <dt class="col-sm-3" id="dtEmail">Email:</dt>
                         <dd class="col-sm-8" id="ddEmail"><a href="" id="email" target="_blank"></a></dd>
 
-                        <!--se usar a outra forma de ocultar tem que criar uma div que englobe os 2 campos abaixo-->
                         <dt class="col-sm-3" id="dtEdifice">Edificio:</dt>
                         <dd class="col-sm-8" id="edifice"></dd>
 
@@ -201,15 +211,16 @@
                     </dl>
                 </div>
                 <div class="modal-footer" id="footer">
-                    <button class="btn btn-warning btn-canc-vis">Editar</button>
-                    <a href="" id="deleteEvent" class="btn btn-danger">Apagar</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a href="#" class="btn btn-danger btn-delete-event">Apagar</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalDeleteEvent" data-toggle="modal" data-target="#modalDeleteEvent">
-        <div class="modal-dialog modal-sm">
+    <!-- Modal de confirmação -->
+    <div class="modal fade" id="modalConfirm" data-toggle="modal" data-target="targetModalConfirm">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="titulo"></h4>
@@ -221,8 +232,8 @@
                     <p id="texto"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnCancelDelete">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmaExclusao">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirm">Sim</button>
                 </div>
             </div>
         </div>

@@ -65,7 +65,7 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
         include '../app/View/schedule/schedule-events/edit-event.php';
     });
     
-    $route->get('/eventos/mudar-status', function () {
+    $route->post('/eventos/mudar-status', function () {
         include '../app/View/schedule/schedule-events/update-status.php';
     });
 });

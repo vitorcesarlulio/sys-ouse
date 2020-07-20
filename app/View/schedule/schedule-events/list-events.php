@@ -15,6 +15,7 @@ $query =
 even_titulo, 
 even_status, 
 date_format(even_datahorai,'%d/%m/%Y') as even_datahorai,
+date_format(even_datahoraf,'%d/%m/%Y') as even_datahoraf,
 
 orca_nome, 
 orca_sobrenome
@@ -23,24 +24,24 @@ FROM tb_eventos e
 INNER JOIN tb_orcamento o 
 on e.orca_numero = o.orca_numero WHERE ";
 
-/*
-$dateStart = str_replace('/', '-', $_POST["start_date"]);
+# Filtros
+$dateStart = str_replace('/', '-',  $_POST['startDate']);
 $convertDateStart = date("Y-m-d", strtotime($dateStart));
 
-$dateEnd = str_replace('/', '-', $_POST["end_date"]);
+$dateEnd = str_replace('/', '-', $_POST['endDate']);
 $convertDateEnd = date("Y-m-d", strtotime($dateEnd));
 
-
-if($_POST["is_date_search"] == "yes")
-{
- $query .= 'even_datahorai BETWEEN "'.$convertDateStart.'" AND "'.$convertDateEnd.'" AND '; 
+if ($_POST['startDate'] != "" && $_POST['endDate'] =! "") {
+$query .= ' even_datahorai BETWEEN "'.$convertDateStart.'" AND "'.$convertDateEnd.'" AND ';
 }
 
-if ($_POST["is_date_search"] == "yes"){
- $query .= 'even_status = "'.$_POST["status"].'" AND '; 
-} */
+if ($_POST['status'] != "") {
+   $query .= 'even_status = "'.$_POST["status"].'" AND ';
+}
 
-//$query .= 'even_status = "P" AND '; 
+if ($_POST['event'] != "") {
+   $query .= 'even_titulo = "'.$_POST['event'].'" AND ';
+}
 
 //converter data para padrao br se nao a consulta tem que ser em americano
 if (isset($_POST["search"]["value"])) {
@@ -50,14 +51,14 @@ if (isset($_POST["search"]["value"])) {
     OR orca_sobrenome                         LIKE "%' . $_POST["search"]["value"] . '%" 
     OR even_status                            LIKE "%' . $_POST["search"]["value"] . '%" 
     OR date_format(even_datahorai,"%d/%m/%Y") LIKE "%' . $_POST["search"]["value"] . '%" 
-    )';
+    ) ';
 }
 
 if (isset($_POST["order"])) {
-   $query .= 'ORDER BY '.$columns[$_POST['order']['0']['column']].' '.$_POST['order']['0']['dir'].' ';
+   $query .= ' ORDER BY ' . $columns[$_POST['order']['0']['column']] . ' ' . $_POST['order']['0']['dir'] . ' ';
    //$query .= 'ORDER BY ' . $columns[$_POST['order']['0']['column']] . ' DESC '; //SE DEIXAR ASSIM PRECIO DO CODIGO 
 } else {
-   $query .= 'ORDER BY even_codigo DESC';
+   $query .= ' ORDER BY even_codigo DESC ';
 }
 
 $query1 = '';
@@ -89,8 +90,8 @@ while ($row = mysqli_fetch_array($result)) {
    $sub_array[] = $row["even_datahorai"];
    //<div class="classStatus" style="cursor: pointer;"> <span class="'.$checkStatusClass[$row["even_status"]].'">'.$checkStatus[$row["even_status"]].'</span> </div>
    //<button type="button" class="badge badge-warning">Pendente </button>
-   $sub_array[] =  '<a href="/agenda/eventos/mudar-status?id=' . $row["even_codigo"] . '"><span class="' . $checkStatusClass[$row["even_status"]] . '">' . $checkStatus[$row["even_status"]] . '</span></a>';
-   $sub_array[] = '<div class="btn-group btn-group-sm"><a href="/agenda/eventos/editar?id=' . $row["even_codigo"] . '" class="btn btn-warning" name="viewEvent"><i class="fas fa-edit"></i></a><a href="#" class="btn btn-info" id="' . $row["even_codigo"] . '" name="viewEvent"><i class="fas fa-eye"></i></a>  <button type="button" name="deleteEvent" class="btn btn-danger btn-excluir-evento" id="' . $row["even_codigo"] . '"><i class="fas fa-trash"></i></button>  </div>';
+   $sub_array[] =  '<a href="#" id="' . $row["even_codigo"] . '" class="span-update-status"><span class="' . $checkStatusClass[$row["even_status"]] . '">' . $checkStatus[$row["even_status"]] . '</span></a>';
+   $sub_array[] = '<div class="btn-group btn-group-sm"><a href="#" class="btn btn-info btn-view-event" id="' . $row["even_codigo"] . '" name="viewEvent"><i class="fas fa-eye"></i></a><button type="button" name="deleteEvent" class="btn btn-danger btn-delete-event" id="' . $row["even_codigo"] . '"><i class="fas fa-trash"></i></button></div>';
    $data[] = $sub_array;
 }
 

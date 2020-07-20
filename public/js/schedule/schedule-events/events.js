@@ -1,53 +1,91 @@
 $(document).ready(function () {
 
+    $('formFilters').submit(function () {
+        $(this)[0].reset();
+    });
+
     var dataTable = $("#listEvents").DataTable({
-        "autoWidth": false,
-        "responsive": true,
+        "deferRender": true, //Os elementos serão criados somente quando necessários
         "processing": true,
-        "serverSide": true,
+        "serverSide": true, //importante
+        "ajax": {
+            "url": "/agenda/eventos/listar",
+            "type": "POST",
+            "data": function (data) {
+                //Filtros
+                // Valor dos campos
+                var startDate = $('#startDate').val();
+                var endDate = $('#endDate').val();
+                var status = $('#status').val();
+                var event = $('#event').val();
+
+                // Anexar aos dados
+                data.startDate = startDate; 
+                data.endDate = endDate;
+                data.status = status;
+                data.event = event;
+            }
+
+        },
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
+        },
+
+        "columnDefs": [
+            { "width": "10%", "targets": 4 },
+            { "width": "10%", "targets": 3 },
+            { "width": "10%", "targets": 2 },
+        ],
+
+        
+        "responsive": true,
+
         "lengthChange": true, //Usuario aumentar ou diminuir largura da coluna
-        "keys": true,
+        "keys": true, //usar teclas para navegar bna tabela e atalhos
 
         "fixedHeader": true,
         "colReorder": true, //arrastar colunas,
-
-        //"fixedColumns": true,//creio que quando precisar rolar para esquerda e direita
-        //"Scroller": true, //cria uma rolagem dentro do dataTable
+        "paging": false,  
+        "autoWidth": false, //Largura automática (não é bom)
+        "order": [0, 'desc'], //ordenar coluna
 
         "dom": 'B <"clear"> lfrtip',
         //"dom": 'Bfrtip',
         lengthMenu: [
-            [10, 25, 50, -1],
-            ['10 rows', '25 rows', '50 rows', 'Show all']
+            [10, 25, 50, 100, -1],
+            ['10', '25', '50', '100', 'Tudo']
         ],
         "buttons": [
-            'pageLength',
+            {
+                extend: 'pageLength',
+                text: 'Resultados por página',
+            },
 
             {
                 extend: 'collection',
                 text: 'Controle',
                 autoClose: true, //fechar o modalzinho
-                buttons: [{
-                    extend: 'excel',
-                    text: '<u>E</u>xcel',
-                    key: {
-                        key: 'e',
-                        altKey: true
+                buttons:
+                    [{
+                        extend: 'excel',
+                        text: '<u>E</u>xcel',
+                        key: {
+                            key: 'e',
+                            altKey: true
+                        }
+                    },
+                    {
+                        collectionTitle: 'Visibility control',
+                        extend: 'colvis',
+                        collectionLayout: 'two-column'
+                    },
+                    {
+                        text: 'Toggle salary',
+                        action: function (e, dt, node, config) {
+                            dt.column(-1).visible(!dt.column(-1).visible());
+                        }
                     }
-                },
-
-                {
-                    collectionTitle: 'Visibility control',
-                    extend: 'colvis',
-                    collectionLayout: 'two-column'
-                },
-                {
-                    text: 'Toggle salary',
-                    action: function (e, dt, node, config) {
-                        dt.column(-1).visible(!dt.column(-1).visible());
-                    }
-                }
-                ]
+                    ]
             },
 
 
@@ -70,7 +108,6 @@ $(document).ready(function () {
                         $(this).css('background-color', '#D0D0D0');
                     });
                     $(win.document.body).find('h1').css('text-align', 'center');
-
                 }
             },
             {
@@ -79,7 +116,7 @@ $(document).ready(function () {
                 text: 'PDF MODIF',
                 orientation: 'landscape', //portrait RETRADO
                 pageSize: 'A4',
-                //download: 'open', //abrir pdf em uma nova aba, so que o nome vem cagado
+                //download: 'open', //abrir pdf em uma nova aba, so que o nome do arquivo é modificado
                 //filename: 'Oi', //nome do arquivo 
                 //footer: true, //incluir roda pe
                 //header: true, //incluir topo da tabela
@@ -122,30 +159,6 @@ $(document).ready(function () {
             }
         ],
 
-
-        //"bPaginate": false,//oculta "10 resultados por página"
-        //"paging": false, //oculta "10 resultados por página"
-        //"lengthMenu": [[100,250, -1], [100,250, "All"]],
-        //"order": [5, 'asc'], //ordenar coluna
-
-        //"searching": false,
-        //"ordering": true,
-        //"info": true,
-
-        //select: true, //selecionar coluna para alguma ação
-        //"fnRender": true, //desempenho 
-        /*Rapidez
-        scrollY: 200, //Ative a rolagem vertical no DataTables.
-        deferRender: true, //Os elementos serão criados somente quando necessários
-        scroller: true,
-         */
-
-
-        "ajax": {
-            "url": "/agenda/eventos/listar",
-            "type": "POST"
-        },
-
         /* Tirar ordenação da coluna que não desejo 
         "columnDefs": [{
             "targets": [3],
@@ -154,76 +167,84 @@ $(document).ready(function () {
         }],*/
         //"order": [[ 1, 'asc' ]],
 
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
-        }
     });
-});
 
-/* Excluir Evnto */
-$(document).on('click', '.btn-danger', function () {
-    var id = $(this).attr("id");
-    showModal('#modalDeleteEvent', 'Excluir Evento', 'Realmente deseja excluir esse registro?',
-        function () {
-            console.log(id);
-            $.ajax({
-                url: "/agenda/eventos/apagar",
-                method: "POST",
-                data: {
-                    id: id
-                },
-                success: function (data) {
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Evento apagado com sucesso!</div></div></div>');
-                    $('#listEvents').DataTable().ajax.reload();
-                }
-            });
-        }
-    );
+    //A cada click é uma requição Ajax
+    $('#startDate').keyup(function () {
+        dataTable.draw();
+    });
+    $('#endDate').keyup(function () {
+        dataTable.draw();
+    });
+
+    $('#status').change(function () {
+        dataTable.draw();
+    });
+
+    $('#event').change(function () {
+        dataTable.draw();
+    });
 
 });
+
+/* Função para Exibir modal de confirmação */
 function showModal(id, titulo, texto, callback) {
     $(id).find('#titulo').text(titulo);
     $(id).find('#texto').text(texto);
     $(id).modal('show');
     if (typeof callback === 'function') {
-        $(id).find('#btnCancelDelete').click(function () {
-            $(id).modal('close');
-        });
-        $(id).find('#confirmaExclusao').click(function () {
-            callback();
-        });
+        $(id).find('#btnConfirm').click(function () { $(id).modal('hide'); });
+        $(id).find('#btnConfirm').click(function () { callback(); }); //dado que vai confirmar exclusao
+
     }
 }
 
-//     console.log($('.btn-excluir-evento'));
-// $('.btn-excluir-evento').each(function() {
-//     $(this).click(function() { 
-//         console.log('click -> ' + $(this).data('id'));
-//         $('#exampleModal').modal('show')
-//     })
-// });
-
-/* Mudar Status Evento 
-$(document).on('click', '.classStatus', function() {
+/* Modal confirma excluir evento */
+$(document).on('click', '.btn-delete-event', function () {
     var id = $(this).attr("id");
-    if (confirm("Deseja mesmo alterar o status?")) {
-        $.ajax({
-            url: "/agenda/eventos/mudar-status",
-            method: "POST",
-            data: {
-                id: id
-            },
-            success: function(data) {
-                $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Status alterado com sucesso!</div></div></div>');
-                $("#listEvents").DataTable().destroy();
-                fetch_data();
-            }
-        })
-    }
-});*/
+    showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?',
+        function () {
+            $.ajax({
+                url: "/agenda/eventos/apagar",
+                method: "POST",
+                data: { id: id },
+                success: function () {
+                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento apagado!</div></div></div>');
+                    $('#listEvents').DataTable().ajax.reload(); //atualiza somente o data table, sem dar refresh na pagina
+                },
+                error: function () {
+                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Erro: evento não apagado!</div></div></div>');
+                    $('#listEvents').DataTable().ajax.reload();
+                }
+            });
+        }
+    );
+});
+
+/* Modal confirma mudar status evento */
+$(document).on('click', '.span-update-status', function () {
+    var id = $(this).attr("id");
+    showModal('#modalConfirm', 'Alterar Status', 'Realmente deseja alterar o status desse registro?',
+        function () {
+            $.ajax({
+                url: "/agenda/eventos/mudar-status",
+                method: "POST",
+                data: { id: id },
+                success: function () {
+                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: status alterado!</div></div></div>');
+                    $('#listEvents').DataTable().ajax.reload();
+                },
+                error: function () {
+                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="polite" style=""><div class="toast-message">Erro: status não alterado!</div></div></div>');
+                    $('#listEvents').DataTable().ajax.reload();
+                }
+            });
+        }
+    );
+});
 
 /* Visualizar Evnto */
-$(document).on('click', '.btn-info', function () {
+$(document).on('click', '.btn-view-event', function () {
     $.ajax({
         url: "/agenda/calendario/listar",
         type: 'GET',
@@ -232,95 +253,89 @@ $(document).on('click', '.btn-info', function () {
         },
         success: function (data) {
             if (JSON.parse(data).length) { //se exitir o dado > 0 
-                //$('#modalViewEvent #id').text(JSON.parse(data)[0].id);
-                //$('#modalViewEvent #title').text(JSON.parse(data)[0].title);
+                var dadosJson = JSON.parse(data)[0];
 
-                $('#modalViewEvent #title').text(JSON.parse(data)[0].title);
-                $('#modalViewEvent #start').text(JSON.parse(data)[0].start.toLocaleString());
-                $('#modalViewEvent #end').text(JSON.parse(data)[0].end.toLocaleString());
+                $('#modalViewEvent #title').text(dadosJson.title);
+                $('#modalViewEvent #start').text(dadosJson.start.toLocaleString());
+                $('#modalViewEvent #end').text(dadosJson.end.toLocaleString());
 
                 document.getElementById('P').remove();
                 document.getElementById('R').remove();
 
-                if (JSON.parse(data)[0].status == "P") {
+                //Status
+                if (dadosJson.status == "P") {
                     $('#modalViewEvent #status').append(`<span id="P" class="badge badge-warning">Pendente</span> <span id="R" class="badge badge-success" style="display:none">Realizado</span>`);
                 } else {
                     $('#modalViewEvent #status').append(`<span id="R" class="badge badge-success">Realizado</span> <span id="P" class="badge badge-warning" style="display:none">Pendente</span>`);
                 }
 
-
-                $('#modalViewEvent #name').text(JSON.parse(data)[0].name + " " + JSON.parse(data)[0].surname);
+                $('#modalViewEvent #name').text(dadosJson.name + " " + dadosJson.surname);
 
                 //Celular
-                if (JSON.parse(data)[0].cellphone != "") {
-                    $('#modalViewEvent #cellphone').text(JSON.parse(data)[0].cellphone);
-                    $('#modalViewEvent #cellphone').attr('href', `tel: +55${JSON.parse(data)[0].cellphone}`);
+                if (dadosJson.cellphone != "") {
+                    $('#modalViewEvent #cellphone').text(dadosJson.cellphone);
+                    $('#modalViewEvent #cellphone').attr('href', `tel: +55${dadosJson.cellphone}`);
                 } else {
-                    document.getElementById("dtCellphone").style.display = "none";
-                    document.getElementById("ddCellphone").style.display = "none";
+                    $("#modalViewEvent #dtCellphone").hide();
+                    $("#modalViewEvent #ddCellphone").hide();
                 }
 
                 //Telefone
-                if (JSON.parse(data)[0].telephone != "") {
-                    $('#modalViewEvent #telephone').text(JSON.parse(data)[0].telephone);
-                    $('#modalViewEvent #telephone').attr('href', `tel: +55${JSON.parse(data)[0].telephone}`);
+                if (dadosJson.telephone != "") {
+                    $('#modalViewEvent #telephone').text(dadosJson.telephone);
+                    $('#modalViewEvent #telephone').attr('href', `tel: +55${dadosJson.telephone}`);
                 } else {
-                    document.getElementById("dtTelephone").style.display = "none";
-                    document.getElementById("ddTelephone").style.display = "none";
+                    $("#modalViewEvent #dtTelephone").hide();
+                    $("#modalViewEvent #ddTelephone").hide();
                 }
 
                 //Email
-                if (JSON.parse(data)[0].email != "") {
-                    $('#modalViewEvent #email').text(JSON.parse(data)[0].email);
-                    $('#modalViewEvent #email').attr('href', `malito:${JSON.parse(data)[0].email}`);
+                if (dadosJson.email != "") {
+                    $('#modalViewEvent #email').text(dadosJson.email);
+                    $('#modalViewEvent #email').attr('href', `malito:${dadosJson.email}`);
                 } else {
-                    document.getElementById("dtEmail").style.display = "none";
-                    document.getElementById("ddEmail").style.display = "none";
+                    $("#modalViewEvent #dtEmail").hide();
+                    $("#modalViewEvent #ddEmail").hide();
                 }
 
                 //Endereço
-                $('#modalViewEvent #address').text(JSON.parse(data)[0].logradouro + ", " + JSON.parse(data)[0].number + " - " + JSON.parse(data)[0].bairro + " " + JSON.parse(data)[0].localidade + " - " + JSON.parse(data)[0].uf + " " + JSON.parse(data)[0].cep);
-                $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${JSON.parse(data)[0].logradouro + "+" + JSON.parse(data)[0].number + "+" + JSON.parse(data)[0].bairro + "+" + JSON.parse(data)[0].localidade + "+" + JSON.parse(data)[0].uf + "+" + JSON.parse(data)[0].cep}`);
+                $('#modalViewEvent #address').text(dadosJson.logradouro + ", " + dadosJson.number + " - " + dadosJson.bairro + " " + dadosJson.localidade + " - " + dadosJson.uf + " " + dadosJson.cep);
+                $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${dadosJson.logradouro + "+" + dadosJson.number + "+" + dadosJson.bairro + "+" + dadosJson.localidade + "+" + dadosJson.uf + "+" + dadosJson.cep}`);
 
                 //Edificio, bloco e Apartamento
-                if (JSON.parse(data)[0].edifice && JSON.parse(data)[0].block && JSON.parse(data)[0].apartment != "") {
-                    $('#modalViewEvent #edifice').text(JSON.parse(data)[0].edifice);
-                    $('#modalViewEvent #block').text(JSON.parse(data)[0].block);
-                    $('#modalViewEvent #apartment').text(JSON.parse(data)[0].apartment);
+                if (dadosJson.edifice && dadosJson.block && dadosJson.apartment != "") {
+                    $('#modalViewEvent #edifice').text(dadosJson.edifice);
+                    $('#modalViewEvent #block').text(dadosJson.block);
+                    $('#modalViewEvent #apartment').text(dadosJson.apartment);
                 } else {
-                    document.getElementById("dtEdifice").style.display = "none";
-                    document.getElementById("edifice").style.display = "none";
-
-                    document.getElementById("dtBlock").style.display = "none";
-                    document.getElementById("block").style.display = "none";
-
-                    document.getElementById("dtApartment").style.display = "none";
-                    document.getElementById("apartment").style.display = "none";
-                } /* OU if (JSON.parse(data)[0].edifice != "") {$('#modalViewEvent #edifice').append(`<dt class="col-sm-3">Edificio:</dt>`);$('#modalViewEvent #edifice').append(`<dd class="col-sm-8">${JSON.parse(data)[0].edifice}</dd>`);} */
+                    $("#modalViewEvent #dtEdifice").hide();
+                    $("#modalViewEvent #edifice").hide();
+                    $("#modalViewEvent #dtBlock").hide();
+                    $("#modalViewEvent #block").hide();
+                    $("#modalViewEvent #dtApartment").hide();
+                    $("#modalViewEvent #apartment").hide();
+                }
 
                 //Rua do Condominio
-                if (JSON.parse(data)[0].streetCondominium != "") {
-                    $('#modalViewEvent #streetCondominium').text(JSON.parse(data)[0].streetCondominium);
+                if (dadosJson.streetCondominium != "") {
+                    $('#modalViewEvent #streetCondominium').text(dadosJson.streetCondominium);
                 } else {
-                    document.getElementById("dtStreetCondominium").style.display = "none";
-                    document.getElementById("streetCondominium").style.display = "none";
+                    $("#modalViewEvent #dtStreetCondominium").hide();
+                    $("#modalViewEvent #streetCondominium").hide();
                 }
 
                 //Observação
-                if (JSON.parse(data)[0].observation != "") {
-                    $('#modalViewEvent #observation').text(JSON.parse(data)[0].observation);
+                if (dadosJson.observation != "") {
+                    $('#modalViewEvent #observation').text(dadosJson.observation);
                 } else {
-                    document.getElementById("divObservation").style.display = "none";
-                    document.getElementById("dtObservation").style.display = "none";
+                    $("#modalViewEvent #divObservation").hide();
+                    $("#modalViewEvent #dtObservation").hide();
                 }
 
                 $('#modalViewEvent').modal('show');
             }
         }
     });
-
-    //$('#modalViewEvent #id').text(id);
-
 });
 
 /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */

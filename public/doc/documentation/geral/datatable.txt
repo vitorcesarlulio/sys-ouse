@@ -52,3 +52,22 @@
 
 https://datatables.net/reference/option/language
 
+        "fixedColumns": true,//creio que quando precisar rolar para esquerda e direita
+        "Scroller": true, //cria uma rolagem dentro do dataTable, mas precisa do cdn do componente
+
+        "bPaginate": false,//oculta "10 resultados por página"
+        "paging": false, //oculta "10 resultados por página"
+        "lengthMenu": [[100,250, -1], [100,250, "All"]],
+        "order": [5, 'asc'], //ordenar coluna
+
+        "searching": false, //campo de pesquisa oculto
+        "ordering": true,
+        "info": true,
+
+        select: true, //selecionar coluna para alguma ação
+        "fnRender": true, //desempenho 
+        //Rapidez
+        scrollY: 200, //Ative a rolagem vertical no DataTables.
+        scroller: true,
+         
+

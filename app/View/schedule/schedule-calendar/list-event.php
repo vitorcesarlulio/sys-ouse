@@ -2,7 +2,7 @@
 include '../app/Model/connection-pdo.php';
 
 $querySelectEvent =
-" SELECT 
+    " SELECT 
 even_codigo, 
 even_titulo, 
 even_cor, 
@@ -28,7 +28,7 @@ orca_logradouro_condominio
 
 FROM tb_eventos e 
 INNER JOIN tb_orcamento o 
-on e.orca_numero = o.orca_numero ";
+ON e.orca_numero = o.orca_numero ";
 
 # Visualizar evento pela consulta Eventos (fora do calendario)
 $parametros = [];
@@ -45,6 +45,40 @@ $searchEvent->execute($parametros);
 $eventos = [];
 
 while ($row_events = $searchEvent->fetch(PDO::FETCH_ASSOC)) {
+
+    #Somente as Datas
+    $dateStart = substr($row_events['even_datahorai'], 0, 10);
+    $dateStart = explode("-", $dateStart);
+    $dateStart = $dateStart[2] . "/" . $dateStart[1] . "/" . $dateStart[0];
+
+    #Somente hora e minuto
+    $hourStart = substr($row_events['even_datahorai'], 11, -3);
+    $hourEnd   = substr($row_events['even_datahoraf'], 11, -3);
+
+    #Mascara Celular
+    if (strlen($row_events['orca_cel']) == 10) {
+        $cellphoneFormatted = substr_replace($row_events['orca_cel'], '(', 0, 0);
+        $cellphoneFormatted = substr_replace($cellphoneFormatted, '9', 3, 0);
+        $cellphoneFormatted = substr_replace($cellphoneFormatted, ')', 3, 0);
+    } else {
+        $cellphoneFormatted = substr_replace($row_events['orca_cel'], '(', 0, 0);
+        $cellphoneFormatted = substr_replace($cellphoneFormatted, ') ', 3, 0);
+        $cellphoneFormatted = substr_replace($cellphoneFormatted, '-', 10, 0);
+    }
+
+    #Mascara Telefone
+    if (strlen($row_events['orca_tel']) == 9) {
+        $telephoneFormatted = substr_replace($row_events['orca_tel'], '(', 0, 0);
+        $telephoneFormatted = substr_replace($telephoneFormatted, '9', 3, 0);
+        $telephoneFormatted = substr_replace($telephoneFormatted, ')', 3, 0);
+    } else {
+        $telephoneFormatted = substr_replace($row_events['orca_tel'], '(', 0, 0);
+        $telephoneFormatted = substr_replace($telephoneFormatted, ') ', 3, 0);
+        $telephoneFormatted = substr_replace($telephoneFormatted, '-', 9, 0);
+    }
+
+    $row_events['orca_cep'] = substr_replace($row_events['orca_cep'], '-', 5, 0);
+
 
     $eventos[] = [
         'id'                => $row_events['even_codigo'],
@@ -69,9 +103,13 @@ while ($row_events = $searchEvent->fetch(PDO::FETCH_ASSOC)) {
         'block'             => $row_events['orca_bloco'],
         'apartment'         => $row_events['orca_apartamento'],
         'streetCondominium' => $row_events['orca_logradouro_condominio'],
+
+        'dateStart'         => $dateStart,
+        'hourStart'         => $hourStart,
+        'hourEnd'           => $hourEnd,
+        'cellphoneFormatted' => $cellphoneFormatted,
+        'telephoneFormatted' => $telephoneFormatted,
     ];
 }
 
 echo json_encode($eventos);
-
-?>

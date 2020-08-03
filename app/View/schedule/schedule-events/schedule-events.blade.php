@@ -41,7 +41,27 @@
     .badge{
         border-color: #FFC107;
         color: #fff;
-    }*/
+    }
+    
+    .dataTables_filter { //deixar a caixa de filtro no meio
+	float: left;
+	margin-top: 4px;
+	margin-right: 2%;
+	text-align: left;
+    }
+    */
+    .dataTables_length {
+        display: none;
+    }
+
+    .dt-buttons {
+        margin-bottom: 10px;
+    }
+
+    .dt-buttons.btn-group {
+        float: left;
+        margin-right: 2%;
+    }
 </style>
 @endsection
 
@@ -54,6 +74,7 @@
 <div id="alertMessage"></div>
 
 <div class="container-fluid">
+    
     <div class="card card-primary collapsed-card">
         <div class="card-header">
             <h3 class="card-title">Filtros</h3>
@@ -62,29 +83,41 @@
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <form role="form" id="formFilters" autocomplete="off" enctype="multipart/form-data">
+        <form role="form" id="formFilters" autocomplete="off" enctype="multipart/form-data">
+        <div class="card-body">               
                     <div class="row">
-                        <div class="col-sm-3">
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>Periodo:</label>
+                                <select name="event" class="form-control" id="period">
+                                    <option value="">Todos</option>
+                                    <option value="today">Hoje</option>
+                                    <option value="afterToday">Depois de Hoje</option>
+                                    <option value="beforeToday">Antes de Hoje</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Data de:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" name="startDate" id="startDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    <input type="date" class="form-control" name="startDate" id="startDate">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Até:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" name="endDate" id="endDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                    <input type="date" class="form-control" name="endDate" id="endDate">
                                 </div>
                             </div>
                         </div>
@@ -99,8 +132,8 @@
                                 </select>
                             </div>
                         </div>
-                        
-                        <div class="col-sm-3">
+
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Evento:</label>
                                 <select name="event" class="form-control" id="event">
@@ -111,10 +144,18 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>Descrição do Relatório</label>
+                                <input type="text" name="descriptionReport" id="descriptionReport" class="form-control">
+                            </div>
+                        </div>
+
                     </div>
-                </form>
-            </div>
+                
         </div>
+        </form>
         <div class="card-footer">
             <button type="reset" class="btn btn-default" value="Reset"><i class="fas fa-times"></i></button>
         </div>
@@ -132,19 +173,23 @@
                         <thead>
                             <tr>
                                 <th>Evento</th>
-                                <th>Nome</th>
-                                <th>Inicio</th>
+                                <th>Pessoa</th>
+                                <th>Data de início</th>
+                                <th>Hora Inicial</th>
+                                <th>Hora Final</th>
                                 <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Evento</th>
-                                <th>Nome</th>
-                                <th>Inicio</th>
-                                <th>Status</th>
-                                <th>Ações</th>
+                                <th>Evento </th>
+                                <th>Pessoa </th>
+                                <th>Data de início</th>
+                                <th>Hora Inicial </th>
+                                <th>Hora Final </th>
+                                <th>Status </th>
+                                <th>Ações </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -154,7 +199,7 @@
     </div>
 
     <!-- Modal de Visualizar Evento -->
-    <div class="modal fade" id="modalViewEvent" data-toggle="modal" >
+    <div class="modal fade" id="modalViewEvent" data-toggle="modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -203,7 +248,7 @@
                         <dt class="col-sm-3" id="dtApartment">Apartamento:</dt>
                         <dd class="col-sm-8" id="apartment"></dd>
 
-                        <dt class="col-sm-3" id="dtStreetCondominium">Rua do Conominio:</dt>
+                        <dt class="col-sm-3" id="dtStreetCondominium">Rua do Condomínio:</dt>
                         <dd class="col-sm-8" id="streetCondominium"></dd>
 
                         <dt class="col-sm-3" id="dtObservation"> Observação: </dt>
@@ -211,7 +256,8 @@
                     </dl>
                 </div>
                 <div class="modal-footer" id="footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a href="#" id="btnWpp" class="btn btn-success" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <a href="#" class="btn btn-danger btn-delete-event">Apagar</a>
                 </div>
             </div>

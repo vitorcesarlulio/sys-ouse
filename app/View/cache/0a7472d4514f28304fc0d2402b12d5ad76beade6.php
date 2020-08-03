@@ -15,6 +15,10 @@
   <?php echo $__env->yieldContent('head'); ?>
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.min.css' ?>">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="<?= DIRPLUGINS . 'tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' ?>">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="<?= DIRPLUGINS . 'overlayScrollbars/css/OverlayScrollbars.min.css' ?>">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- pace-progress -->
@@ -22,7 +26,7 @@
   <?php echo $__env->yieldContent('css'); ?>
 </head>
 
-<body class="hold-transition pace-primary pace-done sidebar-mini  sidebar-collapse ">
+<body class="hold-transition pace-primary pace-done sidebar-mini sidebar-collapse">
   <!--layout-navbar-fixed-->
   <div class="pace pace-inactive">
     <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
@@ -253,17 +257,20 @@
   <script src="<?= DIRPLUGINS . 'bootstrap/js/bootstrap.bundle.min.js' ?>"></script>
 
   <!-- jQuery UI -->
-  <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="<?= DIRPLUGINS . 'jquery-ui/jquery-ui.min.js' ?>"></script>
 
   <!-- AdminLTE App (nao sei o que é)-->
   <script src="<?= DIRJS . 'adminlte.min.js' ?>"></script>
+
+  <!-- overlayScrollbars -->
+  <script src="<?= DIRPLUGINS . 'overlayScrollbars/js/jquery.overlayScrollbars.min.js' ?>"></script>
 
   <!-- AdminLTE for demo purposes (nao sei o que é) -->
   <script src="<?= DIRJS . 'demo.js' ?>"></script>
 
   <?php echo $__env->yieldContent('script'); ?>
 
- <!-- <script>
+  <!-- <script>
     $(document).ready(function() {
       $(document).keypress(function(e) {
         if (e.wich == 67 || e.keyCode == 67) {

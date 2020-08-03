@@ -78,13 +78,13 @@ $(function () {
                 $('#modalViewEvent').modal('hide');
                 showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?', function () { $("#btnConfirm").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id); });
             });
-            
+
             info.jsEvent.preventDefault();
 
             //Visualizar
             $('#modalViewEvent #title').text(info.event.title);
-            $('#modalViewEvent #start').text(info.event.start.toLocaleString());
-            $('#modalViewEvent #end').text(info.event.end.toLocaleString());
+            $('#modalViewEvent #start').text(info.event.extendedProps.dateStart + " " + info.event.extendedProps.hourStart + "h");
+            $('#modalViewEvent #end').text(info.event.extendedProps.dateStart + " " + info.event.extendedProps.hourEnd + "h");
 
             document.getElementById('P').remove();
             document.getElementById('R').remove();
@@ -95,12 +95,11 @@ $(function () {
                 $('#modalViewEvent #status').append(`<span id="R" class="badge badge-success">Realizado</span> <span id="P" class="badge badge-warning" style="display:none">Pendente</span>`);
             }
 
-
             $('#modalViewEvent #name').text(info.event.extendedProps.name + " " + info.event.extendedProps.surname);
 
             //Celular
             if (info.event.extendedProps.cellphone != "") {
-                $('#modalViewEvent #cellphone').text(info.event.extendedProps.cellphone);
+                $('#modalViewEvent #cellphone').text(info.event.extendedProps.cellphoneFormatted);
                 $('#modalViewEvent #cellphone').attr('href', `tel: +55${info.event.extendedProps.cellphone}`);
             } else {
                 $("#modalViewEvent #dtCellphone").hide();
@@ -109,7 +108,7 @@ $(function () {
 
             //Telefone
             if (info.event.extendedProps.telephone != "") {
-                $('#modalViewEvent #telephone').text(info.event.extendedProps.telephone);
+                $('#modalViewEvent #telephone').text(info.event.extendedProps.telephoneFormatted);
                 $('#modalViewEvent #telephone').attr('href', `tel: +55${info.event.extendedProps.telephone}`);
             } else {
                 $("#modalViewEvent #dtTelephone").hide();
@@ -125,9 +124,11 @@ $(function () {
                 $("#modalViewEvent #ddEmail").hide();
             }
 
-            //Endereço
-            $('#modalViewEvent #address').text(info.event.extendedProps.logradouro + ", " + info.event.extendedProps.number + " - " + info.event.extendedProps.bairro + " " + info.event.extendedProps.localidade + " - " + info.event.extendedProps.uf + " " + info.event.extendedProps.cep);
-            $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${info.event.extendedProps.logradouro + "+" + info.event.extendedProps.number + "+" + info.event.extendedProps.bairro + "+" + info.event.extendedProps.localidade + "+" + info.event.extendedProps.uf + "+" + info.event.extendedProps.cep}`);
+            //Endereço 
+            var adressJoin = info.event.extendedProps.logradouro + ", " + info.event.extendedProps.number + " - " + info.event.extendedProps.bairro + " " + info.event.extendedProps.localidade + " - " + info.event.extendedProps.uf + " " + info.event.extendedProps.cep;
+            var adressLink = info.event.extendedProps.logradouro + "+" + info.event.extendedProps.number + "+" + info.event.extendedProps.bairro + "+" + info.event.extendedProps.localidade + "+" + info.event.extendedProps.uf + "+" + info.event.extendedProps.cep;
+            $('#modalViewEvent #address').text(adressJoin);
+            $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${adressLink}`);
 
             //Edificio, bloco e Apartamento
             if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
@@ -159,13 +160,94 @@ $(function () {
                 $("#modalViewEvent #dtObservation").hide();
             }
 
+            //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
             //Editar
             $('#modalViewEvent #id').val(info.event.id);
-            $('#modalViewEvent #title').val(info.event.title);
-            $('#modalViewEvent #start').val(info.event.start.toLocaleString());
-            $('#modalViewEvent #end').val(info.event.end.toLocaleString());
-            $('#modalViewEvent #color').val(info.event.backgroundColor);
+            $('#modalViewEvent #selectionTitleEdit').val(info.event.title);
+            $('#modalViewEvent #startDateEdit').val(info.event.start.toLocaleString());
+            $('#modalViewEvent #startTimeEdit').val(info.event.extendedProps.hourStart);
+            $('#modalViewEvent #endTimeEdit').val(info.event.extendedProps.hourEnd);
+
+            if (info.event.title == "Voltar na Obra" || info.event.title == "Início de Obra") {
+                $('#modalViewEvent #divClientEdit').show();
+                $('#modalViewEvent #divClientEdit').val(info.event.extendedProps.name + " " + info.event.extendedProps.surname);
+            } else {
+                $('#modalViewEvent #divClientEdit').hide();
+            }
+
+            /*
+            $('#modalViewEvent #nameEdit').val(info.event.extendedProps.name);
+            $('#modalViewEvent #surnameEdit').val(info.event.extendedProps.surname);
+            $('#modalViewEvent #cellphoneEdit').val(info.event.extendedProps.cellphone);
+            $('#modalViewEvent #telephoneEdit').val(info.event.extendedProps.telephone);
+            $('#modalViewEvent #emailEdit').val(info.event.extendedProps.email);
+            $('#modalViewEvent #cep').val(info.event.extendedProps.cep);
+            $('#modalViewEvent #logradouro').val(info.event.extendedProps.logradouro);
+            $('#modalViewEvent #bairro').val(info.event.extendedProps.bairro);
+            $('#modalViewEvent #localidade').val(info.event.extendedProps.localidade);
+            $('#modalViewEvent #uf').val(info.event.extendedProps.uf);
+
+            /*Numero
+            if (info.event.extendedProps.number != "") {
+                $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
+                $("#modalViewEvent #optionHomeEdit").prop("checked", true);
+            } else {
+                $('#modalViewEvent #divNumberEdit').hide();
+            }
+
+            //Edificio
+            if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
+                $('#modalViewEvent #edificeEdit').val(info.event.extendedProps.edifice);
+                $('#modalViewEvent #blockEdit').val(info.event.extendedProps.block);
+                $('#modalViewEvent #apartmentEdit').val(info.event.extendedProps.apartment);
+                $("#modalViewEvent #optionBuildingEdit").prop("checked", true);
+            } else {
+                $('#modalViewEvent #divEdificeEdit').hide();
+                $('#modalViewEvent #divBlockEdit').hide();
+                $('#modalViewEvent #divApartmentEdit').hide();
+            }
+
+            //Condominio
+            if (info.event.extendedProps.number && info.event.extendedProps.streetCondominium != "") {
+                $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
+                $('#modalViewEvent #streetCondominiumEdit').val(info.event.extendedProps.streetCondominium);
+                $("#modalViewEvent #optionCondominiumEdit").prop("checked", true);
+            } else {
+                $('#modalViewEvent #divStreetCondominiumEdit').hide();
+                $('#modalViewEvent #divNumberEdit').hide();
+            }
+
+            if (info.event.extendedProps.observation != "") {
+                $('#modalViewEvent #observationEdit').val(info.event.extendedProps.observation);
+            }else{
+                $('#modalViewEvent #divObservationEdit').hide();
+            } */
+        
+
+
+            //Momento do dia (bom dia, boa tarde...)
+            varDate = new Date();
+            hour = varDate.getHours();
+            if (hour < 5) { var momentDay = "Boa noite, "; }
+            else
+                if (hour < 8) { var momentDay = "Bom dia, "; }
+                else
+                    if (hour < 12) { var momentDay = "Bom dia, "; }
+                    else
+                        if (hour < 18) { var momentDay = "Boa tarde, "; }
+                        else { var momentDay = "Boa noite, "; }
+
+            //Mensagem WhatsApp                        
+            if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
+                var msgWhatsapp = momentDay + info.event.extendedProps.name + " " + info.event.extendedProps.surname + "! %0AVocê agendou uma visita para o *Dia:* " + info.event.extendedProps.dateStart + " das " + info.event.extendedProps.hourStart + " às " + info.event.extendedProps.hourEnd +
+                    " no *Endereço:* " + adressJoin + " *Edifício:* " + info.event.extendedProps.edifice + " *Bloco:* " + info.event.extendedProps.block + " *Apartamento:* " + info.event.extendedProps.apartment + " . Até mais, Gesso Cidade Nova.";
+            } else {
+                var msgWhatsapp = momentDay + info.event.extendedProps.name + " " + info.event.extendedProps.surname + "! %0AVocê agendou uma visita para o *Dia:* " + info.event.extendedProps.dateStart + " das " + info.event.extendedProps.hourStart + " às " + info.event.extendedProps.hourEnd +
+                    " no *Endereço:* " + adressJoin + ". Até mais, Gesso Cidade Nova.";
+            }
+
+            $("#btnWpp").attr("href", "https://api.whatsapp.com/send?phone=+55" + info.event.extendedProps.cellphone + "&text=" + msgWhatsapp);
 
 
             $('#modalViewEvent').modal('show');
@@ -191,6 +273,7 @@ $(function () {
     calendar.render();
 });
 
+/* Função para Exibir modal de confirmação */
 function showModal(id, titulo, texto, callback) {
     $(id).find('#titulo').text(titulo);
     $(id).find('#texto').text(texto);
@@ -207,10 +290,7 @@ $(document).on('click', '#btnCancelDelete', function () {
     $('#modalViewEvent').modal('show');
 });
 
-/*
- * Cadastrar um Evento
- * event.preventDefault(); = não fecha o modal sem autorizar
- */
+/* Ações do botão Editar e Canclar */
 $(document).ready(function () {
 
     //Botão Cancelar
@@ -224,40 +304,21 @@ $(document).ready(function () {
         $('.formedit').slideToggle();
         $('.divViewEvent').slideToggle();
     });
-
-    $("#formEditEvent").on("submit", function (event) {
-        //event.preventDefault(); //para nao atualizar a pagina
-        $.ajax({
-            method: "POST",
-            url: "/agenda/calendario/editar",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (retorna) {
-                if (retorna['sit']) {
-                    //$("#msg-cad").html(retorna['msg']);
-                    location.reload();
-                } else {
-                    $("#msg-edit").html(retorna['msg']);
-                }
-            }
-        })
-    });
 });
 
 /* Função para mostrar ou ocultar campos de acordo com seleção (Marcar horário?) */
 function optionsScheduleTime() {
     var optionScheduleTimeYes = document.getElementById("optionScheduleTimeYes").checked;
     if (optionScheduleTimeYes) {
-        document.getElementById("divTitleRegister").style.display = "block";
-        document.getElementById("divStartDateRegister").style.display = "block";
-        document.getElementById("divStartTimeRegister").style.display = "block";
-        document.getElementById("divEndTimeRegister").style.display = "block";
+        $("#divTitleRegister").show();
+        $("#divStartDateRegister").show();
+        $("#divStartTimeRegister").show();
+        $("#divEndTimeRegister").show();
     } else {
-        document.getElementById("divTitleRegister").style.display = "none";
-        document.getElementById("divStartDateRegister").style.display = "none";
-        document.getElementById("divStartTimeRegister").style.display = "none";
-        document.getElementById("divEndTimeRegister").style.display = "none";
+        $("#divTitleRegister").hide();
+        $("#divStartDateRegister").hide();
+        $("#divStartTimeRegister").hide();
+        $("#divEndTimeRegister").hide();
     }
 }
 
@@ -265,42 +326,38 @@ function optionsScheduleTime() {
 window.onload = function () {
     var select = document.getElementById("selectionTitleRegister").addEventListener('change', function () {
         if (this.value == 'Voltar na Obra' || this.value == 'Início de Obra') {
-            document.getElementById('divClientRegister').style.display = 'block';
-
-            document.getElementById('divNameRegister').style.display = 'none';
-            document.getElementById('divSurnameRegister').style.display = 'none';
-            document.getElementById('divCellphoneRegister').style.display = 'none';
-            document.getElementById('divTelephoneRegister').style.display = 'none';
-            document.getElementById('divEmaileRegister').style.display = 'none';
-            document.getElementById('divCepRegister').style.display = 'none';
-            document.getElementById('divStreetRegister').style.display = 'none';
-            document.getElementById('divNeighBorhoodRegister').style.display = 'none';
-            document.getElementById('divCityRegister').style.display = 'none';
-            document.getElementById('divStateRegister').style.display = 'none';
-            document.getElementById('divTypeResidenceRegister').style.display = 'none';
-            document.getElementById("divEdificeRegister").style.display = "none";
-            document.getElementById("divBlockRegister").style.display = "none";
-            document.getElementById("divApartamentRegister").style.display = "none";
-            document.getElementById("divStreetCondominiumRegister").style.display = "none";
-            document.getElementById("divNumberRegister").style.display = "none";
-
-            document.getElementById("divScheduleTimeNo").style.display = "none";//quando clicar em realizar orçamento ele oculta "Não" na opção "Marcar Horario?"
+            $("#divClientRegister").show();//Mostra a seleção do cliente
+            $("#divNameRegister").hide();
+            $("#divSurnameRegister").hide();
+            $("#divCellphoneRegister").hide();
+            $("#divTelephoneRegister").hide();
+            $("#divEmaileRegister").hide();
+            $("#divCepRegister").hide();
+            $("#divStreetRegister").hide();
+            $("#divNeighBorhoodRegister").hide();
+            $("#divCityRegister").hide();
+            $("#divStateRegister").hide();
+            $("#divTypeResidenceRegister").hide();
+            $("#divEdificeRegister").hide();
+            $("#divBlockRegister").hide();
+            $("#divApartmentRegister").hide();
+            $("#divStreetCondominiumRegister").hide();
+            $("#divNumberRegister").hide();
+            $("#divScheduleTimeNo").hide();//quando clicar em realizar orçamento ele oculta "Não" na opção "Marcar Horario?"
         } else {
-            document.getElementById('divClientRegister').style.display = 'none';
-
-            document.getElementById('divNameRegister').style.display = 'block';
-            document.getElementById('divSurnameRegister').style.display = 'block';
-            document.getElementById('divCellphoneRegister').style.display = 'block';
-            document.getElementById('divTelephoneRegister').style.display = 'block';
-            document.getElementById('divEmaileRegister').style.display = 'block';
-            document.getElementById('divCepRegister').style.display = 'block';
-            document.getElementById('divStreetRegister').style.display = 'block';
-            document.getElementById('divNeighBorhoodRegister').style.display = 'block';
-            document.getElementById('divCityRegister').style.display = 'block';
-            document.getElementById('divStateRegister').style.display = 'block';
-            document.getElementById('divTypeResidenceRegister').style.display = 'block';
-
-            document.getElementById("divScheduleTimeNo").style.display = "block";//quando clicar em realizar orçamento ele mostra "Não" na opção "Marcar Horario?"
+            $("#divClientRegister").hide(); //esconde a seleção do cliente
+            $("#divNameRegister").show();
+            $("#divSurnameRegister").show();
+            $("#divCellphoneRegister").show();
+            $("#divTelephoneRegister").show();
+            $("#divEmaileRegister").show();
+            $("#divCepRegister").show();
+            $("#divStreetRegister").show();
+            $("#divNeighBorhoodRegister").show();
+            $("#divCityRegister").show();
+            $("#divStateRegister").show();
+            $("#divTypeResidenceRegister").show();
+            $("#divScheduleTimeNo").show();//quando clicar em realizar orçamento ele mostra "Não" na opção "Marcar Horario?"
         }
     });
 }
@@ -312,37 +369,65 @@ function optionTypeResidenceRegister() {
     if (optionHomeRegister) {
         $('#edificeRegister').val("");
         $('#blockRegister').val("");
-        $('#apartamentRegister').val("");
+        $('#apartmentRegister').val("");
         $('#streetCondominiumRegister').val("");
         $('#numberRegister').val("");
 
-        document.getElementById("divEdificeRegister").style.display = "none";
-        document.getElementById("divBlockRegister").style.display = "none";
-        document.getElementById("divApartamentRegister").style.display = "none";
-        document.getElementById("divStreetCondominiumRegister").style.display = "none";
-        document.getElementById("divNumberRegister").style.display = "block";
+        $("#divEdificeRegister").hide();
+        $("#divBlockRegister").hide();
+        $("#divApartmentRegister").hide();
+        $("#divStreetCondominiumRegister").hide();
+        $("#divNumberRegister").show();
     } else if (optionCondominiumRegister) {
         $('#edificeRegister').val("");
         $('#blockRegister').val("");
-        $('#apartamentRegister').val("");
+        $('#apartmentRegister').val("");
         $('#streetCondominiumRegister').val("");
         $('#numberRegister').val("");
-        document.getElementById("divEdificeRegister").style.display = "none";
-        document.getElementById("divBlockRegister").style.display = "none";
-        document.getElementById("divApartamentRegister").style.display = "none";
-        document.getElementById("divStreetCondominiumRegister").style.display = "block";
-        document.getElementById("divNumberRegister").style.display = "block";
+
+        $("#divEdificeRegister").hide();
+        $("#divBlockRegister").hide();
+        $("#divApartmentRegister").hide();
+        $("#divStreetCondominiumRegister").show();
+        $("#divNumberRegister").show();
     } else {
         $('#edificeRegister').val("");
         $('#blockRegister').val("");
-        $('#apartamentRegister').val("");
+        $('#apartmentRegister').val("");
         $('#streetCondominiumRegister').val("");
         $('#numberRegister').val("");
-        document.getElementById("divEdificeRegister").style.display = "block";
-        document.getElementById("divBlockRegister").style.display = "block";
-        document.getElementById("divApartamentRegister").style.display = "block";
-        document.getElementById("divStreetCondominiumRegister").style.display = "none";
-        document.getElementById("divNumberRegister").style.display = "none";
+
+        $("#divEdificeRegister").show();
+        $("#divBlockRegister").show();
+        $("#divApartmentRegister").show();
+        $("#divStreetCondominiumRegister").hide();
+        $("#divNumberRegister").hide();
+    }
+}
+
+//Editar
+/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de residencia) - EDITAR */
+function optionTypeResidenceEdit() {
+    var optionHomeEdit = document.getElementById("optionHomeEdit").checked;
+    var optionCondominiumEdit = document.getElementById("optionCondominiumEdit").checked;
+    if (optionHomeEdit) {
+        $("#divEdificeEdit").hide();
+        $("#divBlockEdit").hide();
+        $("#divApartmentEdit").hide();
+        $("#divStreetCondominiumEdit").hide();
+        $("#divNumberEdit").show();
+    } else if (optionCondominiumEdit) {
+        $("#divEdificeEdit").hide();
+        $("#divBlockEdit").hide();
+        $("#divApartmentEdit").hide();
+        $("#divStreetCondominiumEdit").show();
+        $("#divNumberEdit").show();
+    } else {
+        $("#divEdificeEdit").show();
+        $("#divBlockEdit").show();
+        $("#divApartmentEdit").show();
+        $("#divStreetCondominiumEdit").hide();
+        $("#divNumberEdit").hide();
     }
 }
 

@@ -60,14 +60,35 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
     $route->post('/eventos/apagar', function () {
         include '../app/View/schedule/schedule-events/delete-event.php';
     });
-
-    $route->get('/eventos/editar', function () {
-        include '../app/View/schedule/schedule-events/edit-event.php';
-    });
     
     $route->post('/eventos/mudar-status', function () {
         include '../app/View/schedule/schedule-events/update-status.php';
     });
+});
+
+# Usuarios
+$route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
+
+    $route->get('', function () use ($blade) {
+        echo $blade->render('users.users');
+    });
+
+    $route->post('/listar', function () {
+        include '../app/View/users/list-users.php';
+    });
+
+    $route->post('/apagar', function () {
+        include '../app/View/users/delete-users.php';
+    });
+
+    $route->post('/cadastrar', function () {
+        include '../app/View/users/register-user.php';
+    });
+
+    $route->post('/listar-editar', function () {
+        include '../app/View/users/list-user-edit.php';
+    });
+
 });
 
 $route->on();

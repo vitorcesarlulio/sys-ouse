@@ -27,6 +27,10 @@
 </head>
 
 <body class="hold-transition pace-primary pace-done sidebar-mini sidebar-collapse">
+
+  <!-- Alerta depois de alguma alteração GLOBAL -->
+  <div id="alertMessage"></div>
+
   <!--layout-navbar-fixed-->
   <div class="pace pace-inactive">
     <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
@@ -206,6 +210,13 @@
               </ul>
             </li>
 
+            <li class="nav-item has-treeview">
+              <a href="/usuarios" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p> Usuários </p>
+              </a>
+            </li>
+
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -232,6 +243,8 @@
         </div><!-- /.container-fluid -->
       </section>
 
+
+
       <!-- Main content -->
       <section class="content">
         <?php echo $__env->yieldContent('content'); ?>
@@ -239,6 +252,27 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+    <!-- Modal de confirmação Global -->
+    <div class="modal fade" id="modalConfirm" data-toggle="modal" data-target="targetModalConfirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="titulo"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="texto"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="btnConfirm">Sim</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="main-footer">
       <strong>Copyright &copy; <?php echo e(date('Y')); ?> <a href="https://ouse.com.br" target="_blank">Ouse</a>.</strong>

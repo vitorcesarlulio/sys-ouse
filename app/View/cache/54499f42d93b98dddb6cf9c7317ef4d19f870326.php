@@ -71,7 +71,6 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<div id="alertMessage"></div>
 
 <div class="container-fluid">
     
@@ -263,28 +262,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal de confirmação -->
-    <div class="modal fade" id="modalConfirm" data-toggle="modal" data-target="targetModalConfirm">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="titulo"></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="texto"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="btnConfirm">Sim</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 <?php $__env->stopSection(); ?>
 
@@ -296,7 +273,7 @@
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
 <script src="<?= DIRJS . 'schedule/schedule-events/events.js' ?>"></script>
-
+<script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
 <!-- Alerta de cadastro - Toastr Examples -->
 <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 

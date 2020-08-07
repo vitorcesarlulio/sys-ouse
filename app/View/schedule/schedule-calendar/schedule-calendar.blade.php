@@ -2,7 +2,7 @@
 session_start();
 require_once '../app/Model/connection-mysqli.php';
 
-$selectClient = "SELECT orca_numero, orca_nome, orca_sobrenome from tb_orcamento ORDER BY orca_numero DESC";
+$selectClient = " SELECT orca_numero, orca_nome, orca_sobrenome from tb_orcamento ORDER BY orca_numero DESC ";
 $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 
 ?>
@@ -300,21 +300,7 @@ if (isset($_SESSION['msg'])) {
                                             <label>Apartamento</label>
                                             <input type="text" name="apartmentEdit" id="apartmentEdit" class="form-control">
                                         </div>
-                                    </div>-->
-
-                                    <div class="col-sm-12" id="divClientEdit">
-                                        <div class="form-group">
-                                            <label>Cliente:</label>
-                                            <select class="form-control select2" name="clientEdit" id="clientEdit" style="width: 100%;">
-                                                <?php while ($showClient = mysqli_fetch_row($resultSelectClient)) { ?>
-                                                    <option value="<?php echo $showClient[0] ?>">
-                                                        <?php echo $showClient[1] . " " . $showClient[2]  ?>
-                                                    </option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                     
+                                    </div>-->                                     
                                     <!--
                                     <div class="col-sm-12" id="divObservationEdit">
                                         <div class="form-group">

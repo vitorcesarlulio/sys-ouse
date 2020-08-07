@@ -66,6 +66,23 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
     });
 });
 
+# Orçamento
+$route->group(['prefix' => '/orcamentos'], function ($route) use ($blade) {
+
+    $route->get('', function () use ($blade) {
+        echo $blade->render('budgets.budgets');
+    });
+
+    $route->get('/editar', function () use ($blade) {
+        echo $blade->render('budgets.edit-budget.edit-budget');
+    });
+
+    $route->post('/listar', function () {
+        include '../app/View/budgets/list-budgets.php';
+    });
+
+});
+
 # Usuarios
 $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
 

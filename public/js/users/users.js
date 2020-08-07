@@ -304,12 +304,6 @@ $(document).ready(function () {
         });
     });
 
-    /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
-    setTimeout(function () {
-        var a = document.getElementById("alertMessage");
-        a.style.display = "none"
-    }, 8000);
-
 
 });
 

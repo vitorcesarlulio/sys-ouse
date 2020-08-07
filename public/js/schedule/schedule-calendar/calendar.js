@@ -454,8 +454,3 @@ $(document).keydown(function(e) { //Quando uma tecla é pressionada
     }
 });*/
 
-/* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
-setTimeout(function () {
-    var a = document.getElementById("toast-container");
-    a.style.display = "none"
-}, 8000);

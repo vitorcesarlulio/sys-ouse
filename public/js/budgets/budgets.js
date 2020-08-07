@@ -1,14 +1,14 @@
 $(document).ready(function () {
-    var dataTable = $("#listEvents").DataTable({
+    var dataTable = $("#listBudgets").DataTable({
         "deferRender": true, //Os elementos serão criados somente quando necessários
         "processing": true,
         "serverSide": true, //importante
 
         "ajax": {
-            "url": "/agenda/eventos/listar",
+            "url": "/orcamentos/listar",
             "type": "POST",
             "data": function (data) {
-                //Filtros
+                /*Filtros
                 // Valor dos campos
                 var startDate = $('#formFilters #startDate').val();
                 var endDate = $('#formFilters #endDate').val();
@@ -21,7 +21,7 @@ $(document).ready(function () {
                 data.endDate = endDate;
                 data.status = status;
                 data.event = event;
-                data.period = period;
+                data.period = period; */
             }
 
         },
@@ -32,11 +32,9 @@ $(document).ready(function () {
         "autoWidth": false, //Largura automática
         //Largura e tirar ordenaçao das colunas
         "columnDefs": [
-            { "targets": 2, "width": "10%" },
-            { "targets": 3, "width": "10%" },
-            { "targets": 4, "width": "10%" },
-            { "targets": 5, "width": "10%" },
-            { "targets": 6, "width": "10%", "orderable": false, "searchable": false },
+
+           // { "targets": 3, "width": "10%", "orderable": false, "searchable": false },
+           // { "targets": 2, "width": "12%" },
         ],
 
         "responsive": true,
@@ -47,7 +45,7 @@ $(document).ready(function () {
         "fixedHeader": true,
         "colReorder": true, //arrastar colunas,
         "paging": false, //Paginaçao
-        "order": [2, 'desc'], //ordenar coluna
+        //"order": [2, 'asc'], //ordenar coluna
         "paging": true, //mostra "10 resultados por página", mas esta oculto no css se nao quebra o design
 
         "dom": 'B <"clear"> lfrtip',
@@ -259,7 +257,7 @@ $(document).ready(function () {
         ]
     });
 
-    //A cada click é uma requição Ajax
+    /*A cada click é uma requição Ajax
     $('#formFilters #startDate').keyup(function () {
         dataTable.draw();
     });
@@ -276,138 +274,18 @@ $(document).ready(function () {
     });
     $('#formFilters #period').change(function () {
         dataTable.draw();
-    });
+    }); */
 
-});
-
-/* Visualizar Evnto */
-$(document).on('click', '.btn-view-event', function () {
-    $.ajax({
-        url: "/agenda/calendario/listar",
-        type: 'GET',
-        data: {
-            id: $(this).attr("id")
-        },
-        success: function (data) {
-            if (JSON.parse(data).length) { //se exitir o dado > 0 
-                var dadosJson = JSON.parse(data)[0];
-
-                $('#modalViewEvent #title').text(dadosJson.title);
-                $('#modalViewEvent #start').text(dadosJson.dateStart + " " + dadosJson.hourStart + "h");
-                $('#modalViewEvent #end').text(dadosJson.dateStart + " " + dadosJson.hourEnd + "h");
-
-                document.getElementById('P').remove();
-                document.getElementById('R').remove();
-
-                //Status
-                if (dadosJson.status == "P") {
-                    $('#modalViewEvent #status').append(`<span id="P" class="badge badge-warning">Pendente</span> <span id="R" class="badge badge-success" style="display:none">Realizado</span>`);
-                } else {
-                    $('#modalViewEvent #status').append(`<span id="R" class="badge badge-success">Realizado</span> <span id="P" class="badge badge-warning" style="display:none">Pendente</span>`);
-                }
-
-                $('#modalViewEvent #name').text(dadosJson.name + " " + dadosJson.surname);
-
-                //Celular
-                if (dadosJson.cellphone != "") {
-                    $('#modalViewEvent #cellphone').text(dadosJson.cellphoneFormatted);
-                    $('#modalViewEvent #cellphone').attr('href', `tel: +55${dadosJson.cellphone}`);
-                } else {
-                    $("#modalViewEvent #dtCellphone").hide();
-                    $("#modalViewEvent #ddCellphone").hide();
-                }
-
-                //Telefone
-                if (dadosJson.telephone != "") {
-                    $('#modalViewEvent #telephone').text(dadosJson.telephoneFormatted);
-                    $('#modalViewEvent #telephone').attr('href', `tel: +55${dadosJson.telephone}`);
-                } else {
-                    $("#modalViewEvent #dtTelephone").hide();
-                    $("#modalViewEvent #ddTelephone").hide();
-                }
-
-                //Email
-                if (dadosJson.email != "") {
-                    $('#modalViewEvent #email').text(dadosJson.email);
-                    $('#modalViewEvent #email').attr('href', `malito:${dadosJson.email}`);
-                } else {
-                    $("#modalViewEvent #dtEmail").hide();
-                    $("#modalViewEvent #ddEmail").hide();
-                }
-
-                //Endereço 
-                var adressJoin = dadosJson.logradouro + ", " + dadosJson.number + " - " + dadosJson.bairro + " " + dadosJson.localidade + " - " + dadosJson.uf + " " + dadosJson.cep;
-                var adressLink = dadosJson.logradouro + "+" + dadosJson.number + "+" + dadosJson.bairro + "+" + dadosJson.localidade + "+" + dadosJson.uf + "+" + dadosJson.cep;
-                $('#modalViewEvent #address').text(adressJoin);
-                $('#modalViewEvent #address').attr('href', `https://www.google.com/maps/search/?api=1&query=${adressLink}`);
-
-                //Edificio, bloco e Apartamento
-                if (dadosJson.edifice && dadosJson.block && dadosJson.apartment != "") {
-                    $('#modalViewEvent #edifice').text(dadosJson.edifice);
-                    $('#modalViewEvent #block').text(dadosJson.block);
-                    $('#modalViewEvent #apartment').text(dadosJson.apartment);
-                } else {
-                    $("#modalViewEvent #dtEdifice").hide();
-                    $("#modalViewEvent #edifice").hide();
-                    $("#modalViewEvent #dtBlock").hide();
-                    $("#modalViewEvent #block").hide();
-                    $("#modalViewEvent #dtApartment").hide();
-                    $("#modalViewEvent #apartment").hide();
-                } /* OU if (dadosJson.edifice != "") {$('#modalViewEvent #edifice').append(`<dt class="col-sm-3">Edificio:</dt>`);$('#modalViewEvent #edifice').append(`<dd class="col-sm-8">${dadosJson.edifice}</dd>`);} */
-
-                //Rua do Condominio
-                if (dadosJson.streetCondominium != "") {
-                    $('#modalViewEvent #streetCondominium').text(dadosJson.streetCondominium);
-                } else {
-                    $("#modalViewEvent #dtStreetCondominium").hide();
-                    $("#modalViewEvent #streetCondominium").hide();
-                }
-
-                //Observação
-                if (dadosJson.observation != "") {
-                    $('#modalViewEvent #observation').text(dadosJson.observation);
-                } else {
-                    $("#modalViewEvent #divObservation").hide();
-                    $("#modalViewEvent #dtObservation").hide();
-                }
-
-                //Momento do dia (bom dia, boa tarde...)
-                varDate = new Date();
-                hour = varDate.getHours();
-                if (hour < 5) {
-                    var momentDay = "Boa noite, ";
-                }
-                else
-                    if (hour < 8) {
-                        var momentDay = "Bom dia, ";
-                    }
-                    else
-                        if (hour < 12) {
-                            var momentDay = "Bom dia, ";
-                        }
-                        else
-                            if (hour < 18) {
-                                var momentDay = "Boa tarde, ";
-                            }
-                            else {
-                                var momentDay = "Boa noite, ";
-                            }
-
-                //Mensagem WhatsApp                        
-                if (dadosJson.edifice && dadosJson.block && dadosJson.apartment != "") {
-                    var msgWhatsapp = momentDay + dadosJson.name + " " + dadosJson.surname + "! %0AVocê agendou uma visita para o *Dia:* " + dadosJson.dateStart + " das " + dadosJson.hourStart + " às " + dadosJson.hourEnd +
-                        " no *Endereço:* " + adressJoin + " *Edifício:* " + dadosJson.edifice + " *Bloco:* " + dadosJson.block + " *Apartamento:* " + dadosJson.apartment + " . Até mais, Gesso Cidade Nova.";
-                } else {
-                    var msgWhatsapp = momentDay + dadosJson.name + " " + dadosJson.surname + "! %0AVocê agendou uma visita para o *Dia:* " + dadosJson.dateStart + " das " + dadosJson.hourStart + " às " + dadosJson.hourEnd +
-                        " no *Endereço:* " + adressJoin + ". Até mais, Gesso Cidade Nova.";
-                }
-
-                $("#btnWpp").attr("href", "https://api.whatsapp.com/send?phone=+55" + dadosJson.cellphone + "&text=" + msgWhatsapp);
-
-                $('#modalViewEvent').modal('show');
+    /* Editar Usuario 
+    $(document).on('click', '.btn-edit-budget', function () {
+        $.ajax({
+            url: "/orcamentos/editar",
+            type: 'post',
+            data: {
+                idBudgetEdit: $(this).attr("id")
             }
-        }
-    });
-});
+        });
+    });*/
 
+});
 

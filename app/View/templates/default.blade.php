@@ -211,6 +211,22 @@
             </li>
 
             <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-money-check"></i>
+                <p> Orçamentos <i class="right fas fa-angle-left"></i> </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/orcamentos" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Orçamentos</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            
+
+            <li class="nav-item has-treeview">
               <a href="/usuarios" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
                 <p> Usuários </p>
@@ -304,6 +320,15 @@
 
   @yield('script')
 
+
+  <script>
+    /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
+setTimeout(function () {
+    var a = document.getElementById("toast-container");
+    a.style.display = "none"
+}, 8000);
+
+  </script>
   <!-- <script>
     $(document).ready(function() {
       $(document).keypress(function(e) {

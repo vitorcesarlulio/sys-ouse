@@ -1,18 +1,21 @@
+
+
 $(document).ready(function () {
   $('#formRegisterUser').validate({
     rules: {
-      nameUserRegister: { required: true },
-      surnameUserRegister: { required: true },
-      loginUserRegister: { required: true },
-      passwordUserRegister: { required: true, minlength: 6 }
-
+      nameUserRegister: { required: true, lettersonly: true },
+      surnameUserRegister: { required: true, lettersonly: true },
+      loginUserRegister: { required: true, lettersonly: true },
+      passwordUserRegister: { required: true, minlength: 6, equalTo: "#confirmationPasswordRegister" },
+      confirmationPasswordRegister: { required: true, minlength: 6, equalTo: "#passwordUserRegister" },
     },
 
     messages: {
-      nameUserRegister: { required: "Digite o Nome" },
-      surnameUserRegister: { required: "Digite o Sobrenome" },
-      loginUserRegister: { required: "Digite o Login" },
-      passwordUserRegister: { required: "Digite a Senha", minlength: "Digite pelo menos 6 caracteres" },
+      nameUserRegister: { required: "Digite o Nome", lettersonly: "Digite apenas letras" },
+      surnameUserRegister: { required: "Digite o Sobrenome", lettersonly: "Digite apenas letras" },
+      loginUserRegister: { required: "Digite o Login", lettersonly: "Digite apenas letras" },
+      passwordUserRegister: { required: "Digite a Senha", minlength: "Digite pelo menos 6 caracteres", equalTo: "Senhas diferentes" },
+      confirmationPasswordRegister: { required: "Digite a Confirmação da Senha", minlength: "Digite pelo menos 6 caracteres", equalTo: "Senhas diferentes" },
     },
 
     errorElement: 'span',
@@ -36,15 +39,13 @@ $(document).ready(function () {
         data: dados,
         processData: false,
         success: function () {
-          $("#alertMessage").show();
-          $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: usuário cadastrado!</div></div></div>');
+          toastr.success('Sucesso: usuário cadastrado!');
           $('#modalRegisterUser').modal('hide');
           $('#formRegisterUser').each(function () { this.reset(); });
           $('#listUsers').DataTable().ajax.reload();
         },
         error: function () {
-          $("#alertMessage").show();
-          $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Erro: usuário não cadastrado!</div></div></div>');
+          toastr.error('Erro: usuário não cadastrado!');
           $('#modalRegisterUser').modal('hide');
           $('#formRegisterUser').each(function () { this.reset() });
           $('#listUsers').DataTable().ajax.reload();

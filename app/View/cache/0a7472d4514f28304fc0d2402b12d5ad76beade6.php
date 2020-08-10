@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="author" content="Ouse Inteligência em Marcas - Vitor Cesar Lulio">
+  <meta name="author" content="Ouse Inteligência em Marcas">
   <title>Sys Ouse | <?php echo $__env->yieldContent('title'); ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -224,7 +224,7 @@
                 </li>
               </ul>
             </li>
-            
+
 
             <li class="nav-item has-treeview">
               <a href="/usuarios" class="nav-link">
@@ -323,11 +323,9 @@
 
   <script>
     /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
-setTimeout(function () {
-    var a = document.getElementById("toast-container");
-    a.style.display = "none"
-}, 8000);
-
+    setTimeout(function() {
+      $("#toast-container").hide();
+    }, 8000);
   </script>
   <!-- <script>
     $(document).ready(function() {

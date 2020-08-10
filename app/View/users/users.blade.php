@@ -128,6 +128,12 @@
                                     <input type="password" name="passwordUserRegister" id="passwordUserRegister" class="form-control" placeholder="Entre com a Senha">
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Confirmar Senha:</label>
+                                    <input type="password" name="confirmationPasswordRegister" id="confirmationPasswordRegister" class="form-control" placeholder="Confirmação da Senha">
+                                </div>
+                            </div>
 
                         </div>
                     </div>

@@ -20,10 +20,11 @@ if (substr($_SERVER['DOCUMENT_ROOT'], -1) == '/') {
 /**
  * Diretórios Específicos
  */
-define('DIRIMG',     "../img/");
+define('DIRIMG',     "../img/"); //SE QUISER ADD DIRPAGE."../img/"
 define('DIRCSS',     "../css/");
 define('DIRPLUGINS', "../plugins/");
 define('DIRJS',      "../js/");
+define("DOMAIN",$_SERVER["HTTP_HOST"]);
 
 /**
  * Acesso ao banco de dados

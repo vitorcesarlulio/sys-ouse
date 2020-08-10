@@ -10,9 +10,20 @@ $blade = new Blade('../app/View/', '../app/View/cache');
 $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 
 $route->notFound(function () use ($blade) {
-    echo $blade->render('errors.404'); 
+    echo $blade->render('errors.404');
 });
 
+# Login
+$route->group(['prefix' => '/login'], function ($route) use ($blade) {
+
+    $route->get('', function () {
+        include '../app/View/login/login.php';
+    });
+
+    $route->post('/verificar', function () {
+        include '../app/View/login/check-login.php';
+    });
+});
 
 $route->get('/', function () use ($blade) {
     echo $blade->render('home.home');
@@ -60,7 +71,7 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
     $route->post('/eventos/apagar', function () {
         include '../app/View/schedule/schedule-events/delete-event.php';
     });
-    
+
     $route->post('/eventos/mudar-status', function () {
         include '../app/View/schedule/schedule-events/update-status.php';
     });
@@ -80,7 +91,6 @@ $route->group(['prefix' => '/orcamentos'], function ($route) use ($blade) {
     $route->post('/listar', function () {
         include '../app/View/budgets/list-budgets.php';
     });
-
 });
 
 # Usuarios
@@ -105,7 +115,6 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
     $route->post('/listar-editar', function () {
         include '../app/View/users/list-user-edit.php';
     });
-
 });
 
 $route->on();

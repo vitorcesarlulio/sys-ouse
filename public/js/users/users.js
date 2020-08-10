@@ -281,6 +281,12 @@ $(document).ready(function () {
         $('#modalRegisterUser').modal('show');
     });
 
+    $(document).ready(function () {  
+        $("#loginUserRegister").keyup(function () {  
+            $(this).val($(this).val().toUpperCase());  
+        });  
+    }); 
+
     /* Editar Usuario */
     $(document).on('click', '.btn-edit-user', function () {
         $.ajax({

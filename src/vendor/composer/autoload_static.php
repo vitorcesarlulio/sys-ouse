@@ -121,7 +121,7 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
         ),
         'Models\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/../app/model',
+            0 => __DIR__ . '/../..' . '/../app/Model',
         ),
         'Jenssegers\\Blade\\' => 
         array (

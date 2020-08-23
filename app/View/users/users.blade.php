@@ -119,19 +119,35 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Login:</label>
-                                    <input type="text" autofocus name="loginUserRegister" id="loginUserRegister" class="form-control" placeholder="Entre com o Login">
+                                    <input type="text" autofocus name="loginUserRegister" id="loginUserRegister" class="form-control" placeholder="Entre com o Login" onblur="findLogin();">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Senha:</label>
-                                    <input type="password" name="passwordUserRegister" id="passwordUserRegister" class="form-control" placeholder="Entre com a Senha">
+                                    <div class="input-group">
+                                        <input type="password" name="passwordUserRegister" id="passwordUserRegister" class="form-control" placeholder="Entre com a Senha">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" onclick="showPassword()" style="cursor: pointer;">
+                                                <i class="far fa-eye" id="iconPasswordRegister"></i>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Confirmar Senha:</label>
-                                    <input type="password" name="confirmationPasswordRegister" id="confirmationPasswordRegister" class="form-control" placeholder="Confirmação da Senha">
+                                    <div class="input-group">
+                                        <input type="password" name="confirmationPasswordRegister" id="confirmationPasswordRegister" class="form-control" placeholder="Confirmação da Senha">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" onclick="showPasswordConfirm()" style="cursor: pointer;">
+                                                <i class="far fa-eye" id="iconPasswordRegisterConfirm"></i>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -146,8 +162,8 @@
         </div>
     </div>
 
-        <!-- Modal de Editar Usuario -->
-        <div class="modal fade" id="modalEditUser">
+    <!-- Modal de Editar Usuario -->
+    <div class="modal fade" id="modalEditUser">
         <div class="modal-dialog">
             <form id="formEditUser" method="POST" autocomplete="off" enctype="multipart/form-data">
                 <div class="modal-content">
@@ -239,4 +255,43 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
+
+<script>
+    // Envaindo os dados via Ajax para ver se ja existe o usuario
+    function findLogin() {
+        var dados = $('#loginUserRegister').serialize();
+        $.ajax({
+            type: "POST",
+            url: "/usuarios/verificar-existencia-usuario",
+            data: dados,
+            processData: false,
+            success: function(returnAjax) {
+                if (returnAjax == 'true') {
+                    toastr.error('Erro: usuário já existente no banco de dados!');
+                    $('.btn-register-user').attr('disabled','disabled');
+                }
+            }
+        });
+    }
+
+    function showPassword() {
+        if ($("#passwordUserRegister").is(":password")) {
+            $("#passwordUserRegister").prop('type', 'text');
+            $("#iconPasswordRegister").prop('class', 'far fa-eye-slash');
+        } else {
+            $("#passwordUserRegister").prop('type', 'password');
+            $("#iconPasswordRegister").prop('class', 'far fa-eye');
+        }
+    }
+
+    function showPasswordConfirm() {
+        if ($("#confirmationPasswordRegister").is(":password")) {
+            $("#confirmationPasswordRegister").prop('type', 'text');
+            $("#iconPasswordRegisterConfirm").prop('class', 'far fa-eye-slash');
+        } else {
+            $("#confirmationPasswordRegister").prop('type', 'password');
+            $("#iconPasswordRegisterConfirm").prop('class', 'far fa-eye');
+        }
+    }
+</script>
 @endsection

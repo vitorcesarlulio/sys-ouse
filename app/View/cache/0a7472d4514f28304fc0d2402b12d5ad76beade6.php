@@ -1,3 +1,19 @@
+<?php
+//header("Content-Type: text/html; charset=utf-8");
+include_once '../app/View/login/check-login.php';
+
+# Sortear Imagem
+$image = array();
+$image[1] = DIRIMG . "user3-128x128.jpg"; 
+$image[2] = DIRIMG . "user4-128x128.jpg";
+$image[3] = DIRIMG . "user5-128x128.jpg";
+$image[4] = DIRIMG . "user6-128x128.jpg";
+$image[5] = DIRIMG . "user7-128x128.jpg";
+$image[6] = DIRIMG . "user8-128x128.jpg";
+$count = count($image); 
+$imageRandom = rand(1, $count); 
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -137,19 +153,19 @@
         </li>
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" class="user-image img-circle elevation-2" alt="User Image">
-            <span class="d-none d-md-inline">Alexander Pierce</span>
+            <img src="<?php echo $image[$imageRandom]; ?>" class="user-image img-circle elevation-2" alt="User Image">
+            <span class="d-none d-md-inline"> <?php echo $_SESSION['name']; ?> </span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
             <!-- User image -->
             <li class="user-header bg-primary">
-              <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" class="img-circle elevation-2" alt="User Image">
-              <p> Alexander Pierce - Web Developer <small>Membro Desde </small> </p>
+              <img src="<?php echo $image[$imageRandom]; ?>" class="img-circle elevation-2" alt="User Image">
+              <p> <?php echo $_SESSION['name']; ?> </p>
             </li>
             <!-- Menu Footer-->
             <li class="user-footer">
-              <a href="#" class="btn btn-default btn-flat">Conta</a>
-              <a href="#" class="btn btn-default btn-flat float-right">Sair</a>
+              <!--<a href="#" class="btn btn-default btn-flat">Conta</a>-->
+              <a href="/logout" class="btn btn-default btn-flat float-right">Sair</a>
             </li>
           </ul>
         </li>
@@ -160,7 +176,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="/" class="brand-link">
+      <a href="/home" class="brand-link">
         <img src=<?= DIRIMG . 'maior-128.png' ?> alt="AdminLTE Logo" class="brand-image " style="opacity: .8">
         <span class="brand-text font-weight-light">OUSE</span>
       </a>
@@ -225,13 +241,20 @@
               </ul>
             </li>
 
-
-            <li class="nav-item has-treeview">
+            <?php
+            if ($_SESSION["permition"] !== "admin") {
+           
+            }else{
+              echo '<li class="nav-item has-treeview">
               <a href="/usuarios" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
                 <p> Usuários </p>
               </a>
-            </li>
+            </li>';
+            } 
+            ?>
+
+            
 
           </ul>
         </nav>
@@ -251,15 +274,13 @@
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/home">Home</a></li>
                 <?php echo $__env->yieldContent('breadcrumb'); ?>
               </ol>
             </div>
           </div>
         </div><!-- /.container-fluid -->
       </section>
-
-
 
       <!-- Main content -->
       <section class="content">

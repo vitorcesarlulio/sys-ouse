@@ -18,7 +18,7 @@ return array(
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'PlugRoute\\' => array($vendorDir . '/erandir/plug-route/src'),
     'PlugHttp\\' => array($vendorDir . '/erandir/plug-http/src'),
-    'Models\\' => array($baseDir . '/../app/model'),
+    'Models\\' => array($baseDir . '/../app/Model'),
     'Jenssegers\\Blade\\' => array($vendorDir . '/jenssegers/blade/src'),
     'Illuminate\\View\\' => array($vendorDir . '/illuminate/view'),
     'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support'),

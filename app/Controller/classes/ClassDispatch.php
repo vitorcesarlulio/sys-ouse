@@ -27,7 +27,7 @@ class ClassDispatch
     private function verificaParametros()
     {
         if ($this->cont == 1 && empty($this->url[0])) {
-            $this->page = DIRREQ . 'views/index.php'; //se for '/' 
+            $this->page = DIRREQ . 'views/index.php';
         } else {
             $this->verificaDir();
         }

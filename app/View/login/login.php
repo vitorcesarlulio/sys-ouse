@@ -1,3 +1,53 @@
+<?php
+include_once '../app/Model/connection-pdo.php';
+
+# Pegando IP do usuário
+$ipAdressUser = '';
+if (getenv('HTTP_CLIENT_IP'))
+    $ipAdressUser = getenv('HTTP_CLIENT_IP');
+else if (getenv('HTTP_X_FORWARDED_FOR'))
+    $ipAdressUser = getenv('HTTP_X_FORWARDED_FOR');
+else if (getenv('HTTP_X_FORWARDED'))
+    $ipAdressUser = getenv('HTTP_X_FORWARDED');
+else if (getenv('HTTP_FORWARDED_FOR'))
+    $ipAdressUser = getenv('HTTP_FORWARDED_FOR');
+else if (getenv('HTTP_FORWARDED'))
+    $ipAdressUser = getenv('HTTP_FORWARDED');
+else if (getenv('REMOTE_ADDR'))
+    $ipAdressUser = getenv('REMOTE_ADDR');
+else
+    $ipAdressUser = 'UNKNOWN';
+
+# Contando as tentativas de erro
+$querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
+$selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
+$selectAttempt->bindParam('ten_ip', $ipAdressUser);
+$selectAttempt->execute();
+
+# Pegando a data de e hora de agora
+$dateNow = date('Y-m-d H:i:s');
+
+$r = 0;
+while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
+    if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
+        $r++;
+    }
+}
+
+if ($r >= 5) {
+    $block = true;
+} else {
+    $block = false;
+}
+
+# Lembre-me
+$loginRemember    = (isset($_COOKIE['CookieUser'])) ? base64_decode($_COOKIE['CookieUser']) : '';
+$passwordRemember = (isset($_COOKIE['CookiePassword'])) ? base64_decode($_COOKIE['CookiePassword']) : '';
+$remember         = (isset($_COOKIE['CookieRemember'])) ? base64_decode($_COOKIE['CookieRemember']) : '';
+$checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -18,6 +68,7 @@
     <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.min.css' ?>">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
 </head>
 
 <body class="hold-transition login-page">
@@ -28,48 +79,51 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Faça login para iniciar sua sessão</p>
 
-                <form id="formLogin" method="post">
-
+                <form id="formLogin" method="POST" autocomplete="off">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Usuário" name="userLogin" id="userLogin">
+                        <input type="text" class="form-control" placeholder="Usuário" name="userLogin" id="userLogin" value="<?= $loginRemember ?>">
                         <div class="input-group-append">
-                            <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                            <div class="input-group-text">
+                                
+                            </div>
                         </div>
                     </div>
 
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Senha" name="passwordLogin" id="passwordLogin">
+                        <input type="password" class="form-control" placeholder="Senha" name="passwordLogin" id="passwordLogin" value="<?= $passwordRemember ?>">
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                            <div class="input-group-text" id="divShowPassword">
+                                <span class="far fa-eye" onclick="myFunction()" style="cursor: pointer;" id="showPassword">
                             </div>
                         </div>
+                    </div>
+
+                   
+
+                    <div id="divErrors">
+                        <?php
+                        if ($block === true) {
+                            echo 'Tentativas excedidas, tente novamente daqui 20 minutos ou entre em contato com o Administrador do sistema!';
+                        } ?>
                     </div>
 
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">Remember Me</label>
+                                <input type="checkbox" id="remember" name="remember" value="rememberYes" <?= $checkedRemember ?>>
+                                <label for="remember">Lembre-me</label>
                             </div>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit" value="Entrar" class="btn btn-primary btn-block">Entrar</button>
+                        <div class="col-4" id="divBtnLogin">
+                            <button type="submit" value="Entrar" class="btn btn-primary btn-block" id="btnLogin" <?php if ($block === true) {
+                                                                                                                        echo ' disabled';
+                                                                                                                    } ?>>Entrar</button>
                         </div>
-                        <!-- /.col -->
                     </div>
                 </form>
-
-
-                <p class="mb-1">
-                    <a href="forgot-password.html">Esqueci a minha senha</a>
-                </p>
             </div>
-            <!-- /.login-card-body -->
         </div>
     </div>
-    <!-- /.login-box -->
 
     <!-- PADRÃO jQuery -->
     <script src="<?= DIRPLUGINS . 'jquery/jquery.min.js' ?>"></script>
@@ -81,6 +135,25 @@
     <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
     <script src="<?= DIRJS . 'login/login.js' ?>"></script>
+    <!-- Alerta de cadastro - Toastr Examples -->
+    <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
+    <script>
+
+        function myFunction() {
+            var x = document.getElementById("passwordLogin");
+            var shwoPassword = document.getElementById("showPassword");
+            if (x.type === "password") {
+                x.type = "text";
+                $('#showPassword').hide();
+                $('#divShowPassword').html('<span class="far fa-eye-slash" onclick="myFunction()" style="cursor: pointer;" id="showPassword">');
+            } else {
+                x.type = "password";
+                $('#showPassword').hide();
+                $('#divShowPassword').html('<span class="far fa-eye" onclick="myFunction()" style="cursor: pointer;" id="showPassword">');
+            }
+        }
+        
+    </script>
 
 </body>
 

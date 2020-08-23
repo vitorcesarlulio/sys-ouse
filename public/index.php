@@ -9,28 +9,33 @@ $blade = new Blade('../app/View/', '../app/View/cache');
 
 $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 
+/**
+ * Rota de Erros
+ */
 $route->notFound(function () use ($blade) {
     echo $blade->render('errors.404');
 });
 
-# Login
-$route->group(['prefix' => '/login'], function ($route) use ($blade) {
-
-    $route->get('', function () {
-        include '../app/View/login/login.php';
-    });
-
-    $route->post('/verificar', function () {
-        include '../app/View/login/check-login.php';
-    });
+/**
+ * Login
+ */
+$route->get('/', function () {
+    include '../app/View/login/login.php';
 });
 
-$route->get('/', function () use ($blade) {
+$route->post('/verificar-login', function () {
+    include '../app/View/login/validation-login.php';
+});
+
+$route->get('/logout', function () {
+    include '../app/View/login/logout.php';
+});
+
+/**
+ * Home
+ */
+$route->get('/home', function () use ($blade) {
     echo $blade->render('home.home');
-});
-
-$route->get('/cadastro', function () use ($blade) {
-    echo $blade->render('cadastro.cadastro');
 });
 
 /**
@@ -38,7 +43,7 @@ $route->get('/cadastro', function () use ($blade) {
  */
 $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
 
-    #Calendario
+    # Calendario
     $route->get('/calendario', function () use ($blade) {
         echo $blade->render('schedule.schedule-calendar.schedule-calendar');
     });
@@ -59,7 +64,7 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
         include '../app/View/schedule/schedule-calendar/delete-events.php';
     });
 
-    #Eventos
+    # Eventos
     $route->get('/eventos', function () use ($blade) {
         echo $blade->render('schedule.schedule-events.schedule-events');
     });
@@ -77,7 +82,9 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
     });
 });
 
-# Orçamento
+/**
+ * Orçamento
+ */
 $route->group(['prefix' => '/orcamentos'], function ($route) use ($blade) {
 
     $route->get('', function () use ($blade) {
@@ -93,7 +100,9 @@ $route->group(['prefix' => '/orcamentos'], function ($route) use ($blade) {
     });
 });
 
-# Usuarios
+/**
+ * Usuários
+ */
 $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
 
     $route->get('', function () use ($blade) {
@@ -115,6 +124,17 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
     $route->post('/listar-editar', function () {
         include '../app/View/users/list-user-edit.php';
     });
+
+    $route->post('/verificar-existencia-usuario', function () {
+        include '../app/View/users/check-user-existence.php';
+    });
+
+    
+});
+
+# TESTES
+$route->get('/cadastro', function () use ($blade) {
+    echo $blade->render('cadastro.cadastro');
 });
 
 $route->on();

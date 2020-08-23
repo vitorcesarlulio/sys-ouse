@@ -27,7 +27,7 @@
       "App\\": "../app/",
       "Src\\": "../src/",
       "Classes\\": "../app/Controller/classes/",
-      "Models\\": "../app/model/",
+      "Models\\": "../app/Model/",
       "Traits\\": "../app/Controller/traits/"
     },
     "files": [

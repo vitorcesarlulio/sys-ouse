@@ -96,16 +96,7 @@
 
 <script src="<?= DIRJS . 'budgets/budgets.js' ?>"></script>
 
-<!-- JQuery validation -->
-<script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
 <!-- <script src="<?= DIRJS . 'users/register-user-validation.js' ?>"></script> -->
-
-<!-- Modal de confirmação -->
-<script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
-
-<!-- Alerta de cadastro - Toastr Examples -->
-<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>

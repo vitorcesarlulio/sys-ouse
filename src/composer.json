@@ -25,10 +25,7 @@
   "autoload": {
     "psr-4": {
       "App\\": "../app/",
-      "Src\\": "../src/",
-      "Classes\\": "../app/Controller/classes/",
-      "Models\\": "../app/Model/",
-      "Traits\\": "../app/Controller/traits/"
+      "Src\\": "../src/"
     },
     "files": [
       "../config/config.php"

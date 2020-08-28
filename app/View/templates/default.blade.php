@@ -1,17 +1,17 @@
 <?php
 //header("Content-Type: text/html; charset=utf-8");
-include_once '../app/View/login/check-login.php';
+require_once '../app/View/login/check-login.php';
 
 # Sortear Imagem
 $image = array();
-$image[1] = DIRIMG . "user3-128x128.jpg"; 
+$image[1] = DIRIMG . "user3-128x128.jpg";
 $image[2] = DIRIMG . "user4-128x128.jpg";
 $image[3] = DIRIMG . "user5-128x128.jpg";
 $image[4] = DIRIMG . "user6-128x128.jpg";
 $image[5] = DIRIMG . "user7-128x128.jpg";
 $image[6] = DIRIMG . "user8-128x128.jpg";
-$count = count($image); 
-$imageRandom = rand(1, $count); 
+$count = count($image);
+$imageRandom = rand(1, $count);
 ?>
 
 <!DOCTYPE html>
@@ -43,9 +43,6 @@ $imageRandom = rand(1, $count);
 </head>
 
 <body class="hold-transition pace-primary pace-done sidebar-mini sidebar-collapse">
-
-  <!-- Alerta depois de alguma alteração GLOBAL -->
-  <div id="alertMessage"></div>
 
   <!--layout-navbar-fixed-->
   <div class="pace pace-inactive">
@@ -242,19 +239,12 @@ $imageRandom = rand(1, $count);
             </li>
 
             <?php
-            if ($_SESSION["permition"] !== "admin") {
-           
-            }else{
-              echo '<li class="nav-item has-treeview">
-              <a href="/usuarios" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
-                <p> Usuários </p>
-              </a>
-            </li>';
-            } 
+            if ($_SESSION["permition"] === "admin") {
+              echo '<li class="nav-item has-treeview"> <a href="/usuarios" class="nav-link"> <i class="nav-icon fas fa-users"></i> <p> Usuários </p> </a> </li>';
+            } else {
+              
+            }
             ?>
-
-            
 
           </ul>
         </nav>
@@ -339,15 +329,16 @@ $imageRandom = rand(1, $count);
   <!-- AdminLTE for demo purposes (nao sei o que é) -->
   <script src="<?= DIRJS . 'demo.js' ?>"></script>
 
+  <!-- JQuery validation -->
+  <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
+  <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
+
+  <!-- Alerta de cadastro - Toastr Examples -->
+  <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
+  <!-- Modal de confirmação -->
+<script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
   @yield('script')
 
-
-  <script>
-    /* Depois de um tempo ocultar o alerta de cadastro/apagado/editado */
-    setTimeout(function() {
-      $("#toast-container").hide();
-    }, 8000);
-  </script>
   <!-- <script>
     $(document).ready(function() {
       $(document).keypress(function(e) {

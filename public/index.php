@@ -43,7 +43,7 @@ $route->get('/home', function () use ($blade) {
  */
 $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
 
-    # Calendario
+    # Calendário
     $route->get('/calendario', function () use ($blade) {
         echo $blade->render('schedule.schedule-calendar.schedule-calendar');
     });
@@ -60,7 +60,7 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
         include '../app/View/schedule/schedule-calendar/edit-event.php';
     });
 
-    $route->get('/calendario/apagar/', function () {
+    $route->post('/calendario/apagar/', function () {
         include '../app/View/schedule/schedule-calendar/delete-events.php';
     });
 
@@ -113,8 +113,8 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
         include '../app/View/users/list-users.php';
     });
 
-    $route->post('/apagar', function () {
-        include '../app/View/users/delete-users.php';
+    $route->post('/verificar-existencia-usuario', function () {
+        include '../app/View/users/check-user-existence.php';
     });
 
     $route->post('/cadastrar', function () {
@@ -125,11 +125,13 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
         include '../app/View/users/list-user-edit.php';
     });
 
-    $route->post('/verificar-existencia-usuario', function () {
-        include '../app/View/users/check-user-existence.php';
+    $route->post('/editar', function () {
+        include '../app/View/users/edit-user.php';
     });
 
-    
+    $route->post('/apagar', function () {
+        include '../app/View/users/delete-users.php';
+    });
 });
 
 # TESTES

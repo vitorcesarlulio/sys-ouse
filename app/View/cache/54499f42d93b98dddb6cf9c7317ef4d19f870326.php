@@ -273,9 +273,6 @@
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
 <script src="<?= DIRJS . 'schedule/schedule-events/events.js' ?>"></script>
-<script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
-<!-- Alerta de cadastro - Toastr Examples -->
-<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>

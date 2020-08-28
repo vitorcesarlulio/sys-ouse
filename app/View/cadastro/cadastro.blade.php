@@ -199,10 +199,6 @@
 <!-- Busca endereço pelo CEP -->
 <script src="<?= DIRPLUGINS . 'search-zip/search-zip.js' ?>"></script>
 
-<!-- jquery-validation (PRECISO PARA DAR A MENSAGEM e validar CPF, CPNJ EMAIL etc) -->
-<script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
-
 <!-- Mensagem de validação -->
 <script src="<?= DIRPLUGINS . 'cadastro-cliente/msg-validacao.js' ?>"></script>
 

@@ -1,18 +1,16 @@
-
-
 $(document).ready(function () {
   $('#formRegisterUser').validate({
     rules: {
-      nameUserRegister: { required: true, lettersonly: true },
-      surnameUserRegister: { required: true, lettersonly: true },
+      nameUserRegister: { required: true },
+      surnameUserRegister: { required: true },
       loginUserRegister: { required: true, lettersonly: true },
       passwordUserRegister: { required: true, minlength: 6, equalTo: "#confirmationPasswordRegister" },
       confirmationPasswordRegister: { required: true, minlength: 6, equalTo: "#passwordUserRegister" },
     },
 
     messages: {
-      nameUserRegister: { required: "Digite o Nome", lettersonly: "Digite apenas letras" },
-      surnameUserRegister: { required: "Digite o Sobrenome", lettersonly: "Digite apenas letras" },
+      nameUserRegister: { required: "Digite o Nome" },
+      surnameUserRegister: { required: "Digite o Sobrenome" },
       loginUserRegister: { required: "Digite o Login", lettersonly: "Digite apenas letras" },
       passwordUserRegister: { required: "Digite a Senha", minlength: "Digite pelo menos 6 caracteres", equalTo: "Senhas diferentes" },
       confirmationPasswordRegister: { required: "Digite a Confirmação da Senha", minlength: "Digite pelo menos 6 caracteres", equalTo: "Senhas diferentes" },
@@ -31,24 +29,27 @@ $(document).ready(function () {
     },
 
     submitHandler: function (form) {
-      //event.preventDefault();
       var dados = $(form).serialize();
       $.ajax({
         type: "POST",
         url: "/usuarios/cadastrar",
         data: dados,
         processData: false,
-        success: function () {
-          toastr.success('Sucesso: usuário cadastrado!');
-          $('#modalRegisterUser').modal('hide');
-          $('#formRegisterUser').each(function () { this.reset(); });
-          $('#listUsers').DataTable().ajax.reload();
+        success: function (returnAjax) {
+          if (returnAjax === true) {
+            toastr.success('Sucesso: usuário cadastrado!');
+            $('#modalRegisterUser').modal('hide');
+            $('#formRegisterUser').each(function () { this.reset(); });
+            $('#listUsers').DataTable().ajax.reload();
+          } else {
+            toastr.error('Erro: usuário não cadastrado!');
+            $('#modalRegisterUser').modal('hide');
+            $('#formRegisterUser').each(function () { this.reset() });
+            $('#listUsers').DataTable().ajax.reload();
+          }
         },
         error: function () {
-          toastr.error('Erro: usuário não cadastrado!');
-          $('#modalRegisterUser').modal('hide');
-          $('#formRegisterUser').each(function () { this.reset() });
-          $('#listUsers').DataTable().ajax.reload();
+          toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
         }
       });
       return false;

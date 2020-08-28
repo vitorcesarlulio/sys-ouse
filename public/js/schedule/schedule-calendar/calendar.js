@@ -76,7 +76,29 @@ $(function () {
             /* Modal confirma excluir evento */
             $(document).on('click', '#deleteEvent', function () {
                 $('#modalViewEvent').modal('hide');
-                showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?', function () { $("#btnConfirm").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id); });
+                /*showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?', function () {
+                    $("#btnConfirm").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id);
+                });*/
+
+                showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?',
+                    function () {
+                        $.ajax({
+                            url: "/agenda/calendario/apagar/",
+                            method: "POST",
+                            data: { idEvent: info.event.id },
+                            success: function (retunAjax) {
+                                if (retunAjax === true) {
+                                    toastr.success('Sucesso: evento apagado!');
+                                } else {
+                                    toastr.error('Erro: evento não apagado!');
+                                }
+                            },
+                            error: function () {
+                                toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+                            }
+                        });
+                    }
+                );
             });
 
             info.jsEvent.preventDefault();
@@ -223,7 +245,7 @@ $(function () {
             }else{
                 $('#modalViewEvent #divObservationEdit').hide();
             } */
-        
+
 
 
             //Momento do dia (bom dia, boa tarde...)
@@ -431,13 +453,13 @@ function optionTypeResidenceEdit() {
     }
 }
 
-/* Atalhos do Calendario 
+/* Atalhos do Calendario
 
 $(document).keyup(function(e) { //O evento Kyeup é acionado quando as teclas são soltas
     if (e.which == 16) pressedCtrl = false; //Quando qualuer tecla for solta é preciso informar que Crtl não está pressionada
 })*/
 
-/* Fechar form Visualizar com Shift+F 
+/* Fechar form Visualizar com Shift+F
 $(document).keydown(function(e) { //Quando uma tecla é pressionada
     if (e.which == 67) pressedCtrl = true; //Informando que Crtl está acionado
     if ((e.which == 67 || e.keyCode == 67) && pressedCtrl == true) { //Reconhecendo tecla Enter
@@ -445,7 +467,7 @@ $(document).keydown(function(e) { //Quando uma tecla é pressionada
     }
 });*/
 
-/* 
+/*
 $(document).keydown(function(e) { //Quando uma tecla é pressionada
     if (e.which == 27) pressedCtrl = true; //Informando que Crtl está acionado
     if ((e.which == 27 || e.keyCode == 27) && pressedCtrl == true) { //Reconhecendo tecla Enter

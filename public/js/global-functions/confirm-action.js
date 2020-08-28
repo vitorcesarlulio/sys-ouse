@@ -18,15 +18,17 @@ $(document).on('click', '.btn-delete-event', function () {
                 url: "/agenda/eventos/apagar",
                 method: "POST",
                 data: { idEvent: idEvent },
-                success: function () {
-                    $("#alertMessage").show();
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento apagado!</div></div></div>');
-                    $('#listEvents').DataTable().ajax.reload(); //atualiza somente o data table, sem dar refresh na pagina
+                success: function (retunAjax) {
+                    if (retunAjax === true) {
+                        toastr.success('Sucesso: evento apagado!');
+                        $('#listEvents').DataTable().ajax.reload();
+                    } else {
+                        toastr.error('Erro: evento não apagado!');
+                        $('#listEvents').DataTable().ajax.reload();
+                    }
                 },
                 error: function () {
-                    $("#alertMessage").show();
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Erro: evento não apagado!</div></div></div>');
-                    $('#listEvents').DataTable().ajax.reload();
+                    toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
                 }
             });
         }
@@ -65,16 +67,18 @@ $(document).on('click', '.btn-delete-user', function () {
             $.ajax({
                 url: "/usuarios/apagar",
                 method: "POST",
-                data: { idUser : idUser },
-                success: function () {
-                    $("#alertMessage").show();
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: usuário apagado!</div></div></div>');
-                    $('#listUsers').DataTable().ajax.reload();
+                data: { idUser: idUser },
+                success: function (retunAjax) {
+                    if (retunAjax === true) {
+                        toastr.success('Sucesso: usuário apagado!');
+                        $('#listUsers').DataTable().ajax.reload();
+                    } else {
+                        toastr.error('Erro: usuário não apagado!');
+                        $('#listUsers').DataTable().ajax.reload();
+                    }
                 },
                 error: function () {
-                    $("#alertMessage").show();
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Erro: usuário não apagado!</div></div></div>');
-                    $('#listUsers').DataTable().ajax.reload();
+                    toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
                 }
             });
         }

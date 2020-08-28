@@ -1,3 +1,144 @@
+/* Novo usuario */
+$(document).on('click', '.btn-new-user', function () {
+    $('#modalRegisterUser').modal('show');
+});
+
+$(document).ready(function () {
+    $("#loginUserRegister").keyup(function () {
+        $(this).val($(this).val().toUpperCase());
+    });
+});
+
+// Envaindo os dados via Ajax para ver se ja existe o usuario
+function findLogin() {
+    var dados = $('#loginUserRegister').serialize();
+    $.ajax({
+        type: "POST",
+        url: "/usuarios/verificar-existencia-usuario",
+        data: dados,
+        processData: false,
+        success: function (returnAjax) {
+            if (returnAjax == true) {
+                toastr.error('Erro: usuário já existente no banco de dados!');
+                $('.btn-register-user').attr('disabled', true);
+            } else {
+                $('.btn-register-user').attr('disabled', false);
+            }
+        },
+        error: function () {
+            toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+        }
+    });
+}
+
+// Função para exibir a senha no Cadastro 
+function showPassword() {
+    if ($("#passwordUserRegister").is(":password")) {
+        $("#passwordUserRegister").prop('type', 'text');
+        $("#iconPasswordRegister").prop('class', 'far fa-eye-slash');
+    } else {
+        $("#passwordUserRegister").prop('type', 'password');
+        $("#iconPasswordRegister").prop('class', 'far fa-eye');
+    }
+}
+// Função para exibir a confirm senha no Cadastro 
+function showPasswordConfirm() {
+    if ($("#confirmationPasswordRegister").is(":password")) {
+        $("#confirmationPasswordRegister").prop('type', 'text');
+        $("#iconPasswordRegisterConfirm").prop('class', 'far fa-eye-slash');
+    } else {
+        $("#confirmationPasswordRegister").prop('type', 'password');
+        $("#iconPasswordRegisterConfirm").prop('class', 'far fa-eye');
+    }
+}
+
+/* Editar Usuario */
+$(document).on('click', '.btn-edit-user', function () {
+    var id = $(this).attr("id");
+    $('#modalEditUser #idUserEdit').val(id);
+    $.ajax({
+        url: "/usuarios/listar-editar",
+        type: 'POST',
+        data: {
+            idUserEdit: $(this).attr("id")
+        },
+        success: function (data) {
+            if (JSON.parse(data).length) {
+                var dadosJson = JSON.parse(data)[0];
+
+                $('#modalEditUser #nameUserEdit').val(dadosJson.nameUser);
+                $('#modalEditUser #surnameUserEdit').val(dadosJson.surnameUser);
+                $('#modalEditUser #loginUserEdit').val(dadosJson.loginUser);
+                $('#modalEditUser #loginUserEdit').val(dadosJson.loginUser);
+
+                if (dadosJson.permitionUser === "admin") {
+                    //$('#modalEditUser #permitionUserEdit').attr('checked', false);
+                    //$('#modalEditUser #labelUserPermition').attr('class', 'btn btn-secondary');
+
+                    $('#modalEditUser #permitionAdminEdit').val(dadosJson.permitionUser);
+                    $('#modalEditUser #labelAdminPermition').attr('class', 'btn btn-secondary active');
+                    $('#modalEditUser #permitionAdminEdit').attr('checked', '');
+                } else {
+                    //$('#modalEditUser #permitionAdminEdit').attr('checked', false);
+                    //$('#modalEditUser #labelAdminPermition').attr('class', 'btn btn-secondary');
+
+                    $('#modalEditUser #permitionUserEdit').val(dadosJson.permitionUser);
+                    $('#modalEditUser #labelUserPermition').attr('class', 'btn btn-secondary active');
+                    $('#modalEditUser #permitionUserEdit').attr('checked', true);
+                }
+
+                $('#modalEditUser').modal('show');
+            }
+        }
+    });
+});
+
+// Função para exibir a senha no editar 
+function showPasswordEdit() {
+    if ($("#passwordUserEdit").is(":password")) {
+        $("#passwordUserEdit").prop('type', 'text');
+        $("#iconPasswordEdit").prop('class', 'far fa-eye-slash');
+    } else {
+        $("#passwordUserEdit").prop('type', 'password');
+        $("#iconPasswordEdit").prop('class', 'far fa-eye');
+    }
+}
+// Função para exibir a confirm senha no editar 
+function showPasswordConfirmEdit() {
+    if ($("#confirmationPasswordEdit").is(":password")) {
+        $("#confirmationPasswordEdit").prop('type', 'text');
+        $("#iconPasswordEditConfirm").prop('class', 'far fa-eye-slash');
+    } else {
+        $("#confirmationPasswordEdit").prop('type', 'password');
+        $("#iconPasswordEditConfirm").prop('class', 'far fa-eye');
+    }
+}
+
+//quando ele clicar em um dos botoes faz o inverso com o outro
+$("#modalEditUser #permitionUserEdit").click(function () {
+    $('#modalEditUser #permitionAdminEdit').attr('checked', false);
+    $('#modalEditUser #permitionUserEdit').attr('checked', true);
+});
+
+$("#modalEditUser #permitionAdminEdit").click(function () {
+    $('#modalEditUser #permitionUserEdit').attr('checked', false);
+    $('#modalEditUser #permitionAdminEdit').attr('checked', true);
+});
+
+
+$("#modalRegisterUser #permitionUserRegister").click(function () {
+    $('#modalRegisterUser #permitionAdminRegister').attr('checked', false);
+    $('#modalRegisterUser #divPermitionAdminRegister').attr('class', 'btn btn-secondary');
+    $('#modalRegisterUser #permitionUserRegister').attr('checked', true);
+});
+
+$("#modalRegisterUser #permitionAdminRegister").click(function () {
+    $('#modalRegisterUser #permitionUserRegister').attr('checked', false);
+    $('#modalRegisterUser #divPermitionUserRegister').attr('class', 'btn btn-secondary');
+    $('#modalRegisterUser #permitionAdminRegister').attr('checked', true);
+});
+
+
 $(document).ready(function () {
     var dataTable = $("#listUsers").DataTable({
         "deferRender": true, //Os elementos serão criados somente quando necessários
@@ -8,20 +149,20 @@ $(document).ready(function () {
             "url": "/usuarios/listar",
             "type": "POST",
             "data": function (data) {
-                /*Filtros
+                //Filtros
                 // Valor dos campos
-                var startDate = $('#formFilters #startDate').val();
-                var endDate = $('#formFilters #endDate').val();
-                var status = $('#formFilters #status').val();
-                var event = $('#formFilters #event').val();
-                var period = $('#formFilters #period').val();
+                var startDate = $('#formFiltersUsers #startDate').val();
+                var endDate = $('#formFiltersUsers #endDate').val();
+                var status = $('#formFiltersUsers #status').val();
+                var event = $('#formFiltersUsers #event').val();
+                var period = $('#formFiltersUsers #period').val();
 
                 // Anexar aos dados
                 data.startDate = startDate;
                 data.endDate = endDate;
                 data.status = status;
                 data.event = event;
-                data.period = period; */
+                data.period = period;
             }
 
         },
@@ -258,58 +399,22 @@ $(document).ready(function () {
     });
 
     /*A cada click é uma requição Ajax
-    $('#formFilters #startDate').keyup(function () {
+    $('#formFiltersUsers #startDate').keyup(function () {
         dataTable.draw();
     });
-    $('#formFilters #endDate').keyup(function () {
-        dataTable.draw();
-    });
-
-    $('#formFilters #status').change(function () {
+    $('#formFiltersUsers #endDate').keyup(function () {
         dataTable.draw();
     });
 
-    $('#formFilters #event').change(function () {
+    $('#formFiltersUsers #status').change(function () {
         dataTable.draw();
     });
-    $('#formFilters #period').change(function () {
+
+    $('#formFiltersUsers #event').change(function () {
+        dataTable.draw();
+    });
+    $('#formFiltersUsers #period').change(function () {
         dataTable.draw();
     }); */
 
-    /* Novo usuario */
-    $(document).on('click', '.btn-new-user', function () {
-        $('#modalRegisterUser').modal('show');
-    });
-
-    $(document).ready(function () {  
-        $("#loginUserRegister").keyup(function () {  
-            $(this).val($(this).val().toUpperCase());  
-        });  
-    }); 
-
-    /* Editar Usuario */
-    $(document).on('click', '.btn-edit-user', function () {
-        $.ajax({
-            url: "/usuarios/listar-editar",
-            type: 'POST',
-            data: {
-                idUserEdit: $(this).attr("id")
-            },
-            success: function (data) {
-                if (JSON.parse(data).length) {
-                    var dadosJson = JSON.parse(data)[0];
-
-                    $('#modalEditUser #nameUserEdit').val(dadosJson.nameUser);
-                    $('#modalEditUser #surnameUserEdit').val(dadosJson.surnameUser);
-                    $('#modalEditUser #loginUserEdit').val(dadosJson.loginUser);
-                    $('#modalEditUser #passwordUserEdit').val(dadosJson.passwordUser);
-
-                    $('#modalEditUser').modal('show');
-                }
-            }
-        });
-    });
-
-
 });
-

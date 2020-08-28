@@ -5,19 +5,34 @@ include_once '../app/Model/connection-pdo.php';
 $userLogin = $_SESSION["loginUser"];
 
 # Consultando no banco para ver se encontra algum usuário
-$queryCheckLogin = " SELECT usu_login FROM tb_usuario WHERE usu_login=:usu_login ";
+$queryCheckLogin = " SELECT usu_login, usu_permissoes FROM tb_usuario WHERE usu_login=:usu_login ";
 $selectLogin = $connectionDataBase->prepare($queryCheckLogin);
 $selectLogin->bindParam("usu_login", $userLogin);
 $selectLogin->execute();
+$dataUserCheck = $selectLogin->fetch(\PDO::FETCH_ASSOC);
 
 # Vejo seencontrou alguma linha (registro)
 $countRow = 0;
 $countRow = $selectLogin->rowCount();
 
 if ($countRow === 0) {
+    foreach (array_keys($_SESSION) as $key) {
+        unset($_SESSION[$key]);
+    }
+    session_destroy();
     header("Location: /");
 }
 
+# Verrificando se os dados do banco sao iguais as sessions, se eu trocar a permissao dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
+if ($dataUserCheck['usu_permissoes'] === $_SESSION['permition']) {
+    # code...
+}else{
+    foreach (array_keys($_SESSION) as $key) {
+        unset($_SESSION[$key]);
+    }
+    session_destroy();
+    header("Location: /");
+}
 
 # Pegando IP do usuário
 $ipAdressUser = '';

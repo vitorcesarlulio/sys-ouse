@@ -1,7 +1,8 @@
 <?php 
-include_once '../app/Model/connection-pdo.php';
-
 if (isset($_POST['loginUserRegister']) && !empty($_POST['loginUserRegister'])) {
+
+    include_once '../app/Model/connection-pdo.php';
+    
     # Verificando se ja existe o usuario no banco
     $userLogin  = filter_input(INPUT_POST, 'loginUserRegister', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -21,5 +22,6 @@ if (isset($_POST['loginUserRegister']) && !empty($_POST['loginUserRegister'])) {
     } else {
         $returnAjax = false;
     }
+    header('Content-Type: application/json');
     echo json_encode($returnAjax);
 }

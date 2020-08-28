@@ -58,15 +58,11 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $insertEvent->bindParam(':even_observacao', $dados['observationRegister']);
         $insertEvent->bindParam(':orca_numero',     $dados['clientRegister']);
 
-        $mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento cadastrado!</div></div></div>';
-        $mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: evento não cadastrado!</div></div></div>';
-
-        # Se inserir, exibe a mensagem 
+        # Se inserir exibe a mensagem
         if ($insertEvent->execute()) {
-            $retorna = ['sit' => true, 'msg' => $mesageSuccess];
-            $_SESSION['msg'] = $mesageSuccess;
+            $returnAjax = 'insertEvent';
         } else {
-            $retorna = ['sit' => true, 'msg' => $mesageError];
+            $returnAjax = 'noInsertEvent';
         }
     } else {
         # Query inserir na tb_orcamento
@@ -131,20 +127,13 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $insertEvent->bindParam(':even_observacao', $dados['observationRegister']);
         $insertEvent->bindParam(':orca_numero',     $idBudget);
 
-        $mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento e orçamento cadastrados!</div></div></div>';
-        $mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: evento e orçamento não cadastrados!</div></div></div>';
-
-        # Se inserir, exibe a mensagem 
+        # Se inserir exibe a mensagem
         if ($insertEvent->execute()) {
-            $retorna = ['sit' => true, 'msg' => $mesageSuccess];
-            $_SESSION['msg'] = $mesageSuccess;
+            $returnAjax = 'insertEventBudget';
         } else {
-            $retorna = ['sit' => true, 'msg' => $mesageError];
+            $returnAjax = 'noInsertEventBudget';
         }
     }
-
-    header('Content-Type: application/json');
-    echo json_encode($retorna);
 }
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # Verificando se a opção "Agendar Horario" foi marcada como "Não" 
@@ -188,18 +177,13 @@ else if ($dados['scheduleTime'] == "scheduleTimeNo") {
     $insertBudget->bindParam(':orca_cep',                   $cep);
     $insertBudget->bindParam(':orca_observacao', $dados['observationRegister']);
 
-    $mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: orçamento cadastrado!</div></div></div>';
-    $mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: orçamento não cadastrado!</div></div></div>';
-
     # Se inserir exibe a mensagem
     if ($insertBudget->execute()) {
-        $retorna = ['sit' => true, 'msg' => $mesageSuccess];
-        $_SESSION['msg'] = $mesageSuccess;
+        $returnAjax = 'insertBudget';
     } else {
-        $retorna = ['sit' => true, 'msg' => $mesageError];
+        $returnAjax = 'noInsertBudget';
     }
-
-    header('Content-Type: application/json');
-    echo json_encode($retorna);
 }
-?>
+
+header('Content-Type: application/json');
+echo json_encode($returnAjax);

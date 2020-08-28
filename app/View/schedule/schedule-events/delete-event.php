@@ -8,9 +8,13 @@ if (!empty($idEvent)) {
     $deleteEvent = $connectionDataBase->prepare($queryDeleteEvent);
 
     $deleteEvent->bindParam("even_codigo", $idEvent);
-    $deleteEvent->execute();
 
-} else {
-    //header("Location: /agenda/calendario");
-} 
+    if ($deleteEvent->execute()) {
+        $returnAjax = true;
+    }else {
+        $returnAjax = false;
+    }
+    header('Content-Type: application/json');
+    echo json_encode($returnAjax);
+}  
 ?>

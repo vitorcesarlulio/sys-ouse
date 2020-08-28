@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 require_once '../app/Model/connection-mysqli.php';
 
 $selectClient = " SELECT orca_numero, orca_nome, orca_sobrenome from tb_orcamento ORDER BY orca_numero DESC ";
@@ -46,11 +46,11 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<?php
+ <?php /*
 if (isset($_SESSION['msg'])) {
     echo $_SESSION['msg'];
     unset($_SESSION['msg']);
-}
+} */
 ?>
 
 <div class="container-fluid">
@@ -338,8 +338,8 @@ if (isset($_SESSION['msg'])) {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="visevent">
-                        <span id="msg-cad"></span>
+                    <!--<div class="visevent"></div>-->
+                        <!--<span id="msg-cad"></span>-->
                         <div class="row">
 
                             <div class="col-sm-12" id="divScheduleTimeRegister">
@@ -543,7 +543,7 @@ if (isset($_SESSION['msg'])) {
                             </div>
 
                         </div>
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -575,9 +575,6 @@ if (isset($_SESSION['msg'])) {
         </div>
     </div>
 </div>
-
-<!--so para nao dar erro no Js do Modal -->
-<div id="toast-container"> </div>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
@@ -593,10 +590,9 @@ if (isset($_SESSION['msg'])) {
 <!-- Script do Calendário -->
 <script src="<?= DIRJS . 'schedule/schedule-calendar/calendar.js' ?>"></script>
 <!-- JQuery validation -->
-<script src="<?= DIRJS . 'schedule/schedule-calendar/calendar-validation.js' ?>"></script>
-<script src="<?= DIRJS . 'schedule/schedule-calendar/calendar-edit-validation.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-calendar/register-event-validation.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-calendar/edit-event-validation.js' ?>"></script>
+
 <!-- InputMask -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
@@ -608,8 +604,6 @@ if (isset($_SESSION['msg'])) {
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 <!-- Select2 -->
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
-<!-- Alerta de cadastro - Toastr Examples -->
-<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
 <script type="text/javascript" language="javascript">
     /* Date Picker */

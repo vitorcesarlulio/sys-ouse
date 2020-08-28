@@ -1,3 +1,11 @@
+<?php
+require_once '../app/View/login/check-login.php';
+
+if ($_SESSION["permition"] === "admin") {
+} else {
+    echo " <script> alert('Você nao tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
+}
+?>
 @extends('templates.default')
 
 @section('title', 'Usuários')
@@ -34,7 +42,6 @@
 @section('content')
 
 <div class="container-fluid">
-
     <div class="card card-primary collapsed-card">
         <div class="card-header">
             <h3 class="card-title">Filtros</h3>
@@ -43,9 +50,74 @@
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <form role="form" id="formFilters" autocomplete="off" enctype="multipart/form-data">
+        <form role="form" id="formFiltersUsers" autocomplete="off" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="row">
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Periodo:</label>
+                            <select name="event" class="form-control" id="period">
+                                <option value="">Todos</option>
+                                <option value="today">Hoje</option>
+                                <option value="afterToday">Depois de Hoje</option>
+                                <option value="beforeToday">Antes de Hoje</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Data de:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" class="form-control" name="startDate" id="startDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Até:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" class="form-control" name="endDate" id="endDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select name="status" class="form-control" id="status">
+                                <option value="">Todos</option>
+                                <option style="background-color:#FFC107; color: #fff;" value="P">Pendente</option>
+                                <option style="background-color:#28A745; color: #fff;" value="R">Realizado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Evento:</label>
+                            <select name="event" class="form-control" id="event">
+                                <option value="">Todos</option>
+                                <option value="Realizar Orçamento">Realizar Orçamento</option>
+                                <option value="Voltar na Obra">Voltar na Obra</option>
+                                <option value="Início de Obra">Início de Obra</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Descrição do Relatório</label>
+                            <input type="text" name="descriptionReport" id="descriptionReport" class="form-control">
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -136,7 +208,6 @@
                                 </div>
                             </div>
 
-
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Confirmar Senha:</label>
@@ -150,6 +221,32 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!--<div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Permissões:</label>
+                                    <select name="permitionUserRegister" class="form-control" id="permitionUserRegister">
+                                        <option value="user">Usuário</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+                            </div> -->
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Permissões:</label>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary active focus" id="divPermitionUserRegister">
+                                            <input type="radio" name="permitionUserRegister" id="permitionUserRegister" checked value="user"> Usuário 
+                                        </label>
+                                        <label class="btn btn-secondary" id="divPermitionAdminRegister">
+                                            <input type="radio" name="permitionAdminRegister" id="permitionAdminRegister" value="admin"> Administrador 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
 
                         </div>
                     </div>
@@ -165,7 +262,7 @@
     <!-- Modal de Editar Usuario -->
     <div class="modal fade" id="modalEditUser">
         <div class="modal-dialog">
-            <form id="formEditUser" method="POST" autocomplete="off" enctype="multipart/form-data">
+            <form id="formEditUser" autocomplete="off" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Editar Usuário</h4>
@@ -175,6 +272,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
+
+                            <input type="hidden" name="idUserEdit" id="idUserEdit" class="form-control">
 
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -188,17 +287,61 @@
                                     <input type="text" name="surnameUserEdit" id="surnameUserEdit" class="form-control">
                                 </div>
                             </div>
-
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Login:</label>
-                                    <input type="text" autofocus name="loginUserEdit" id="loginUserEdit" class="form-control">
+                                    <input type="text" name="loginUserEdit" id="loginUserEdit" class="form-control" disabled style="cursor: no-drop;">
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+
+                            <div class="col-sm-6" id="divPasswordUserEdit">
                                 <div class="form-group">
                                     <label>Senha:</label>
-                                    <input type="password" name="passwordUserEdit" id="passwordUserEdit" class="form-control">
+                                    <div class="input-group">
+                                        <input type="password" name="passwordUserEdit" id="passwordUserEdit" class="form-control">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" onclick="showPasswordEdit()" style="cursor: pointer;">
+                                                <i class="far fa-eye" id="iconPasswordEdit"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" id="divConfirmationPasswordEdit">
+                                <div class="form-group">
+                                    <label>Confirmar Senha:</label>
+                                    <div class="input-group">
+                                        <input type="password" name="confirmationPasswordEdit" id="confirmationPasswordEdit" class="form-control">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" onclick="showPasswordConfirmEdit()" style="cursor: pointer;">
+                                                <i class="far fa-eye" id="iconPasswordEditConfirm"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!--<div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Permissões:</label>
+                                    <select name="permitionUserEdit" class="form-control" id="permitionUserEdit">
+                                        <option value="user">Usuário</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+                            </div> -->                           
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Permissões:</label>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary" id="labelUserPermition">
+                                            <input type="radio" name="permitionUserEdit" id="permitionUserEdit" value="user"> Usuário 
+                                        </label>
+                                        <label class="btn btn-secondary" id="labelAdminPermition">
+                                            <input type="radio" name="permitionAdminEdit" id="permitionAdminEdit" value="admin"> Administrador 
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -206,7 +349,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success btn-edit-user">Salvar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
                     </div>
                 </div>
             </form>
@@ -225,16 +368,9 @@
 
 <script src="<?= DIRJS . 'users/users.js' ?>"></script>
 
-<!-- JQuery validation -->
-<script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
-<script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
+<!-- Vaidação -->
 <script src="<?= DIRJS . 'users/register-user-validation.js' ?>"></script>
-
-<!-- Modal de confirmação -->
-<script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
-
-<!-- Alerta de cadastro - Toastr Examples -->
-<script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
+<script src="<?= DIRJS . 'users/edit-user-validation.js' ?>"></script>
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
@@ -255,43 +391,4 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
-
-<script>
-    // Envaindo os dados via Ajax para ver se ja existe o usuario
-    function findLogin() {
-        var dados = $('#loginUserRegister').serialize();
-        $.ajax({
-            type: "POST",
-            url: "/usuarios/verificar-existencia-usuario",
-            data: dados,
-            processData: false,
-            success: function(returnAjax) {
-                if (returnAjax == 'true') {
-                    toastr.error('Erro: usuário já existente no banco de dados!');
-                    $('.btn-register-user').attr('disabled','disabled');
-                }
-            }
-        });
-    }
-
-    function showPassword() {
-        if ($("#passwordUserRegister").is(":password")) {
-            $("#passwordUserRegister").prop('type', 'text');
-            $("#iconPasswordRegister").prop('class', 'far fa-eye-slash');
-        } else {
-            $("#passwordUserRegister").prop('type', 'password');
-            $("#iconPasswordRegister").prop('class', 'far fa-eye');
-        }
-    }
-
-    function showPasswordConfirm() {
-        if ($("#confirmationPasswordRegister").is(":password")) {
-            $("#confirmationPasswordRegister").prop('type', 'text');
-            $("#iconPasswordRegisterConfirm").prop('class', 'far fa-eye-slash');
-        } else {
-            $("#confirmationPasswordRegister").prop('type', 'password');
-            $("#iconPasswordRegisterConfirm").prop('class', 'far fa-eye');
-        }
-    }
-</script>
 @endsection

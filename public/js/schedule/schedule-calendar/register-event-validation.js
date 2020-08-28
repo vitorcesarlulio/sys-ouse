@@ -1,10 +1,10 @@
 $(document).ready(function () {
   $('#formRegisterEvent').validate({
     rules: {
-      startDateRegister: { required: true},
+      startDateRegister: { required: true },
       startTimeRegister: { required: true, time: true },
       endTimeRegister: { required: true, greaterThan: '#startTimeRegister' }, //metodo lessThan se fosse menor
-      nameRegister: { required: true},
+      nameRegister: { required: true },
       surnameRegister: { required: true },
       cellphoneRegister: { require_from_group: [1, ".contact"] },
       telephoneRegister: { require_from_group: [1, ".contact"] },
@@ -63,20 +63,35 @@ $(document).ready(function () {
     },
 
     submitHandler: function (form) {
-      //event.preventDefault();
       var dados = $(form).serialize();
       $.ajax({
         type: "POST",
         url: "/agenda/calendario/cadastar",
         data: dados,
         processData: false,
-        success: function (retorna) {
-          if (retorna['sit']) {
-            //$("#msg-cad").html(retorna['msg']);
-            location.reload();
-          } else {
-            $("#msg-cad").html(retorna['msg']);
+        success: function (returnAjax) {
+          if (returnAjax === 'insertEventBudget') {
+            toastr.success('Sucesso: evento e orçamento cadastrados!');
+            $('#modalRegisterEvent').modal('hide');
+          } else if (returnAjax === 'noInsertEventBudget') {
+            toastr.error('Erro: evento e orçamento não cadastrados!');
+            $('#modalRegisterEvent').modal('hide');
+          } else if (returnAjax === 'insertEvent') {
+            toastr.success('Sucesso: evento cadastrado!');
+            $('#modalRegisterEvent').modal('hide');
+          } else if (returnAjax === 'noInsertEvent') {
+            toastr.error('Erro: evento não cadastrado!');
+            $('#modalRegisterEvent').modal('hide');
+          } else if (returnAjax === 'insertBudget') {
+            toastr.success('Sucesso: orçamento cadastrado!');
+            $('#modalRegisterEvent').modal('hide');
+          } else if (returnAjax === 'noInsertBudget') {
+            toastr.error('Erro: orçamento não cadastrado!');
+            $('#modalRegisterEvent').modal('hide');
           }
+        },
+        error: function () {
+          toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
         }
       });
       return false;

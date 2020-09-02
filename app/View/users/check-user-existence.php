@@ -7,7 +7,7 @@ if (isset($_POST['loginUserRegister']) && !empty($_POST['loginUserRegister'])) {
     $userLogin  = filter_input(INPUT_POST, 'loginUserRegister', FILTER_SANITIZE_SPECIAL_CHARS);
 
     # Consultando no banco para ver se encontra algum usuário
-    $queryCheckLogin = " SELECT usu_login FROM tb_usuario WHERE usu_login=:usu_login ";
+    $queryCheckLogin = " SELECT usu_login FROM tb_usuarios WHERE usu_login=:usu_login ";
     $selectLogin = $connectionDataBase->prepare($queryCheckLogin);
     $selectLogin->bindParam("usu_login", $userLogin);
     $selectLogin->execute();

@@ -5,7 +5,7 @@ include_once '../app/Model/connection-pdo.php';
 $userLogin = $_SESSION["loginUser"];
 
 # Consultando no banco para ver se encontra algum usuário
-$queryCheckLogin = " SELECT usu_login, usu_permissoes FROM tb_usuario WHERE usu_login=:usu_login ";
+$queryCheckLogin = " SELECT usu_login, usu_permissoes, usu_status FROM tb_usuarios WHERE usu_login=:usu_login ";
 $selectLogin = $connectionDataBase->prepare($queryCheckLogin);
 $selectLogin->bindParam("usu_login", $userLogin);
 $selectLogin->execute();
@@ -25,13 +25,22 @@ if ($countRow === 0) {
 
 # Verrificando se os dados do banco sao iguais as sessions, se eu trocar a permissao dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
 if ($dataUserCheck['usu_permissoes'] === $_SESSION['permition']) {
-    # code...
 }else{
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
     session_destroy();
-    header("Location: /");
+    echo " <script> alert('Sua permissao foi alterada. Faça login novamente!'); window.location.href='/'; </script> ";
+}
+
+# Verrificando se os dados do banco sao iguais as sessions, se eu trocar o status dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
+if ($dataUserCheck['usu_status'] === "A") {
+}else{
+    foreach (array_keys($_SESSION) as $key) {
+        unset($_SESSION[$key]);
+    }
+    session_destroy();
+    echo " <script> alert('Seu status foi alterado. Faça login novamente!'); window.location.href='/'; </script> ";
 }
 
 # Pegando IP do usuário

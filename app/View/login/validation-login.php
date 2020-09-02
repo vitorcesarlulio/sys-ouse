@@ -9,8 +9,7 @@ if (isset($_POST['userLogin']) && isset($_POST['passwordLogin'])) {
 $remember = (isset($_POST['remember'])) ? $_POST['remember'] : '';
 
 # verifico se nao esta vazio esses dados
-if (!empty($userLogin) && !empty($passwordLogin)) 
-{
+if (!empty($userLogin) && !empty($passwordLogin)) {
     # Pegando IP do usuário
     $ipAdressUser = '';
     if (getenv('HTTP_CLIENT_IP'))
@@ -29,7 +28,7 @@ if (!empty($userLogin) && !empty($passwordLogin))
         $ipAdressUser = 'UNKNOWN';
 
     # Consultando no banco para ver se encontra algum usuário
-    $queryCheckLogin = " SELECT usu_login, usu_senha, usu_nome, usu_sobrenome, usu_permissoes FROM tb_usuario WHERE usu_login=:usu_login ";
+    $queryCheckLogin = " SELECT usu_login, usu_senha, usu_nome, usu_sobrenome, usu_permissoes, usu_status FROM tb_usuarios WHERE usu_login=:usu_login ";
     $selectLogin = $connectionDataBase->prepare($queryCheckLogin);
     $selectLogin->bindParam("usu_login", $userLogin);
     $selectLogin->execute();
@@ -41,94 +40,100 @@ if (!empty($userLogin) && !empty($passwordLogin))
     # Pegando os dados do usuario que esta tentando fazer o login
     $dataUserLogin = $selectLogin->fetch(\PDO::FETCH_ASSOC);
 
-    # Verifico se encontrou o registro (1 sim, 0 não) e se a senha bate com a do banco
-    if ($countRow === 1 && password_verify($passwordLogin, $dataUserLogin['usu_senha'])) 
-    {
-        # Deletando as tentativas do usuario de acordo com o ip que ele esta acessando
-        $queryDeleteAttempt = " DELETE FROM tb_tentativas WHERE ten_ip=:ten_ip ";
-        $deleteAttempt = $connectionDataBase->prepare($queryDeleteAttempt);
-        $deleteAttempt->bindParam("ten_ip", $ipAdressUser);
-        $deleteAttempt->execute();
+    # Primeiro verifico se o status dele é ativo
+    if ($dataUserLogin['usu_status'] === "A") {
 
-        session_start();
-        # Criando as sessions que vou usar
-        $_SESSION["login"]     = true;
-        $_SESSION["time"]      = time();
-        $_SESSION["name"]      = $dataUserLogin['usu_nome'] . " " . $dataUserLogin['usu_sobrenome'];
-        $_SESSION["loginUser"] = $dataUserLogin['usu_login'];
-        $_SESSION["permition"] = $dataUserLogin['usu_permissoes'];
+        # Verifico se encontrou o registro (1 sim, 0 não) e se a senha bate com a do banco
+        if ($countRow === 1 && password_verify($passwordLogin, $dataUserLogin['usu_senha'])) {
+            # Deletando as tentativas do usuario de acordo com o ip que ele esta acessando
+            $queryDeleteAttempt = " DELETE FROM tb_tentativas WHERE ten_ip=:ten_ip ";
+            $deleteAttempt = $connectionDataBase->prepare($queryDeleteAttempt);
+            $deleteAttempt->bindParam("ten_ip", $ipAdressUser);
+            $deleteAttempt->execute();
 
-        # Proteger contra roubo de sessão
-        $par = null;
-        if ($par == null) {
-            $_SESSION['canary'] = [
-                "birth" => time(),
-                "IP" => $ipAdressUser
-            ];
+            session_start();
+            # Criando as sessions que vou usar
+            $_SESSION["login"]     = true;
+            $_SESSION["time"]      = time();
+            $_SESSION["name"]      = $dataUserLogin['usu_nome'] . " " . $dataUserLogin['usu_sobrenome'];
+            $_SESSION["loginUser"] = $dataUserLogin['usu_login'];
+            $_SESSION["permition"] = $dataUserLogin['usu_permissoes'];
+
+            # Proteger contra roubo de sessão
+            $par = null;
+            if ($par == null) {
+                $_SESSION['canary'] = [
+                    "birth" => time(),
+                    "IP" => $ipAdressUser
+                ];
+            } else {
+                $_SESSION['canary']['birth'] = time();
+            }
+
+            # Dizendo que não houve tentativas
+            $attempts    = false;
+            $errors      = false;
+            $errorStatus = false;
+
+            # Criando Cookies para o "Lembre-me"
+            if ($remember == 'rememberYes') {
+                $expireCookie = time() + 60 * 60 * 24 * 30; //30 dias
+                setCookie('CookieRemember', base64_encode('rememberYes'), $expireCookie);
+                setCookie('CookieUser', base64_encode($userLogin), $expireCookie);
+                setCookie('CookiePassword', base64_encode($passwordLogin), $expireCookie);
+            } else {
+                setCookie('CookieRemember');
+                setCookie('CookieUser');
+                setCookie('CookiePassword');
+            }
         } else {
-            $_SESSION['canary']['birth'] = time();
-        }
+            # Dizendo que houve tentativas
+            $errors = true;
+            $errorStatus = false;
 
-        # Dizendo que não houve tentativas
-        $attempts = false;
-        $errors   = false;
-        
-        # Criando Cookies para o "Lembre-me"
-        if ($remember == 'rememberYes') {
-            $expireCookie = time() + 60*60*24*30; //30 dias
-		    setCookie('CookieRemember', base64_encode('rememberYes') , $expireCookie);
-		    setCookie('CookieUser'    , base64_encode($userLogin)    , $expireCookie);
-		    setCookie('CookiePassword', base64_encode($passwordLogin), $expireCookie);
-        }else{
-            setCookie('CookieRemember');
-		    setCookie('CookieUser');
-		    setCookie('CookiePassword');
-        }
-    } 
+            # Opcional
+            //$_SESSION["login"]     = false;
 
-    else 
-    {
-        # Dizendo que houve tentativas
-        $errors = true;
+            # Contando as tentativas de erro
+            $querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
+            $selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
+            $selectAttempt->bindParam('ten_ip', $ipAdressUser);
+            $selectAttempt->execute();
 
-        # Opcional
-        //$_SESSION["login"]     = false;
+            # Pegando a data de e hora de agora
+            $dateNow = date('Y-m-d H:i:s');
 
-        # Contando as tentativas de erro
-        $querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
-        $selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
-        $selectAttempt->bindParam('ten_ip', $ipAdressUser);
-        $selectAttempt->execute();
+            $r = 0;
+            while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
+                if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
+                    $r++;
+                }
+            }
 
-        # Pegando a data de e hora de agora
-        $dateNow = date('Y-m-d H:i:s');
+            # Vendo se ja foram 5 tentativas, se sim, para de inserir
+            if ($r < 5) {
+                $queryinsertAttempt = " INSERT INTO tb_tentativas (ten_ip) VALUES (:ten_ip) ";
+                $insertAttempt = $connectionDataBase->prepare($queryinsertAttempt);
+                $insertAttempt->bindParam(':ten_ip', $ipAdressUser);
+                $insertAttempt->execute();
+            }
 
-        $r = 0;
-        while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
-            if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
-                $r++;
+            # Se errar mais de 5 vezes deixo a variavel $attempts como true
+            if ($r >= 5) {
+                $attempts = true;
+            } else {
+                $attempts = false;
             }
         }
-
-        # Vendo se ja foram 5 tentativas, se sim, para de inserir
-        if ($r < 5) {
-            $queryinsertAttempt = " INSERT INTO tb_tentativas (ten_ip) VALUES (:ten_ip) ";
-            $insertAttempt = $connectionDataBase->prepare($queryinsertAttempt);
-            $insertAttempt->bindParam(':ten_ip', $ipAdressUser);
-            $insertAttempt->execute();
-        }
-
-        # Se errar mais de 5 vezes deixo a variavel $attempts como true
-        if ($r >= 5) {
-            $attempts = true;
-        } else {
-            $attempts = false;
-        }
+    }else {
+        $errorStatus = true;
+        $attempts = "";
+        $errors = "";
     }
 
+
     # Retornando os resultados para o Ajax
-    $returnAjax = ['redirect' => '/home', 'attempts' => $attempts, 'errors' => $errors];
+    $returnAjax = ['redirect' => '/home', 'attempts' => $attempts, 'errors' => $errors, 'errorStatus' => $errorStatus];
     header('Content-Type: application/json');
     echo json_encode($returnAjax);
-
 }

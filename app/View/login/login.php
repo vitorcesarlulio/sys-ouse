@@ -81,16 +81,15 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
 
                 <form id="formLogin" method="POST" autocomplete="off">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Usuário" name="userLogin" id="userLogin" value="<?= $loginRemember ?>">
+                        <input type="text" class="form-control" placeholder="Usuário" name="userLogin" id="userLogin" value="<?= $loginRemember ?>"> <!--autocomplete="username"-->
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                
                             </div>
                         </div>
                     </div>
 
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Senha" name="passwordLogin" id="passwordLogin" value="<?= $passwordRemember ?>">
+                        <input type="password" class="form-control" placeholder="Senha" name="passwordLogin" id="passwordLogin" value="<?= $passwordRemember ?>"> <!--autocomplete="current-password"-->
                         <div class="input-group-append">
                             <div class="input-group-text" id="divShowPassword">
                                 <span class="far fa-eye" onclick="myFunction()" style="cursor: pointer;" id="showPassword">

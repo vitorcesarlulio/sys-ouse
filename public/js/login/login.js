@@ -38,12 +38,15 @@ $(document).ready(function () {
                 processData: false,
                 success: function (returnAjax) {
                     if (returnAjax['redirect'] === '/home' && returnAjax['attempts'] === false && returnAjax['errors'] === false) {
-                        window.location.href = returnAjax['redirect']; //direciona eu para a home se o usuario existir
+                        window.location.href = '/carregar'; //direciona eu para a home se o usuario existir
                     }
-                    if (returnAjax['errors'] === true && returnAjax['attempts'] === false && returnAjax['redirect'] === '/home') {
+                    else if (returnAjax['errorStatus'] === true) {
+                        toastr.error('Erro: usuário inativo, entre em contato com Administrador do sistema!');//Status como inativo
+                    }
+                    else if (returnAjax['errors'] === true && returnAjax['attempts'] === false && returnAjax['redirect'] === '/home') {
                         toastr.error('Erro: usuário ou senha inválidos!');
                     }
-                    if (returnAjax['attempts'] === true && returnAjax['errors'] === true && returnAjax['redirect'] === '/home') {
+                    else if (returnAjax['attempts'] === true && returnAjax['errors'] === true && returnAjax['redirect'] === '/home') {
                         $('#btnLogin').attr('disabled','disabled');
                         $('#divErrors').html('Tentativas excedidas, tente novamente daqui 20 minutos ou entre em contato com o Administrador do sistema!');
 

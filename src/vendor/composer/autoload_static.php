@@ -18,10 +18,6 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
         array (
             'voku\\' => 5,
         ),
-        'T' => 
-        array (
-            'Traits\\' => 7,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -37,10 +33,6 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
             'Psr\\Container\\' => 14,
             'PlugRoute\\' => 10,
             'PlugHttp\\' => 9,
-        ),
-        'M' => 
-        array (
-            'Models\\' => 7,
         ),
         'J' => 
         array (
@@ -61,7 +53,6 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
         ),
         'C' => 
         array (
-            'Classes\\' => 8,
             'Carbon\\' => 7,
         ),
         'A' => 
@@ -74,10 +65,6 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
-        ),
-        'Traits\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/../app/Controller/traits',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
@@ -119,10 +106,6 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
         array (
             0 => __DIR__ . '/..' . '/erandir/plug-http/src',
         ),
-        'Models\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/../app/Model',
-        ),
         'Jenssegers\\Blade\\' => 
         array (
             0 => __DIR__ . '/..' . '/jenssegers/blade/src',
@@ -154,10 +137,6 @@ class ComposerStaticInit78f545629d0c5d933f7c788c6a4ff628
         'Doctrine\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
-        ),
-        'Classes\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/../app/Controller/classes',
         ),
         'Carbon\\' => 
         array (

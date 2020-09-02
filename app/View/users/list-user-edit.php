@@ -1,10 +1,10 @@
 <?php
 if (isset($_POST['idUserEdit']) && !empty($_POST['idUserEdit'])) {
 
-    include '../app/Model/connection-pdo.php';
+    include_once '../app/Model/connection-pdo.php';
 
     $idUserEdit = filter_input(INPUT_POST, 'idUserEdit', FILTER_SANITIZE_NUMBER_INT);
-    $querySelectUser = " SELECT usu_codigo, usu_login, usu_nome, usu_sobrenome, usu_permissoes FROM tb_usuario ";
+    $querySelectUser = " SELECT usu_codigo, usu_login, usu_nome, usu_sobrenome, usu_permissoes, usu_status FROM tb_usuarios ";
     
     $parametros = [];
     if (isset($idUserEdit)) {
@@ -22,11 +22,11 @@ if (isset($_POST['idUserEdit']) && !empty($_POST['idUserEdit'])) {
             'loginUser'    => $rowUser['usu_login'],
             'nameUser'     => $rowUser['usu_nome'],
             'surnameUser'  => $rowUser['usu_sobrenome'],
-            'permitionUser'=> $rowUser['usu_permissoes']
+            'permitionUser'=> $rowUser['usu_permissoes'],
+            'statusUser'=> $rowUser['usu_status']
         ];
     }
 
     echo json_encode($users);
 
-    
 }

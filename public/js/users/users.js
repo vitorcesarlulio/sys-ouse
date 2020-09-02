@@ -3,6 +3,7 @@ $(document).on('click', '.btn-new-user', function () {
     $('#modalRegisterUser').modal('show');
 });
 
+/* Letras maisculuas */
 $(document).ready(function () {
     $("#loginUserRegister").keyup(function () {
         $(this).val($(this).val().toUpperCase());
@@ -52,6 +53,32 @@ function showPasswordConfirm() {
     }
 }
 
+/* Esquema dos botoes de permissao */
+$("#modalRegisterUser #permitionUserRegister").click(function () {
+    $('#modalRegisterUser #permitionAdminRegister').attr('checked', false);
+    $('#modalRegisterUser #divPermitionAdminRegister').attr('class', 'btn btn-secondary');
+    $('#modalRegisterUser #permitionUserRegister').attr('checked', true);
+});
+
+$("#modalRegisterUser #permitionAdminRegister").click(function () {
+    $('#modalRegisterUser #permitionUserRegister').attr('checked', false);
+    $('#modalRegisterUser #divPermitionUserRegister').attr('class', 'btn btn-secondary');
+    $('#modalRegisterUser #permitionAdminRegister').attr('checked', true);
+});
+
+/* Esquema dos botoes de status */
+$("#modalRegisterUser #statusActiveUserRegister").click(function () {
+    $('#modalRegisterUser #statusInactiveRegister').attr('checked', false);
+    $('#modalRegisterUser #divStatusInactiveUserRegister').attr('class', 'btn btn-secondary');
+    $('#modalRegisterUser #statusActiveUserRegister').attr('checked', true);
+});
+
+$("#modalRegisterUser #statusInactiveRegister").click(function () {
+    $('#modalRegisterUser #statusActiveUserRegister').attr('checked', false);
+    $('#modalRegisterUser #divStatusActiveUserRegister').attr('class', 'btn btn-secondary');
+    $('#modalRegisterUser #statusInactiveRegister').attr('checked', true);
+});
+
 /* Editar Usuario */
 $(document).on('click', '.btn-edit-user', function () {
     var id = $(this).attr("id");
@@ -72,19 +99,35 @@ $(document).on('click', '.btn-edit-user', function () {
                 $('#modalEditUser #loginUserEdit').val(dadosJson.loginUser);
 
                 if (dadosJson.permitionUser === "admin") {
-                    //$('#modalEditUser #permitionUserEdit').attr('checked', false);
-                    //$('#modalEditUser #labelUserPermition').attr('class', 'btn btn-secondary');
+                    $('#modalEditUser #permitionUserEdit').attr('checked', false);
+                    $('#modalEditUser #labelUserPermition').attr('class', 'btn btn-secondary');
 
                     $('#modalEditUser #permitionAdminEdit').val(dadosJson.permitionUser);
                     $('#modalEditUser #labelAdminPermition').attr('class', 'btn btn-secondary active');
                     $('#modalEditUser #permitionAdminEdit').attr('checked', '');
                 } else {
-                    //$('#modalEditUser #permitionAdminEdit').attr('checked', false);
-                    //$('#modalEditUser #labelAdminPermition').attr('class', 'btn btn-secondary');
+                    $('#modalEditUser #permitionAdminEdit').attr('checked', false);
+                    $('#modalEditUser #labelAdminPermition').attr('class', 'btn btn-secondary');
 
                     $('#modalEditUser #permitionUserEdit').val(dadosJson.permitionUser);
                     $('#modalEditUser #labelUserPermition').attr('class', 'btn btn-secondary active');
                     $('#modalEditUser #permitionUserEdit').attr('checked', true);
+                }
+
+                if (dadosJson.statusUser === "I") {
+                    $('#modalEditUser #statusActiveUserEdit').attr('checked', false);
+                    $('#modalEditUser #labelUserStatusActive').attr('class', 'btn btn-secondary');
+
+                    //$('#modalEditUser #statusInactiveUserEdit').val(dadosJson.statusUser);
+                    $('#modalEditUser #labelUserStatusInactive').attr('class', 'btn btn-secondary active');
+                    $('#modalEditUser #statusInactiveUserEdit').attr('checked', '');
+                } else {
+                    $('#modalEditUser #statusInactiveUserEdit').attr('checked', false);
+                    $('#modalEditUser #labelUserStatusInactive').attr('class', 'btn btn-secondary');
+
+                    //$('#modalEditUser #statusActiveUserEdit').val(dadosJson.statusUser);
+                    $('#modalEditUser #labelUserStatusActive').attr('class', 'btn btn-secondary active');
+                    $('#modalEditUser #statusActiveUserEdit').attr('checked', true);
                 }
 
                 $('#modalEditUser').modal('show');
@@ -103,6 +146,7 @@ function showPasswordEdit() {
         $("#iconPasswordEdit").prop('class', 'far fa-eye');
     }
 }
+
 // Função para exibir a confirm senha no editar 
 function showPasswordConfirmEdit() {
     if ($("#confirmationPasswordEdit").is(":password")) {
@@ -125,17 +169,15 @@ $("#modalEditUser #permitionAdminEdit").click(function () {
     $('#modalEditUser #permitionAdminEdit').attr('checked', true);
 });
 
-
-$("#modalRegisterUser #permitionUserRegister").click(function () {
-    $('#modalRegisterUser #permitionAdminRegister').attr('checked', false);
-    $('#modalRegisterUser #divPermitionAdminRegister').attr('class', 'btn btn-secondary');
-    $('#modalRegisterUser #permitionUserRegister').attr('checked', true);
+//quando ele clicar em um dos botoes faz o inverso com o outro
+$("#modalEditUser #statusActiveUserEdit").click(function () {
+    $('#modalEditUser #statusInactiveUserEdit').attr('checked', false);
+    $('#modalEditUser #statusActiveUserEdit').attr('checked', true);
 });
 
-$("#modalRegisterUser #permitionAdminRegister").click(function () {
-    $('#modalRegisterUser #permitionUserRegister').attr('checked', false);
-    $('#modalRegisterUser #divPermitionUserRegister').attr('class', 'btn btn-secondary');
-    $('#modalRegisterUser #permitionAdminRegister').attr('checked', true);
+$("#modalEditUser #statusInactiveUserEdit").click(function () {
+    $('#modalEditUser #statusActiveUserEdit').attr('checked', false);
+    $('#modalEditUser #statusInactiveUserEdit').attr('checked', true);
 });
 
 
@@ -151,18 +193,18 @@ $(document).ready(function () {
             "data": function (data) {
                 //Filtros
                 // Valor dos campos
-                var startDate = $('#formFiltersUsers #startDate').val();
-                var endDate = $('#formFiltersUsers #endDate').val();
-                var status = $('#formFiltersUsers #status').val();
-                var event = $('#formFiltersUsers #event').val();
-                var period = $('#formFiltersUsers #period').val();
+                var startDate   = $('#formFiltersUsers #startDate').val();
+                var endDate     = $('#formFiltersUsers #endDate').val();
+                var statusUser  = $('#formFiltersUsers #statusUser').val();
+                var accessLevel = $('#formFiltersUsers #accessLevel').val();
+                var filterLogin = $('#formFiltersUsers #filterLogin').val();
 
                 // Anexar aos dados
-                data.startDate = startDate;
-                data.endDate = endDate;
-                data.status = status;
-                data.event = event;
-                data.period = period;
+                data.startDate   = startDate;
+                data.endDate     = endDate;
+                data.statusUser  = statusUser;
+                data.accessLevel = accessLevel;
+                data.filterLogin = filterLogin;
             }
 
         },
@@ -173,9 +215,8 @@ $(document).ready(function () {
         "autoWidth": false, //Largura automática
         //Largura e tirar ordenaçao das colunas
         "columnDefs": [
-
-            { "targets": 3, "width": "10%", "orderable": false, "searchable": false },
-            { "targets": 2, "width": "12%" },
+            { "targets": 5, "width": "10%", "orderable": false, "searchable": false },
+            { "targets": 4, "width": "12%" },
         ],
 
         "responsive": true,
@@ -185,9 +226,9 @@ $(document).ready(function () {
 
         "fixedHeader": true,
         "colReorder": true, //arrastar colunas,
-        "paging": false, //Paginaçao
-        "order": [2, 'asc'], //ordenar coluna
-        "paging": true, //mostra "10 resultados por página", mas esta oculto no css se nao quebra o design
+        //"paging": false, //Paginaçao
+        "order": [4, 'asc'], //ordenar coluna
+        //"paging": true, //mostra "10 resultados por página", mas esta oculto no css se nao quebra o design
 
         "dom": 'B <"clear"> lfrtip',
         //"dom": 'Bfrtip',
@@ -209,12 +250,12 @@ $(document).ready(function () {
                         },
                         {
                             extend: 'pdfHtml5',
-                            title: 'Relatório de Eventos',
+                            //title: 'Relatório de Usuários',
                             key: {
-                                key: 'f',
+                                key: 'p',
                                 altKey: true
                             },
-                            text: 'PD<u>F</u> &nbsp; <i class="far fa-file-pdf"></i>',
+                            text: '<u>P</u>DF &nbsp; <i class="far fa-file-pdf"></i>',
                             orientation: 'portrait', //portrait RETRADO //landscape
                             pageSize: 'A4',
                             download: 'open', //abrir pdf em uma nova aba, so que o nome do arquivo é modificado
@@ -225,19 +266,18 @@ $(document).ready(function () {
                             //messageTop: "BLA BLA BLA", //Mensagem acima da tabela, so funciona sem o w
                             //message: "BLA BLA BLA",
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5], //MUDAR 
+                                columns: [0, 1, 2, 3, 4], //MUDAR 
                                 //modifier: {page: 'current'} //salvar apenas os dados mostrados na página atual
                                 //search: "applied",
                                 order: "applied"
                             },
                             customize: function (doc) {
                                 doc.content[1].table.widths = [ //MUDAR
-                                    '20%',
                                     '25%',
-                                    '13%',
-                                    '13%',
-                                    '13%',
-                                    '13%',
+                                    '25%',
+                                    '15%',
+                                    '15%',
+                                    '20%'
                                 ];
 
                                 //doc.defaultStyle.font = 'Arial';
@@ -341,44 +381,16 @@ $(document).ready(function () {
                             );*/
                             }
                         },
-
-                        {
-                            extend: 'print',
-                            text: '<u>P</u>rint',
-                            //messageTop: 'Vitor',
-                            message: 'Message',
-                            title: '<div style="text-align:center;"><h1>Keer Industries</h2></div><div style="text-align:center;font-size:15px;"><br />Krisi Mandi ke piche<br /><br />Bilara<br /><br /></div>',
-                            footer: true,
-                            autoPrint: false, //nao abre a pagina que cai direto na imprssao
-                            key: {
-                                key: 'p',
-                                altKey: true
-                            },
-                            exportOptions: {
-
-                            },
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5], //MUDAR
-                            },
-                            customize: function (win) {
-                                $(win.document.body).css('font-size', '10pt').prepend('<img src="http://datatables.net/media/images/logo-fade.png" style="position:absolute; top:0; left:0;" />');
-                                $(win.document.body).css('font-size', '23pt').prepend('<div> <?php echo date("Y"); ?></div>');
-                                $(win.document.body).find('table').addClass('display').css('font-size', '15px');
-                                $(win.document.body).find('thead').css('background-color', '#0984e3');
-                                $(win.document.body).find('thead').css('font-size', '20px');
-                                $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
-                                    $(this).css('background-color', '#D0D0D0');
-                                });
-                                $(win.document.body).find('h1').css('text-align', 'center');
-                            }
-                        },
                         {
                             extend: 'excel',
                             text: '<u>E</u>xcel',
                             key: {
                                 key: 'e', //ctrl + shift + e
                                 altKey: true
-                            }
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4], 
+                            },
                         },
                         {
                             collectionTitle: 'Visibilidade da coluna',
@@ -398,7 +410,7 @@ $(document).ready(function () {
         ]
     });
 
-    /*A cada click é uma requição Ajax
+    /*A cada click é uma requição Ajax*/
     $('#formFiltersUsers #startDate').keyup(function () {
         dataTable.draw();
     });
@@ -406,15 +418,15 @@ $(document).ready(function () {
         dataTable.draw();
     });
 
-    $('#formFiltersUsers #status').change(function () {
+    $('#formFiltersUsers #statusUser').change(function () {
         dataTable.draw();
     });
 
-    $('#formFiltersUsers #event').change(function () {
+    $('#formFiltersUsers #accessLevel').change(function () {
         dataTable.draw();
     });
-    $('#formFiltersUsers #period').change(function () {
+    $('#formFiltersUsers #filterLogin').change(function () {
         dataTable.draw();
-    }); */
+    }); 
 
 });

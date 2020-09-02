@@ -223,7 +223,7 @@ $(document).ready(function () {
                             },
                             customize: function (win) {
                                 $(win.document.body).css('font-size', '10pt').prepend('<img src="http://datatables.net/media/images/logo-fade.png" style="position:absolute; top:0; left:0;" />');
-                                $(win.document.body).css('font-size', '23pt').prepend('<div> <?php echo date("Y"); ?></div>');
+                                $(win.document.body).css('font-size', '23pt').prepend('<div> <?= date("Y"); ?></div>');
                                 $(win.document.body).find('table').addClass('display').css('font-size', '15px');
                                 $(win.document.body).find('thead').css('background-color', '#0984e3');
                                 $(win.document.body).find('thead').css('font-size', '20px');

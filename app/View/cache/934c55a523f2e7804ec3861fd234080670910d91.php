@@ -1,5 +1,4 @@
 <?php
-//session_start();
 require_once '../app/Model/connection-mysqli.php';
 
 $selectClient = " SELECT orca_numero, orca_nome, orca_sobrenome from tb_orcamento ORDER BY orca_numero DESC ";
@@ -14,7 +13,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-daygrid/main.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-timegrid/main.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.css' ?>">
-<link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'list/main.css' ?>">
 <!-- Date Picker -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />

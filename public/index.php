@@ -139,4 +139,8 @@ $route->get('/cadastro', function () use ($blade) {
     echo $blade->render('cadastro.cadastro');
 });
 
+$route->get('/carregar', function () {
+    include '../app/View/cadastro/oi.html';
+});
+
 $route->on();

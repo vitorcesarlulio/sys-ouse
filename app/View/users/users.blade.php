@@ -3,8 +3,15 @@ require_once '../app/View/login/check-login.php';
 
 if ($_SESSION["permition"] === "admin") {
 } else {
-    echo " <script> alert('Você nao tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
+    echo " <script> alert('Você não tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
 }
+
+include_once '../app/Model/connection-pdo.php';
+
+$querySelectUser = " SELECT usu_codigo, usu_login, usu_nome, usu_sobrenome FROM tb_usuarios ";
+$searchUser = $connectionDataBase->prepare($querySelectUser);
+$searchUser->execute();
+
 ?>
 @extends('templates.default')
 
@@ -14,8 +21,7 @@ if ($_SESSION["permition"] === "admin") {
 <!-- DataTables -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-bs4/css/dataTables.bootstrap4.min.css' ?>">
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'datatables-responsive/css/responsive.bootstrap4.min.css' ?>">
-
-<link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
+<link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
 @endsection
 
 @section('css')
@@ -56,18 +62,6 @@ if ($_SESSION["permition"] === "admin") {
 
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label>Periodo:</label>
-                            <select name="event" class="form-control" id="period">
-                                <option value="">Todos</option>
-                                <option value="today">Hoje</option>
-                                <option value="afterToday">Depois de Hoje</option>
-                                <option value="beforeToday">Antes de Hoje</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <div class="form-group">
                             <label>Data de:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -92,22 +86,36 @@ if ($_SESSION["permition"] === "admin") {
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Status:</label>
-                            <select name="status" class="form-control" id="status">
+                            <select class="form-control" name="statusUser" id="statusUser">
                                 <option value="">Todos</option>
-                                <option style="background-color:#FFC107; color: #fff;" value="P">Pendente</option>
-                                <option style="background-color:#28A745; color: #fff;" value="R">Realizado</option>
+                                <option value="A">Ativo</option>
+                                <option value="I">Inativo</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label>Evento:</label>
-                            <select name="event" class="form-control" id="event">
+                            <label>Nível de Acesso:</label>
+                            <select class="form-control" name="accessLevel" id="accessLevel">
                                 <option value="">Todos</option>
-                                <option value="Realizar Orçamento">Realizar Orçamento</option>
-                                <option value="Voltar na Obra">Voltar na Obra</option>
-                                <option value="Início de Obra">Início de Obra</option>
+                                <option value="user">Usuário</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Login:</label>
+                            <select class="form-control select2" name="filterLogin" id="filterLogin" style="width: 100%;">
+                                <option value="">Todos</option>
+                                <?php foreach ($searchUser->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                    <option value="<?php echo $row['usu_codigo'] ?>">
+                                        <?php echo $row['usu_login'] ?>
+                                    </option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -143,6 +151,8 @@ if ($_SESSION["permition"] === "admin") {
                             <tr>
                                 <th>Nome</th>
                                 <th>Login</th>
+                                <th>Permissão</th>
+                                <th>Status</th>
                                 <th>Data de Cadastro</th>
                                 <th>Ações</th>
                             </tr>
@@ -151,6 +161,8 @@ if ($_SESSION["permition"] === "admin") {
                             <tr>
                                 <th>Nome</th>
                                 <th>Login</th>
+                                <th>Permissão</th>
+                                <th>Status</th>
                                 <th>Data de Cadastro</th>
                                 <th>Ações</th>
                             </tr>
@@ -198,7 +210,7 @@ if ($_SESSION["permition"] === "admin") {
                                 <div class="form-group">
                                     <label>Senha:</label>
                                     <div class="input-group">
-                                        <input type="password" name="passwordUserRegister" id="passwordUserRegister" class="form-control" placeholder="Entre com a Senha">
+                                        <input type="password" name="passwordUserRegister" id="passwordUserRegister" class="form-control" placeholder="Entre com a Senha" autocomplete="new-password">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" onclick="showPassword()" style="cursor: pointer;">
                                                 <i class="far fa-eye" id="iconPasswordRegister"></i>
@@ -212,7 +224,7 @@ if ($_SESSION["permition"] === "admin") {
                                 <div class="form-group">
                                     <label>Confirmar Senha:</label>
                                     <div class="input-group">
-                                        <input type="password" name="confirmationPasswordRegister" id="confirmationPasswordRegister" class="form-control" placeholder="Confirmação da Senha">
+                                        <input type="password" name="confirmationPasswordRegister" id="confirmationPasswordRegister" class="form-control" placeholder="Confirmação da Senha" autocomplete="new-password">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" onclick="showPasswordConfirm()" style="cursor: pointer;">
                                                 <i class="far fa-eye" id="iconPasswordRegisterConfirm"></i>
@@ -237,16 +249,28 @@ if ($_SESSION["permition"] === "admin") {
                                     <label>Permissões:</label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-secondary active focus" id="divPermitionUserRegister">
-                                            <input type="radio" name="permitionUserRegister" id="permitionUserRegister" checked value="user"> Usuário 
+                                            <input type="radio" name="permitionUserRegister" id="permitionUserRegister" checked value="user"> Usuário
                                         </label>
                                         <label class="btn btn-secondary" id="divPermitionAdminRegister">
-                                            <input type="radio" name="permitionAdminRegister" id="permitionAdminRegister" value="admin"> Administrador 
+                                            <input type="radio" name="permitionAdminRegister" id="permitionAdminRegister" value="admin"> Administrador
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Status:</label>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary active focus" id="divStatusActiveUserRegister">
+                                            <input type="radio" name="statusActiveUserRegister" id="statusActiveUserRegister" checked value="A"> Ativo
+                                        </label>
+                                        <label class="btn btn-secondary" id="divStatusInactiveUserRegister">
+                                            <input type="radio" name="statusInactiveRegister" id="statusInactiveRegister" value="I"> Inativo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -298,7 +322,7 @@ if ($_SESSION["permition"] === "admin") {
                                 <div class="form-group">
                                     <label>Senha:</label>
                                     <div class="input-group">
-                                        <input type="password" name="passwordUserEdit" id="passwordUserEdit" class="form-control">
+                                        <input type="password" name="passwordUserEdit" id="passwordUserEdit" class="form-control" autocomplete="new-password">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" onclick="showPasswordEdit()" style="cursor: pointer;">
                                                 <i class="far fa-eye" id="iconPasswordEdit"></i>
@@ -311,7 +335,7 @@ if ($_SESSION["permition"] === "admin") {
                                 <div class="form-group">
                                     <label>Confirmar Senha:</label>
                                     <div class="input-group">
-                                        <input type="password" name="confirmationPasswordEdit" id="confirmationPasswordEdit" class="form-control">
+                                        <input type="password" name="confirmationPasswordEdit" id="confirmationPasswordEdit" class="form-control" autocomplete="new-password">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" onclick="showPasswordConfirmEdit()" style="cursor: pointer;">
                                                 <i class="far fa-eye" id="iconPasswordEditConfirm"></i>
@@ -320,7 +344,7 @@ if ($_SESSION["permition"] === "admin") {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!--<div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Permissões:</label>
@@ -329,17 +353,31 @@ if ($_SESSION["permition"] === "admin") {
                                         <option value="admin">Administrador</option>
                                     </select>
                                 </div>
-                            </div> -->                           
+                            </div> -->
 
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Permissões:</label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-secondary" id="labelUserPermition">
-                                            <input type="radio" name="permitionUserEdit" id="permitionUserEdit" value="user"> Usuário 
+                                            <input type="radio" name="permitionUserEdit" id="permitionUserEdit" value="user"> Usuário
                                         </label>
                                         <label class="btn btn-secondary" id="labelAdminPermition">
-                                            <input type="radio" name="permitionAdminEdit" id="permitionAdminEdit" value="admin"> Administrador 
+                                            <input type="radio" name="permitionAdminEdit" id="permitionAdminEdit" value="admin"> Administrador
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Status:</label>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary" id="labelUserStatusActive">
+                                            <input type="radio" name="statusActiveUserEdit" id="statusActiveUserEdit" value="A"> Ativo
+                                        </label>
+                                        <label class="btn btn-secondary" id="labelUserStatusInactive">
+                                            <input type="radio" name="statusInactiveUserEdit" id="statusInactiveUserEdit" value="I"> Inativo
                                         </label>
                                     </div>
                                 </div>
@@ -367,7 +405,12 @@ if ($_SESSION["permition"] === "admin") {
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
 <script src="<?= DIRJS . 'users/users.js' ?>"></script>
-
+<!-- Select2 -->
+<script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
+<script>
+    //Initialize Select2 Elements
+    $('.select2').select2();
+</script>
 <!-- Vaidação -->
 <script src="<?= DIRJS . 'users/register-user-validation.js' ?>"></script>
 <script src="<?= DIRJS . 'users/edit-user-validation.js' ?>"></script>

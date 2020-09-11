@@ -39,6 +39,40 @@ $route->get('/home', function () use ($blade) {
 });
 
 /**
+ * Pessoas
+ */
+$route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
+
+    $route->get('', function () use ($blade) {
+        echo $blade->render('people.people');
+    });
+
+    $route->post('/listar', function () {
+        include '../app/View/people/list-people.php';
+    });
+
+    $route->get('/cadastro', function () use ($blade) {
+        echo $blade->render('people.people-register');
+    });
+
+    $route->post('/cadastrar', function () {
+        include '../app/View/people/register-people.php';
+    });
+
+    $route->post('/listar-editar', function () {
+        include '../app/View/people/list-people-edit.php';
+    });
+
+    $route->post('/editar', function () {
+        include '../app/View/people/edit-people.php';
+    });
+
+    $route->post('/apagar', function () {
+        include '../app/View/people/delete-people.php';
+    });
+});
+
+/**
  * Rotas Agenda
  */
 $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {

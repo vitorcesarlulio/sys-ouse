@@ -212,6 +212,12 @@ $imageRandom = rand(1, $count);
             </li>
 
             <li class="nav-item has-treeview">
+              <a href="/pessoas" class="nav-link">
+                <i class="nav-icon fas fa-user-circle"></i> <p> Pessoas </p> 
+              </a> 
+            </li>
+
+            <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-calendar-alt"></i>
                 <p> Agenda <i class="right fas fa-angle-left"></i> </p>

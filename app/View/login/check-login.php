@@ -91,7 +91,7 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['permition']) || !isset($_SES
     }
     echo " <script> alert('Você não está logado'); window.location.href='/'; </script> ";
 } else {
-    if ($_SESSION['time'] >= time() - 300) { //1200
+    if ($_SESSION['time'] >= time() - 1200) { //1200
         $_SESSION['time'] = time();
     } else {
         foreach (array_keys($_SESSION) as $key) {

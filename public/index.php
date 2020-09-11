@@ -20,7 +20,8 @@ $route->notFound(function () use ($blade) {
  * Login
  */
 $route->get('/', function () {
-    include '../app/View/login/login.php';
+    //include '../app/View/login/login.php';
+    echo "oi";
 });
 
 $route->post('/verificar-login', function () {

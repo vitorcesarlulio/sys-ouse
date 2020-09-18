@@ -1,45 +1,63 @@
 <?php
-# Recebendo os dados que o Js esta enviando
-if (isset($_POST['loginUserRegister']) && isset($_POST['nameUserRegister']) && isset($_POST['surnameUserRegister']) && isset($_POST['passwordUserRegister'])) {
-    if (!empty($_POST['loginUserRegister']) && !empty($_POST['nameUserRegister']) && !empty($_POST['surnameUserRegister']) && !empty($_POST['passwordUserRegister'])) {
+
+if (isset($_POST['typePerson']) && !empty($_POST['typePerson'])) {
+    include_once '../app/Model/connection-pdo.php';
+
+    $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    $cep   = str_replace('-', '',  $dados['cep']);
+
+    if ($dados['typePerson'] === "F") {
+
+        $cpf = str_replace('.', '',  $dados['cpf']);
+
+        $queryInsertPhysicalPerson = " INSERT INTO tb_pessoas (pess_tipo, pess_nome, pess_sobrenome, pess_cpfcnpj, pess_cep, pess_logradouro, pess_log_numero, pess_bairro, pess_cidade, pess_estado, pess_edificio, pess_bloco, pess_apartamento, pess_logradouro_condominio, pess_observacao) VALUES (:pess_tipo, :pess_nome, :pess_sobrenome, :pess_cpfcnpj, :pess_cep, :pess_logradouro, :pess_log_numero, :pess_bairro, :pess_cidade, :pess_estado, :pess_edificio, :pess_bloco, :pess_apartamento, :pess_logradouro_condominio, :pess_observacao) ";
+        $typePerson = "F";
+        $insertPhysicalPerson = $connectionDataBase->prepare($queryInsertPhysicalPerson);
+        $insertPhysicalPerson->bindParam(':pess_tipo',                  $typePerson);
+        $insertPhysicalPerson->bindParam(':pess_nome',                  $dados['name']);
+        $insertPhysicalPerson->bindParam(':pess_sobrenome',             $dados['surname']);
+        $insertPhysicalPerson->bindParam(':pess_cpfcnpj',               $cpf);
+        $insertPhysicalPerson->bindParam(':pess_cep',                   $cep);
+        $insertPhysicalPerson->bindParam(':pess_logradouro',            $dados['logradouro']);
+        $insertPhysicalPerson->bindParam(':pess_log_numero',            $dados['number']);
+        $insertPhysicalPerson->bindParam(':pess_bairro',                $dados['bairro']);
+        $insertPhysicalPerson->bindParam(':pess_cidade',                $dados['localidade']);
+        $insertPhysicalPerson->bindParam(':pess_estado',                $dados['uf']);
+        $insertPhysicalPerson->bindParam(':pess_edificio',              $dados['edifice']);
+        $insertPhysicalPerson->bindParam(':pess_bloco',                 $dados['block']);
+        $insertPhysicalPerson->bindParam(':pess_apartamento',           $dados['apartment']);
+        $insertPhysicalPerson->bindParam(':pess_logradouro_condominio', $dados['streetCondominium']);
+        $insertPhysicalPerson->bindParam(':pess_observacao',            $dados['observation']);
+
+        $insertPhysicalPerson->execute() ? $returnAjax = 'insertPhysicalPerson' : $returnAjax = 'noInsertPhysicalPerson';
+
+    } else if ($dados['typePerson'] === "J") {
+
+        $cnpj = str_replace(['.', '/', '-'], '',  $dados['cnpj']);
+
+        $queryInsertPhysicalLegal = " INSERT INTO tb_pessoas (pess_tipo, pess_razao_social, pess_nome_fantasia, pess_cpfcnpj, pess_cep, pess_logradouro, pess_log_numero, pess_bairro, pess_cidade, pess_estado, pess_edificio, pess_bloco, pess_apartamento, pess_logradouro_condominio, pess_observacao) VALUES (:pess_tipo, :pess_razao_social, :pess_nome_fantasia, :pess_cpfcnpj, :pess_cep, :pess_logradouro, :pess_log_numero, :pess_bairro, :pess_cidade, :pess_estado, :pess_edificio, :pess_bloco, :pess_apartamento, :pess_logradouro_condominio, :pess_observacao) ";
+        $typePerson = "J";
+        $queryInsertPhysicalLegal = $connectionDataBase->prepare($queryInsertPhysicalLegal);
+        $queryInsertPhysicalLegal->bindParam(':pess_tipo',                  $typePerson);
+        $queryInsertPhysicalLegal->bindParam(':pess_razao_social',          $dados['companyName']);
+        $queryInsertPhysicalLegal->bindParam(':pess_nome_fantasia',         $dados['fantasyName']);
+        $queryInsertPhysicalLegal->bindParam(':pess_cpfcnpj',               $cnpj);
+        $queryInsertPhysicalLegal->bindParam(':pess_cep',                   $cep);
+        $queryInsertPhysicalLegal->bindParam(':pess_logradouro',            $dados['logradouro']);
+        $queryInsertPhysicalLegal->bindParam(':pess_log_numero',            $dados['number']);
+        $queryInsertPhysicalLegal->bindParam(':pess_bairro',                $dados['bairro']);
+        $queryInsertPhysicalLegal->bindParam(':pess_cidade',                $dados['localidade']);
+        $queryInsertPhysicalLegal->bindParam(':pess_estado',                $dados['uf']);
+        $queryInsertPhysicalLegal->bindParam(':pess_edificio',              $dados['edifice']);
+        $queryInsertPhysicalLegal->bindParam(':pess_bloco',                 $dados['block']);
+        $queryInsertPhysicalLegal->bindParam(':pess_apartamento',           $dados['apartment']);
+        $queryInsertPhysicalLegal->bindParam(':pess_logradouro_condominio', $dados['streetCondominium']);
+        $queryInsertPhysicalLegal->bindParam(':pess_observacao',            $dados['observation']);
+
+        $queryInsertPhysicalLegal->execute() ? $returnAjax = 'insertPhysicalLegal' : $returnAjax = 'noInsertPhysicalLegal';
         
-        include_once '../app/Model/connection-pdo.php';
-
-        $loginUserRegister     = filter_input(INPUT_POST,  'loginUserRegister'     , FILTER_SANITIZE_SPECIAL_CHARS);
-        $nameUserRegister      = filter_input(INPUT_POST,  'nameUserRegister'      , FILTER_SANITIZE_SPECIAL_CHARS);
-        $surnameUserRegister   = filter_input(INPUT_POST,  'surnameUserRegister'   , FILTER_SANITIZE_SPECIAL_CHARS);
-        $permitionUserRegister = filter_input(INPUT_POST,  'permitionUserRegister' , FILTER_DEFAULT);
-        $permitionAdminRegister = filter_input(INPUT_POST, 'permitionAdminRegister', FILTER_DEFAULT);
-        $statusActiveUserRegister = filter_input(INPUT_POST,  'statusActiveUserRegister' , FILTER_DEFAULT);
-        $statusInactiveRegister = filter_input(INPUT_POST, 'statusInactiveRegister', FILTER_DEFAULT);
-        $passwordUserRegister  = password_hash($_POST['passwordUserRegister'], PASSWORD_DEFAULT);
-
-        # Query inserir na tb_eventos
-        $queryinsertUser = " INSERT INTO tb_usuarios (usu_login, usu_senha, usu_nome, usu_sobrenome, usu_permissoes, usu_status) VALUES (:usu_login, :usu_senha, :usu_nome, :usu_sobrenome, :usu_permissoes, :usu_status) ";
-
-        $user = "user";
-        $admin = "admin";
-        $active = "A";
-        $inactive = "I";
-        # Inserindo na tb_eventos
-        $insertUser = $connectionDataBase->prepare($queryinsertUser);
-        $insertUser->bindParam(':usu_login'     , $loginUserRegister);
-        $insertUser->bindParam(':usu_senha'     , $passwordUserRegister);
-        $insertUser->bindParam(':usu_nome'      , $nameUserRegister);
-        $insertUser->bindParam(':usu_sobrenome' , $surnameUserRegister);
-        if (!empty($permitionUserRegister)) { $insertUser->bindParam(':usu_permissoes', $user); }
-        else { $insertUser->bindParam(':usu_permissoes', $admin); }
-
-        if (!empty($statusActiveUserRegister)) { $insertUser->bindParam(':usu_status', $active); }
-        else { $insertUser->bindParam(':usu_status', $inactive); }
-        
-        if ($insertUser->execute()) {
-            $returnAjax = true;
-        }else {
-            $returnAjax = false;
-        }
-        
-        header('Content-Type: application/json');
-        echo json_encode($returnAjax);
     }
+
+    header('Content-Type: application/json');
+    echo json_encode($returnAjax);
 }

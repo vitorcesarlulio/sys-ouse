@@ -40,11 +40,10 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
     # Pegando os dados do usuario que esta tentando fazer o login
     $dataUserLogin = $selectLogin->fetch(\PDO::FETCH_ASSOC);
 
-    # Primeiro verifico se o status dele é ativo
-    if ($dataUserLogin['usu_status'] === "A") {
-
-        # Verifico se encontrou o registro (1 sim, 0 não) e se a senha bate com a do banco
-        if ($countRow === 1 && password_verify($passwordLogin, $dataUserLogin['usu_senha'])) {
+    # Verifico se encontrou o registro (1 sim, 0 não) e se a senha bate com a do banco
+    if ($countRow === 1 && password_verify($passwordLogin, $dataUserLogin['usu_senha'])) {
+        # verifico se o status dele é ativo
+        if ($dataUserLogin['usu_status'] === "A") {
             # Deletando as tentativas do usuario de acordo com o ip que ele esta acessando
             $queryDeleteAttempt = " DELETE FROM tb_tentativas WHERE ten_ip=:ten_ip ";
             $deleteAttempt = $connectionDataBase->prepare($queryDeleteAttempt);
@@ -87,49 +86,50 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
                 setCookie('CookiePassword');
             }
         } else {
-            # Dizendo que houve tentativas
-            $errors = true;
-            $errorStatus = false;
+            $errorStatus = true;
+            $attempts = "";
+            $errors = "";
+        }
+    } else {
+        # Dizendo que houve tentativas
+        $errors = true;
+        $errorStatus = false;
 
-            # Opcional
-            //$_SESSION["login"]     = false;
+        # Opcional
+        //$_SESSION["login"]     = false;
 
-            # Contando as tentativas de erro
-            $querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
-            $selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
-            $selectAttempt->bindParam('ten_ip', $ipAdressUser);
-            $selectAttempt->execute();
+        # Contando as tentativas de erro
+        $querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
+        $selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
+        $selectAttempt->bindParam('ten_ip', $ipAdressUser);
+        $selectAttempt->execute();
 
-            # Pegando a data de e hora de agora
-            $dateNow = date('Y-m-d H:i:s');
+        # Pegando a data de e hora de agora
+        $dateNow = date('Y-m-d H:i:s');
 
-            $r = 0;
-            while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
-                if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
-                    $r++;
-                }
-            }
-
-            # Vendo se ja foram 5 tentativas, se sim, para de inserir
-            if ($r < 5) {
-                $queryinsertAttempt = " INSERT INTO tb_tentativas (ten_ip) VALUES (:ten_ip) ";
-                $insertAttempt = $connectionDataBase->prepare($queryinsertAttempt);
-                $insertAttempt->bindParam(':ten_ip', $ipAdressUser);
-                $insertAttempt->execute();
-            }
-
-            # Se errar mais de 5 vezes deixo a variavel $attempts como true
-            if ($r >= 5) {
-                $attempts = true;
-            } else {
-                $attempts = false;
+        $r = 0;
+        while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
+            if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
+                $r++;
             }
         }
-    }else {
-        $errorStatus = true;
-        $attempts = "";
-        $errors = "";
+
+        # Vendo se ja foram 5 tentativas, se sim, para de inserir
+        if ($r < 5) {
+            $queryinsertAttempt = " INSERT INTO tb_tentativas (ten_ip) VALUES (:ten_ip) ";
+            $insertAttempt = $connectionDataBase->prepare($queryinsertAttempt);
+            $insertAttempt->bindParam(':ten_ip', $ipAdressUser);
+            $insertAttempt->execute();
+        }
+
+        # Se errar mais de 5 vezes deixo a variavel $attempts como true
+        if ($r >= 5) {
+            $attempts = true;
+        } else {
+            $attempts = false;
+        }
     }
+
 
 
     # Retornando os resultados para o Ajax

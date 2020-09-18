@@ -76,11 +76,14 @@ $(function () {
             /* Modal confirma excluir evento */
             $(document).on('click', '#deleteEvent', function () {
                 $('#modalViewEvent').modal('hide');
+
+                $('#modalConfirmDeleteEvent').modal('show');
+
                 /*showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?', function () {
                     $("#btnConfirm").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id);
                 });*/
 
-                showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?',
+                /* showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?',
                     function () {
                         $.ajax({
                             url: "/agenda/calendario/apagar/",
@@ -98,7 +101,32 @@ $(function () {
                             }
                         });
                     }
-                );
+                ); */
+            });
+
+            /* Se clicar no cancelar da confirmação exibe o modal de visualizar */
+            $(document).on('click', '#btnCancelDelete', function () {
+                $('#modalViewEvent').modal('show');
+            });
+
+            /* Excluir evento */
+            $(document).on('click', '#btnConfirmDeleteEvent', function () {
+                $.ajax({
+                    url: "/agenda/calendario/apagar",
+                    method: "POST",
+                    dataType: 'JSON',
+                    data: { idDelete: info.event.id },
+                    success: function (retorna) {
+                        if (retorna['sit']) {
+                            location.reload();
+                        } else {
+                            $("#msg-cad").html(retorna['msg']);
+                        }
+                    },
+                    error: function () {
+                        toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+                    }
+                });
             });
 
             info.jsEvent.preventDefault();
@@ -209,7 +237,7 @@ $(function () {
             $('#modalViewEvent #bairro').val(info.event.extendedProps.bairro);
             $('#modalViewEvent #localidade').val(info.event.extendedProps.localidade);
             $('#modalViewEvent #uf').val(info.event.extendedProps.uf);
-
+        
             /*Numero
             if (info.event.extendedProps.number != "") {
                 $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
@@ -217,7 +245,7 @@ $(function () {
             } else {
                 $('#modalViewEvent #divNumberEdit').hide();
             }
-
+        
             //Edificio
             if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
                 $('#modalViewEvent #edificeEdit').val(info.event.extendedProps.edifice);
@@ -229,7 +257,7 @@ $(function () {
                 $('#modalViewEvent #divBlockEdit').hide();
                 $('#modalViewEvent #divApartmentEdit').hide();
             }
-
+        
             //Condominio
             if (info.event.extendedProps.number && info.event.extendedProps.streetCondominium != "") {
                 $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
@@ -239,14 +267,12 @@ $(function () {
                 $('#modalViewEvent #divStreetCondominiumEdit').hide();
                 $('#modalViewEvent #divNumberEdit').hide();
             }
-
+        
             if (info.event.extendedProps.observation != "") {
                 $('#modalViewEvent #observationEdit').val(info.event.extendedProps.observation);
             }else{
                 $('#modalViewEvent #divObservationEdit').hide();
             } */
-
-
 
             //Momento do dia (bom dia, boa tarde...)
             varDate = new Date();
@@ -293,23 +319,6 @@ $(function () {
     });
 
     calendar.render();
-});
-
-/* Função para Exibir modal de confirmação */
-function showModal(id, titulo, texto, callback) {
-    $(id).find('#titulo').text(titulo);
-    $(id).find('#texto').text(texto);
-    $(id).modal('show');
-    if (typeof callback === 'function') {
-        $(id).find('#btnConfirm').click(function () { $(id).modal('hide'); });
-        $(id).find('#btnConfirm').click(function () { callback(); }); //dado que vai confirmar exclusao
-
-    }
-}
-
-/* Se clicar no cancelar da confirmação exibe o modal de visualizar */
-$(document).on('click', '#btnCancelDelete', function () {
-    $('#modalViewEvent').modal('show');
 });
 
 /* Ações do botão Editar e Canclar */

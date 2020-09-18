@@ -206,7 +206,7 @@ $(document).ready(function () {
                                 altKey: true
                             },
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4], 
+                                columns: [0, 1, 2, 3, 4],
                             },
                         },
                         {
@@ -244,6 +244,23 @@ $(document).ready(function () {
     });
     $('#formFiltersUsers #filterLogin').change(function () {
         dataTable.draw();
+    }); */
+
+});
+
+/* Editar Pessoa */
+$(document).on('click', '.btn-edit-people', function () {
+    var idPeople = $(this).attr("id");
+    var id = 'FJFVSD-JHBN-LASDQF-WEFG' + ((idPeople * 9625) * 10101010) + 'SKD-HAKUSBCBJ-DMG-WSSDASD';
+    window.location.href='/pessoas/edicao?id=' + id;
+    /* var idPeople = $(this).attr("id");
+    $.ajax({
+        url: "/pessoas/edicao",
+        method: "GET",
+        data: { idPeople:idPeople },
+        error: function () {
+            toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+        }
     }); */
 
 });

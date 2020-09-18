@@ -1,6 +1,5 @@
 <?php
-//header("Content-Type: text/html; charset=utf-8");
-require_once '../app/View/login/check-login.php';
+header("Content-Type: text/html; charset=utf-8");
 
 # Sortear Imagem
 $image = array();
@@ -44,6 +43,7 @@ $imageRandom = rand(1, $count);
 </head>
 
 <body class="hold-transition pace-primary pace-done sidebar-mini sidebar-collapse">
+  <?php require_once '../app/View/login/check-login.php'; ?>
 
   <!--layout-navbar-fixed-->
   <div class="pace pace-inactive">
@@ -134,9 +134,6 @@ $imageRandom = rand(1, $count);
             <div class="dropdown-divider"></div>
             <?php 
             
-            
-            
-            
             ?>
             <a href="#" class="dropdown-item">
               <i class="fas fa-envelope mr-2"></i> 4 new messages
@@ -194,30 +191,8 @@ $imageRandom = rand(1, $count);
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-user-edit"></i>
-                <p> Cadastros <i class="right fas fa-angle-left"></i> </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/cadastro" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Clientes</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item has-treeview">
-              <a href="/pessoas" class="nav-link">
-                <i class="nav-icon fas fa-user-circle"></i> <p> Pessoas </p> 
-              </a> 
-            </li>
-
-            <li class="nav-item has-treeview">
+            
+          <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-calendar-alt"></i>
                 <p> Agenda <i class="right fas fa-angle-left"></i> </p>
@@ -253,6 +228,12 @@ $imageRandom = rand(1, $count);
                   </a>
                 </li>
               </ul>
+            </li>
+
+            <li class="nav-item has-treeview">
+              <a href="/pessoas" class="nav-link">
+                <i class="nav-icon fas fa-user-circle"></i> <p> Pessoas </p> 
+              </a> 
             </li>
 
             <?php

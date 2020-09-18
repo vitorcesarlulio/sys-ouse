@@ -29,10 +29,10 @@ define("DOMAIN",$_SERVER["HTTP_HOST"]);
 /**
  * Acesso ao banco de dados
  */
-define('HOST', "54.232.12.24");
+define('HOST', "127.0.0.1");
 define('DATABASE', "database_sys_ouse");
-define('USER', "vitor");
-define('PASSWORD', "Eu!2d9CGMaduz6ky");
+define('USER', "root");
+define('PASSWORD', "");
 
 /*outra dica que eu dou é você usar o $_SERVER['HTTP_HOST'] caso o arquivo fique numa public igual o laravel ele não precisa entrar na pasta só no host direto.
 

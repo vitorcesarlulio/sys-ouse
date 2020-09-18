@@ -20,8 +20,7 @@ $route->notFound(function () use ($blade) {
  * Login
  */
 $route->get('/', function () {
-    //include '../app/View/login/login.php';
-    echo "oi";
+    include '../app/View/login/login.php';
 });
 
 $route->post('/verificar-login', function () {
@@ -47,7 +46,6 @@ $route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
     $route->get('', function () use ($blade) {
         echo $blade->render('people.people');
     });
-
     $route->post('/listar', function () {
         include '../app/View/people/list-people.php';
     });
@@ -55,20 +53,25 @@ $route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
     $route->get('/cadastro', function () use ($blade) {
         echo $blade->render('people.people-register');
     });
-
+    $route->post('/verificar-existencia-pessoa', function () {
+        include '../app/View/people/check-people-existence.php';
+    });
     $route->post('/cadastrar', function () {
         include '../app/View/people/register-people.php';
     });
 
+
+    $route->get('/edicao', function () use ($blade) {
+        echo $blade->render('people.people-edit');
+    });
     $route->post('/listar-editar', function () {
         include '../app/View/people/list-people-edit.php';
     });
-
-    $route->post('/editar', function () {
+    $route->put('/editar', function () {
         include '../app/View/people/edit-people.php';
     });
 
-    $route->post('/apagar', function () {
+    $route->delete('/apagar', function () {
         include '../app/View/people/delete-people.php';
     });
 });
@@ -95,7 +98,7 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
         include '../app/View/schedule/schedule-calendar/edit-event.php';
     });
 
-    $route->post('/calendario/apagar/', function () {
+    $route->post('/calendario/apagar', function () {
         include '../app/View/schedule/schedule-calendar/delete-events.php';
     });
 
@@ -170,10 +173,6 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
 });
 
 # TESTES
-$route->get('/cadastro', function () use ($blade) {
-    echo $blade->render('cadastro.cadastro');
-});
-
 $route->get('/carregar', function () {
     include '../app/View/cadastro/oi.html';
 });

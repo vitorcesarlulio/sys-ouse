@@ -1,5 +1,4 @@
 <?php
-require_once '../app/View/login/check-login.php';
 
 if ($_SESSION["permition"] === "admin") {
 } else {
@@ -190,7 +189,7 @@ $searchUser->execute();
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Nome:</label>
-                                    <input type="text" autofocus name="nameUserRegister" id="nameUserRegister" class="form-control" placeholder="Entre com o Nome">
+                                    <input type="text" name="nameUserRegister" id="nameUserRegister" class="form-control" placeholder="Entre com o Nome" autofocus>
                                 </div>
                             </div>
                             <div class="col-sm-6">

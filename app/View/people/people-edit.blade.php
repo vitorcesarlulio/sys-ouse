@@ -1,6 +1,24 @@
+<?php
+
+if (isset($_GET) && !empty($_GET)) {
+
+  /* Descriptografando o ID */
+$string1 = str_replace("FJFVSD-JHBN-LASDQF-WEFG", "", $_GET['id']); 
+$string2 = str_replace("SKD-HAKUSBCBJ-DMG-WSSDASD", "", $string1); 
+$idPeople = ($string2 / 9625) / 10101010;
+
+include_once '../app/Model/connection-pdo.php';
+
+$querySelectPeople = " SELECT * FROM tb_pessoas WHERE pess_codigo = :id ";
+$searchPeople = $connectionDataBase->prepare($querySelectPeople);
+$searchPeople->bindParam(':id', $idPeople);
+$searchPeople->execute();
+$searchPeople = $searchPeople->fetch(PDO::FETCH_ASSOC);
+}
+?>
 @extends('templates.default')
 
-@section('title', 'Cadastrar Pessoas')
+@section('title', 'Editar Pessoas')
 
 @section('head')
 @endsection
@@ -10,7 +28,7 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="/pessoas">Pessoas</a></li>
-<li class="breadcrumb-item">Cadastro</li>
+<li class="breadcrumb-item">Editar</li>
 @endsection
 
 @section('content')
@@ -34,7 +52,7 @@
                 <div class="form-group">
                   <label>Tipo de Pessoa</label>
                   <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="optionPhysicalPerson" name="typePerson" onclick="selTypePerson();" checked="" value="F">
+                    <input class="custom-control-input" type="radio" id="optionPhysicalPerson" name="typePerson" onclick="selTypePerson();" value="F">
                     <label for="optionPhysicalPerson" class="custom-control-label">Pessoa Física</label>
                   </div>
                   <div class="custom-control custom-radio">
@@ -48,7 +66,7 @@
               <div id="divPhysicalPerson" class="col-sm-2">
                 <div class="form-group">
                   <label for="cpf">CPF</label>
-                  <input type="text" name="cpf" class="form-control" id="cpf" autofocus data-inputmask="'mask': ['999.999.999.99']" data-mask="" placeholder="Entre com CPF" onblur="findCPF();">
+                  <input type="text" name="cpf" class="form-control" id="cpf" autofocus data-inputmask="'mask': ['999.999.999.99']" data-mask="" placeholder="Entre com CPF" onblur="findCPF();" >
                 </div>
               </div>
 

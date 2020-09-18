@@ -1,3 +1,8 @@
+$(document).ready(function(){
+    var idPeople = $('#idPeople').attr("value");
+    console.log(idPeople);
+ });
+
 /**
 * Opção Pessoas Fisica ou Juridica 
 */

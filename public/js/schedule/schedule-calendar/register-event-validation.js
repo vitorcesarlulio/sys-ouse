@@ -40,7 +40,7 @@ $(document).ready(function () {
       localidade: { required: "Digite a Cidade." },
       uf: { required: "Digite o Estado." },
       typeResidence: { required: "Selecione uma opção." },
-      numberRegister: { required: "Digite o número da casa." },
+      numberRegister: { required: "Digite o número." },
       streetCondominiumRegister: { required: "Digite a rua do Condomínio." },
       edificeRegister: { required: "Digite o Edifício." },
       blockRegister: { required: "Digite o Bloco." },
@@ -68,8 +68,16 @@ $(document).ready(function () {
         type: "POST",
         url: "/agenda/calendario/cadastar",
         data: dados,
+        dataType: 'JSON',
         processData: false,
-        success: function (returnAjax) {
+        success: function (retorna) {
+          if (retorna['sit']) {
+              location.reload();
+          } else {
+              $("#msg-cad").html(retorna['msg']);
+          }
+      },
+        /* success: function (returnAjax) {
           if (returnAjax === 'insertEventBudget') {
             toastr.success('Sucesso: evento e orçamento cadastrados!');
             $('#modalRegisterEvent').modal('hide');
@@ -89,7 +97,7 @@ $(document).ready(function () {
             toastr.error('Erro: orçamento não cadastrado!');
             $('#modalRegisterEvent').modal('hide');
           }
-        },
+        }, */
         error: function () {
           toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
         }

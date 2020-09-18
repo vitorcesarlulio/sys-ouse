@@ -127,11 +127,21 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $insertEvent->bindParam(':even_observacao', $dados['observationRegister']);
         $insertEvent->bindParam(':orca_numero',     $idBudget);
 
-        # Se inserir exibe a mensagem
+        /* # Se inserir exibe a mensagem
         if ($insertEvent->execute()) {
             $returnAjax = 'insertEventBudget';
         } else {
             $returnAjax = 'noInsertEventBudget';
+        } */
+
+        $msgInsertEvent         = "<script> toastr.success('Sucesso: evento e orçamento cadastrados!'); </script>";
+        $msgNoInsertEventBudget = "<script> toastr.error('Erro: evento e orçamento não cadastrados!'); </script>";
+        # Se inserir exibe a mensagem
+        if ($insertEvent->execute()) { 
+            $retorna = ['sit' => true, 'msg' => $msgInsertEvent];
+            $_SESSION['msg'] = $msgInsertEvent;
+        } else {
+            $retorna = ['sit' => true, 'msg' => $msgNoInsertEventBudget];
         }
     }
 }
@@ -177,13 +187,18 @@ else if ($dados['scheduleTime'] == "scheduleTimeNo") {
     $insertBudget->bindParam(':orca_cep',                   $cep);
     $insertBudget->bindParam(':orca_observacao', $dados['observationRegister']);
 
+    $msgInsertBudget   = "<script> toastr.success('Sucesso: orçamento cadastrado!'); </script>";
+    $msgNoInsertBudget = "<script> toastr.error('Erro: orçamento não cadastrado!'); </script>";
     # Se inserir exibe a mensagem
     if ($insertBudget->execute()) {
-        $returnAjax = 'insertBudget';
+        //$returnAjax = 'insertBudget'; 
+        $retorna = ['sit' => true, 'msg' => $msgInsertBudget];
+        $_SESSION['msg'] = $msgInsertBudget;
     } else {
-        $returnAjax = 'noInsertBudget';
+        //$returnAjax = 'noInsertBudget'; //se der ruim so descomentar e desomentar o js unico bo é que a pessoa tem que recarregar a pagina
+        $retorna = ['sit' => true, 'msg' => $msgNoInsertBudget];
     }
 }
 
 header('Content-Type: application/json');
-echo json_encode($returnAjax);
+echo json_encode($retorna);

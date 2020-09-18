@@ -38,6 +38,8 @@ $(document).on('click', '.btn-delete-event', function () {
 /* Modal confirma mudar status evento */
 $(document).on('click', '.span-update-status', function () {
     var id = $(this).attr("id");
+
+    
     showModal('#modalConfirm', 'Alterar Status', 'Realmente deseja alterar o status desse registro?',
         function () {
             $.ajax({

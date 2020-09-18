@@ -1,13 +1,9 @@
 <?php
 session_start();
 include '../app/Model/connection-pdo.php';
-//include '../app/Model/connection-mysqli.php';
 
 # Recebendo os dados que o Js esta enviando 
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
-$mesageSuccess = '<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: evento editado!</div></div></div>';
-$mesageError   = '<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="assertive" style=""><div class="toast-message">Erro: evento não editado!</div></div></div>';
 
 # Converter a Data no padrão americano 
 $dateStart = str_replace('/', '-', $dados['startDateEdit']);
@@ -21,11 +17,6 @@ $joinDataHourStart = $convertDateStart . " " . $hourStart;
 $hourEnd = $dados['endTimeEdit'];
 $joinDataHourEnd = $convertDateStart . " " . $hourEnd;
 
-/* Pegando o numero do orçamento para o update
-$sqlEvent = " SELECT * FROM tb_eventos WHERE even_codigo = '".$dados['id']."' ";
-$query = mysqli_query($connectionDataBase, $sqlEvent);
-$dataTbEventos = mysqli_fetch_assoc($query); */
-
 $queryUpdateEvent =
 " UPDATE tb_eventos SET even_titulo=:even_titulo, even_datahorai=:even_datahorai, even_datahoraf=:even_datahoraf WHERE even_codigo=:even_codigo ";
 
@@ -35,11 +26,14 @@ $updateEvent->bindParam(':even_datahorai', $joinDataHourStart);
 $updateEvent->bindParam(':even_datahoraf', $joinDataHourEnd);
 $updateEvent->bindParam(':even_codigo',    $dados['id']);
 
-if ($updateEvent->execute()) {
-    $retorna = ['sit' => true, 'msg' => $mesageSuccess];
-    $_SESSION['msg'] = $mesageSuccess;
+$msgUpDateEvent   = "<script> toastr.success('Sucesso: evento editado!'); </script>";
+$msgNoUpDateEvent = "<script> toastr.error('Erro: evento não editado!'); </script>";
+# Se inserir exibe a mensagem
+if ($updateEvent->execute()) { 
+    $retorna = ['sit' => true, 'msg' => $msgUpDateEvent];
+    $_SESSION['msg'] = $msgUpDateEvent;
 } else {
-    $retorna = ['sit' => true, 'msg' => $mesageError];
+    $retorna = ['sit' => true, 'msg' => $msgNoUpDateEvent];
 }
 
 header('Content-Type: application/json');

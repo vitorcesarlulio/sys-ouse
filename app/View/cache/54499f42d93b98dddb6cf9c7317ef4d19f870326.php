@@ -1,3 +1,6 @@
+<?php 
+require_once '../app/View/login/check-login.php'; 
+?>
 
 
 <?php $__env->startSection('title', 'Eventos'); ?>

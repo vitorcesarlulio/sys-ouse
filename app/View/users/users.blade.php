@@ -1,4 +1,5 @@
 <?php
+require_once '../app/View/login/check-login.php'; 
 
 if ($_SESSION["permition"] === "admin") {
 } else {
@@ -140,7 +141,7 @@ $searchUser->execute();
                 <div class="card-header">
                     <h3 class="card-title">Resultado do Filtro</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-block btn-success btn-sm btn-new-user">Novo</button>
+                        <button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#modalRegisterUser">Novo</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -173,7 +174,7 @@ $searchUser->execute();
     </div>
 
     <!-- Modal de Cadastrar Usuario -->
-    <div class="modal fade" id="modalRegisterUser">
+    <div class="modal fade" id="modalRegisterUser" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <form id="formRegisterUser" method="POST" autocomplete="off" enctype="multipart/form-data">
                 <div class="modal-content">

@@ -1,7 +1,7 @@
 <?php
-require_once '../app/View/login/check-login.php';
-
+require_once '../app/View/login/check-login.php'; 
 require_once '../app/Model/connection-mysqli.php';
+
 
 $selectClient = " SELECT orca_numero, orca_nome, orca_sobrenome from tb_orcamento ORDER BY orca_numero DESC ";
 $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
@@ -246,7 +246,7 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                     </div>
                                     <div class="col-sm-12" id="divTypeResidenceEdit">
                                         <div class="form-group">
-                                            <label>Tipo de Residencia</label>
+                                            <label>Tipo de Residência</label>
                                             <div class="custom-control custom-radio">
                                                 <input class="custom-control-input" type="radio" id="optionHomeEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
                                                 <label for="optionHomeEdit" class="custom-control-label">Casa</label>
@@ -466,7 +466,7 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 
                         <div class="col-sm-12" id="divTypeResidenceRegister">
                             <div class="form-group">
-                                <label>Tipo de Residencia</label>
+                                <label>Tipo de Residência</label>
                                 <div class="custom-control custom-radio">
                                     <input class="custom-control-input" type="radio" id="optionHomeRegister" name="typeResidence" onclick="optionTypeResidenceRegister();">
                                     <label for="optionHomeRegister" class="custom-control-label">Casa</label>

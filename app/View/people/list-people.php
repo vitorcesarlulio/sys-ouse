@@ -40,7 +40,7 @@ while ($row = mysqli_fetch_array($result)) {
    $subArray[] = $row["pess_cidade"];
    $subArray[] = $row["pess_cpfcnpj"];
    $subArray[] = $row["pess_logradouro"];
-   $subArray[] = '<div class="btn-group btn-group-sm"><button type="button" name="editUser" class="btn btn-warning btn-edit-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-edit"></i></button>  <button type="button" name="deleteUser" class="btn btn-danger btn-delete-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-trash"></i></button></div>';
+   $subArray[] = '<div class="btn-group btn-group-sm"><button type="button" name="editPeople" class="btn btn-warning btn-edit-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-edit"></i></button>     <button type="button" name="deletePeople" class="btn btn-danger btn-delete-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-trash"></i></button></div>';
    $data[]     = $subArray;
 }
 

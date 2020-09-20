@@ -78,10 +78,19 @@ $(document).ready(function () {
         success: function (returnAjax) {
           if (returnAjax === 'insertPhysicalPerson') {
             toastr.success('Sucesso: pessoa física cadastrada!');
+            $('#modalRegisterPeople').modal('hide');
+            $('#formRegisterPeople').each(function () { this.reset(); });
+            $('#listPeople').DataTable().ajax.reload();
+
           } else if (returnAjax === 'noInsertPhysicalPerson') {
             toastr.error('Erro: pessoa física não cadastrada!');
+            
           } else if (returnAjax === 'insertPhysicalLegal') {
             toastr.success('Sucesso: pessoa jurídica cadastrada!');
+            $('#modalRegisterPeople').modal('hide');
+            $('#formRegisterPeople').each(function () { this.reset(); });
+            $('#listPeople').DataTable().ajax.reload();
+
           } else if (returnAjax === 'noInsertPhysicalLegal') {
             toastr.error('Erro: pessoa jurídica não cadastrada!');
           }

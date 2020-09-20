@@ -1,32 +1,50 @@
 <?php
-if (isset($_POST['idUserEdit']) && !empty($_POST['idUserEdit'])) {
+if (isset($_POST['idPeopleEdit']) && !empty($_POST['idPeopleEdit'])) {
 
     include_once '../app/Model/connection-pdo.php';
 
-    $idUserEdit = filter_input(INPUT_POST, 'idUserEdit', FILTER_SANITIZE_NUMBER_INT);
-    $querySelectUser = " SELECT usu_codigo, usu_login, usu_nome, usu_sobrenome, usu_permissoes, usu_status FROM tb_usuarios ";
-    
+    $idPeopleEdit = filter_input(INPUT_POST, 'idPeopleEdit', FILTER_SANITIZE_NUMBER_INT);
+    $querySelectPeople = " SELECT * FROM tb_pessoas ";
+
     $parametros = [];
-    if (isset($idUserEdit)) {
-        $querySelectUser = $querySelectUser . " WHERE usu_codigo = :id ";
-        $parametros = [':id' => intval($idUserEdit)];
+    if (isset($idPeopleEdit)) {
+        $querySelectPeople = $querySelectPeople . " WHERE pess_codigo = :pess_codigo ";
+        $parametros = [':pess_codigo' => intval($idPeopleEdit)];
     }
 
-    $searchUser = $connectionDataBase->prepare($querySelectUser);
-    $searchUser->execute($parametros);
+    $searchPeople = $connectionDataBase->prepare($querySelectPeople);
+    $searchPeople->execute($parametros);
 
     $users = [];
-    while ($rowUser = $searchUser->fetch(PDO::FETCH_ASSOC)) {
+    while ($rowPeople = $searchPeople->fetch(PDO::FETCH_ASSOC)) {
+
+        #Somente as Datas
+        $dateInsertPeople = substr($rowPeople['pess_data_cadastro'], 0, 10);
+        $dateInsertPeople = explode("-", $dateInsertPeople);
+        $dateInsertPeople = $dateInsertPeople[2] . "/" . $dateInsertPeople[1] . "/" . $dateInsertPeople[0];
+
         $users[] = [
-            'idUser'       => $rowUser['usu_codigo'],
-            'loginUser'    => $rowUser['usu_login'],
-            'nameUser'     => $rowUser['usu_nome'],
-            'surnameUser'  => $rowUser['usu_sobrenome'],
-            'permitionUser'=> $rowUser['usu_permissoes'],
-            'statusUser'=> $rowUser['usu_status']
+            'pess_codigo'                => $rowPeople['pess_codigo'],
+            'pess_tipo'                  => $rowPeople['pess_tipo'],
+            'pess_nome'                  => $rowPeople['pess_nome'],
+            'pess_razao_social'          => $rowPeople['pess_razao_social'],
+            'pess_sobrenome'             => $rowPeople['pess_sobrenome'],
+            'pess_nome_fantasia'         => $rowPeople['pess_nome_fantasia'],
+            'pess_cpfcnpj'               => $rowPeople['pess_cpfcnpj'],
+            'pess_cep'                   => $rowPeople['pess_cep'],
+            'pess_logradouro'            => $rowPeople['pess_logradouro'],
+            'pess_log_numero'            => $rowPeople['pess_log_numero'],
+            'pess_bairro'                => $rowPeople['pess_bairro'],
+            'pess_cidade'                => $rowPeople['pess_cidade'],
+            'pess_estado'                => $rowPeople['pess_estado'],
+            'pess_edificio'              => $rowPeople['pess_edificio'],
+            'pess_bloco'                 => $rowPeople['pess_bloco'],
+            'pess_apartamento'           => $rowPeople['pess_apartamento'],
+            'pess_logradouro_condominio' => $rowPeople['pess_logradouro_condominio'],
+            'pess_observacao'            => $rowPeople['pess_observacao'],
+            'pess_data_cadastro'         => $dateInsertPeople,
         ];
     }
 
     echo json_encode($users);
-
 }

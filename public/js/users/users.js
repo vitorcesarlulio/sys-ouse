@@ -1,8 +1,3 @@
-/* Novo usuario */
-$(document).on('click', '.btn-new-user', function () {
-    $('#modalRegisterUser').modal('show');
-});
-
 /* Letras maisculuas */
 $(document).ready(function () {
     $("#loginUserRegister").keyup(function () {

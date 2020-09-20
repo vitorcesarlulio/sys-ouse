@@ -393,7 +393,7 @@ window.onload = function () {
     });
 }
 
-/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de residencia) */
+/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de Residência) */
 function optionTypeResidenceRegister() {
     var optionHomeRegister = document.getElementById("optionHomeRegister").checked;
     var optionCondominiumRegister = document.getElementById("optionCondominiumRegister").checked;
@@ -437,7 +437,7 @@ function optionTypeResidenceRegister() {
 }
 
 //Editar
-/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de residencia) - EDITAR */
+/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de Residência) - EDITAR */
 function optionTypeResidenceEdit() {
     var optionHomeEdit = document.getElementById("optionHomeEdit").checked;
     var optionCondominiumEdit = document.getElementById("optionCondominiumEdit").checked;

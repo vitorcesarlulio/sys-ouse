@@ -43,9 +43,9 @@ $(document).ready(function () {
             $('#listUsers').DataTable().ajax.reload();
           } else {
             toastr.error('Erro: usuário não cadastrado!');
-            $('#modalRegisterUser').modal('hide');
-            $('#formRegisterUser').each(function () { this.reset() });
-            $('#listUsers').DataTable().ajax.reload();
+            //$('#modalRegisterUser').modal('hide');
+            //$('#formRegisterUser').each(function () { this.reset() });
+            //$('#listUsers').DataTable().ajax.reload();
           }
         },
         error: function () {

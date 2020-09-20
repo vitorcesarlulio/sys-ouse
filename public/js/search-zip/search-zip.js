@@ -21,5 +21,5 @@ cep.addEventListener("blur",(e)=>{
     .then(response=>{ response.json() //se der certo
         .then(data => showData(data)) //e se der certo
     }) 
-    .catch(e => console.log('Deu erro:'+ e,message))//se der errado
+    .catch(e => alert("CEP não encontrado." + e))//se der errado
 })

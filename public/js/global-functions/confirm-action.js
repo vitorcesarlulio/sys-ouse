@@ -86,3 +86,29 @@ $(document).on('click', '.btn-delete-user', function () {
         }
     );
 });
+
+/* Excluir Pessoa */
+$(document).on('click', '.btn-delete-people', function () {
+    var idPeople = $(this).attr("id");
+    showModal('#modalConfirm', 'Excluir Pessoa?', 'Realmente deseja excluir essa Pessoa?',
+        function () {
+            $.ajax({
+                url: "/pessoas/apagar",
+                method: "POST",
+                data: { idPeople: idPeople },
+                success: function (retunAjax) {
+                    if (retunAjax === true) {
+                        toastr.success('Sucesso: pessoas apagada!');
+                        $('#listPeople').DataTable().ajax.reload();
+                    } else {
+                        toastr.error('Erro: pessoas não apagada!');
+                        $('#listPeople').DataTable().ajax.reload();
+                    }
+                },
+                error: function () {
+                    toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+                }
+            });
+        }
+    );
+});

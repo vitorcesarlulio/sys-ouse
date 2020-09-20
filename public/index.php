@@ -10,13 +10,6 @@ $blade = new Blade('../app/View/', '../app/View/cache');
 $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
 
 /**
- * Rota de Erros
- */
-$route->notFound(function () use ($blade) {
-    echo $blade->render('errors.404');
-});
-
-/**
  * Login
  */
 $route->get('/', function () {
@@ -39,41 +32,10 @@ $route->get('/home', function () use ($blade) {
 });
 
 /**
- * Pessoas
+ * Rota de Erros
  */
-$route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
-
-    $route->get('', function () use ($blade) {
-        echo $blade->render('people.people');
-    });
-    $route->post('/listar', function () {
-        include '../app/View/people/list-people.php';
-    });
-
-    $route->get('/cadastro', function () use ($blade) {
-        echo $blade->render('people.people-register');
-    });
-    $route->post('/verificar-existencia-pessoa', function () {
-        include '../app/View/people/check-people-existence.php';
-    });
-    $route->post('/cadastrar', function () {
-        include '../app/View/people/register-people.php';
-    });
-
-
-    $route->get('/edicao', function () use ($blade) {
-        echo $blade->render('people.people-edit');
-    });
-    $route->post('/listar-editar', function () {
-        include '../app/View/people/list-people-edit.php';
-    });
-    $route->put('/editar', function () {
-        include '../app/View/people/edit-people.php';
-    });
-
-    $route->delete('/apagar', function () {
-        include '../app/View/people/delete-people.php';
-    });
+$route->notFound(function () use ($blade) {
+    echo $blade->render('errors.404');
 });
 
 /**
@@ -135,6 +97,37 @@ $route->group(['prefix' => '/orcamentos'], function ($route) use ($blade) {
 
     $route->post('/listar', function () {
         include '../app/View/budgets/list-budgets.php';
+    });
+});
+
+/**
+ * Pessoas
+ */
+$route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
+
+    $route->get('', function () use ($blade) {
+        echo $blade->render('people.people');
+    });
+    $route->post('/listar', function () {
+        include '../app/View/people/list-people.php';
+    });
+
+    $route->post('/verificar-existencia-pessoa', function () {
+        include '../app/View/people/check-people-existence.php';
+    });
+    $route->post('/cadastrar', function () {
+        include '../app/View/people/register-people.php';
+    });
+
+    $route->post('/listar-editar', function () {
+        include '../app/View/people/list-people-edit.php';
+    });
+    $route->post('/editar', function () {
+        include '../app/View/people/edit-people.php';
+    });
+
+    $route->post('/apagar', function () {
+        include '../app/View/people/delete-people.php';
     });
 });
 

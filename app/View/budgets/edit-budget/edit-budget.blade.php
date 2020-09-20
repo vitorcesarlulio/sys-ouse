@@ -95,7 +95,7 @@ $idBudget = filter_input(INPUT_GET, 'budget', FILTER_SANITIZE_NUMBER_INT);
 
               <div class="col-sm-2">
                 <div class="form-group">
-                  <label>Tipo de Residencia</label>
+                  <label>Tipo de Residência</label>
                   <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" id="optionHome" name="typeresidence" onclick="selTypeResidence();">
                     <label for="optionHome" class="custom-control-label">Casa</label>

@@ -247,20 +247,364 @@ $(document).ready(function () {
     }); */
 
 });
+/**
+* Opção Pessoas Fisica ou Juridica 
+*/
+function selTypePerson() {
+    var optionPhysicalPerson = document.getElementById("optionPhysicalPerson").checked;
+    if (optionPhysicalPerson) {
+        $("#physicalLegal").hide();
+        $("#divCompanyName").hide();
+        $("#divFantasyName").hide();
+        $("#divNumber").hide();
+
+        $("#divPhysicalPerson").show();
+        $("#divName").show();
+        $("#divSurname").show();
+        $("#divTypeResidence").show();
+        $("#cnpj").val("");
+    } else {
+        $("#divPhysicalPerson").hide();
+        $("#divName").hide();
+        $("#divSurname").hide();
+        $("#divTypeResidence").hide();
+
+        $("#physicalLegal").show();
+        $("#divCompanyName").show();
+        $("#divFantasyName").show();
+        $("#divNumber").show();
+        $("#cpf").val("");
+    }
+}
+
+// Envaindo os dados via Ajax para ver se ja existe o usuario
+$('#cnpj').blur(function () {
+    var dados = $('#cnpj').serialize();
+    $.ajax({
+        type: "POST",
+        url: "/pessoas/verificar-existencia-pessoa",
+        data: dados,
+        processData: false,
+        success: function (returnAjax) {
+            if (returnAjax === 'foundCnpj') {
+                toastr.warning('Erro: CNPJ já existente no banco de dados!');
+                $('#btnRegisterPeople').hide();
+            } else {
+                $('#btnRegisterPeople').show();
+            }
+        },
+        error: function () {
+            toastr.error('Erro: não foi possível verificar a pessoa, contate o administrador do sistema!');
+        }
+    });
+});
+
+function findCPF() {
+    var dados = $('#cpf').serialize();
+    $.ajax({
+        type: "POST",
+        url: "/pessoas/verificar-existencia-pessoa",
+        data: dados,
+        processData: false,
+        success: function (returnAjax) {
+            if (returnAjax === 'foundCpf') {
+                toastr.warning('Erro: CPF já existente no banco de dados!');
+                $('#btnRegisterPeople').hide();
+            } else {
+                $('#btnRegisterPeople').show();
+            }
+        },
+        error: function () {
+            toastr.error('Erro: não foi possível verificar a pessoa, contate o administrador do sistema!');
+        }
+    });
+}
+
+function ckeckCnpj(cnpj) {
+    $.ajax({
+        'url': 'https://www.receitaws.com.br/v1/cnpj/' + cnpj.replace(/[^0-9]/g, ''),
+        'type': "GET",
+        'dataType': 'jsonp',
+        'success': function (data) {
+            $('#formRegisterPeople #companyName').val(data.nome);
+            $('#formRegisterPeople #fantasyName').val(data.fantasia);
+            //var cep = data.cep.replace(/[^0-9]/g, '');
+            var cep = data.cep.replace(/\.|\-/g, '');
+            $('#formRegisterPeople #cep').val(cep);
+        }
+    })
+}
+
+/* Letras maisculuas */
+$(document).ready(function () {
+    $("#companyName").keyup(function () {
+        $(this).val($(this).val().toUpperCase());
+    });
+    $("#fantasyName").keyup(function () {
+        $(this).val($(this).val().toUpperCase());
+    });
+});
+
+/* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de Residência) */
+function optionTypeResidence() {
+    var optionHome = document.getElementById("optionHome").checked;
+    var optionCondominium = document.getElementById("optionCondominium").checked;
+    if (optionHome) {
+        $('#edifice').val("");
+        $('#block').val("");
+        $('#apartment').val("");
+        $('#streetCondominium').val("");
+        $('#number').val("");
+
+        $("#divEdifice").hide();
+        $("#divBlock").hide();
+        $("#divApartment").hide();
+        $("#divStreetCondominium").hide();
+        $("#divNumber").show();
+    } else if (optionCondominium) {
+        $('#edifice').val("");
+        $('#block').val("");
+        $('#apartment').val("");
+        $('#streetCondominium').val("");
+        $('#number').val("");
+
+        $("#divEdifice").hide();
+        $("#divBlock").hide();
+        $("#divApartment").hide();
+        $("#divStreetCondominium").show();
+        $("#divNumber").show();
+    } else {
+        $('#edifice').val("");
+        $('#block').val("");
+        $('#apartment').val("");
+        $('#streetCondominium').val("");
+        $('#number').val("");
+
+        $("#divEdifice").show();
+        $("#divBlock").show();
+        $("#divApartment").show();
+        $("#divStreetCondominium").hide();
+        $("#divNumber").hide();
+    }
+}
 
 /* Editar Pessoa */
 $(document).on('click', '.btn-edit-people', function () {
-    var idPeople = $(this).attr("id");
-    var id = 'FJFVSD-JHBN-LASDQF-WEFG' + ((idPeople * 9625) * 10101010) + 'SKD-HAKUSBCBJ-DMG-WSSDASD';
-    window.location.href='/pessoas/edicao?id=' + id;
-    /* var idPeople = $(this).attr("id");
+    var id = $(this).attr("id");
     $.ajax({
-        url: "/pessoas/edicao",
-        method: "GET",
-        data: { idPeople:idPeople },
-        error: function () {
-            toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
-        }
-    }); */
+        url: "/pessoas/listar-editar",
+        type: 'POST',
+        data: { idPeopleEdit: id },
+        success: function (data) {
+            if (JSON.parse(data).length) {
+                var dadosJson = JSON.parse(data)[0];
 
+                $('#modalEditPeople #idPeopleEdit').val(dadosJson.pess_codigo);
+
+                if (dadosJson.pess_tipo === "F") {
+                    $("#modalEditPeople #divPhysicalPersonEdit").show();
+                    $("#modalEditPeople #divNameEdit").show();
+                    $("#modalEditPeople #divSurnameEdit").show();
+                    $("#modalEditPeople #divTypeResidenceEdit").show();
+
+                    $('#modalEditPeople #cpfEdit').val(dadosJson.pess_cpfcnpj);
+                    $('#modalEditPeople #nameEdit').val(dadosJson.pess_nome);
+                    $('#modalEditPeople #surnameEdit').val(dadosJson.pess_sobrenome);
+                    $('#modalEditPeople #cepEdit').val(dadosJson.pess_cep);
+                    $('#modalEditPeople #logradouroEdit').val(dadosJson.pess_logradouro);
+                    $('#modalEditPeople #bairroEdit').val(dadosJson.pess_bairro);
+                    $('#modalEditPeople #localidadeEdit').val(dadosJson.pess_cidade);
+                    $('#modalEditPeople #ufEdit').val(dadosJson.pess_estado);
+
+                    $("#modalEditPeople #physicalLegalEdit").hide();
+                    $("#modalEditPeople #divCompanyNameEdit").hide();
+                    $("#modalEditPeople #divFantasyNameEdit").hide();
+                    $("#modalEditPeople #divNumberEdit").hide();
+
+                    if (dadosJson.pess_edificio !== "") {
+                        $("#modalEditPeople #optionBuildingEdit").prop("checked", true);
+
+                        $("#modalEditPeople #divEdificeEdit").show();
+                        $("#modalEditPeople #divBlockEdit").show();
+                        $("#modalEditPeople #divApartmentEdit").show();
+                        $("#modalEditPeople #divStreetCondominiumEdit").hide();
+                        $("#modalEditPeople #divNumberEdit").hide();
+                    } else if (dadosJson.pess_logradouro_condominio !== "") {
+                        $("#modalEditPeople #optionCondominiumEdit").prop("checked", true);
+
+                        $("#modalEditPeople #divStreetCondominiumEdit").show();
+                        $("#modalEditPeople #divNumberEdit").show();
+                        $('#modalEditPeople #modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
+
+                        $("#modalEditPeople #divEdificeEdit").hide();
+                        $("#modalEditPeople #divBlockEdit").hide();
+                        $("#modalEditPeople #divApartmentEdit").hide();
+                    } else {
+                        $("#modalEditPeople #optionHomeEdit").prop("checked", true);
+
+                        $("#modalEditPeople #divNumberEdit").show();
+                        $('#modalEditPeople #modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
+                        $("#modalEditPeople #divEdificeEdit").hide();
+                        $("#modalEditPeople #divBlockEdit").hide();
+                        $("#modalEditPeople #divApartmentEdit").hide();
+                        $("#modalEditPeople #divStreetCondominiumEdit").hide();
+                    }
+
+                } else {
+                    $("#modalEditPeople #physicalLegalEdit").show();
+                    $("#modalEditPeople #divCompanyNameEdit").show();
+                    $("#modalEditPeople #divFantasyNameEdit").show();
+                    $("#modalEditPeople #divNumberEdit").show();
+
+                    $('#modalEditPeople #cnpjEdit').val(dadosJson.pess_cpfcnpj);
+                    $('#modalEditPeople #companyNameEdit').val(dadosJson.pess_razao_social);
+                    $('#modalEditPeople #fantasyNameEdit').val(dadosJson.pess_nome_fantasia);
+                    $('#modalEditPeople #cepEdit').val(dadosJson.pess_cep);
+                    $('#modalEditPeople #logradouroEdit').val(dadosJson.pess_logradouro);
+                    $('#modalEditPeople #bairroEdit').val(dadosJson.pess_bairro);
+                    $('#modalEditPeople #localidadeEdit').val(dadosJson.pess_cidade);
+                    $('#modalEditPeople #ufEdit').val(dadosJson.pess_estado);
+                    $('#modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
+
+                    $("#modalEditPeople #divPhysicalPersonEdit").hide();
+                    $("#modalEditPeople #divNameEdit").hide();
+                    $("#modalEditPeople #divSurnameEdit").hide();
+                    $("#modalEditPeople #divTypeResidenceEdit").hide();
+                }
+                
+                $('#modalEditPeople #dateInsertEdit').val(dadosJson.pess_data_cadastro);
+                $('#modalEditPeople #observationEdit').val(dadosJson.pess_observacao);
+
+                /* <!-- <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                                <tr>
+                                                    <td> <?php echo $row[''] ?> </td>
+                                                    <td> <?php echo $row[''] ?> </td>
+                                                    <td> <?php echo $row[''] ?> </td>
+                                                    <td>
+                                                        <div class="btn-group btn-group-sm">
+                                                            <button type="button" name="deleteContact" class="btn btn-danger btn-delete-contact"><i class="fas fa-minus"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?> --> */
+
+                $('#modalEditPeople').modal('show');
+            }
+        }
+    });
 });
+
+function clearCep() {
+    $('#modalEditPeople #logradouroEdit').val("");
+    $('#modalEditPeople #bairroEdit').val("");
+    $('#modalEditPeople #localidadeEdit').val("");
+    $('#modalEditPeople #ufEdit').val("");
+}
+
+function callbackCep(conteudo) {
+    if (!("erro" in conteudo)) {
+        $('#modalEditPeople #logradouroEdit').val(conteudo.logradouro);
+        $('#modalEditPeople #bairroEdit').val(conteudo.bairro);
+        $('#modalEditPeople #localidadeEdit').val(conteudo.localidade);
+        $('#modalEditPeople #ufEdit').val(conteudo.uf);
+    }
+    else {
+        clearCep();
+        alert("CEP não encontrado.");
+    }
+}
+
+function pesquisaCep(valor) {
+    var cep = valor.replace(/\D/g, '');
+    if (cep != "") {
+        var validaCep = /^[0-9]{8}$/;
+        if (validaCep.test(cep)) {
+            var script = document.createElement('script');
+            script.src = '//viacep.com.br/ws/' + cep + '/json/?callback=callbackCep';
+            document.body.appendChild(script);
+        }
+        else {
+            clearCep();
+            alert("Formato de CEP inválido.");
+        }
+    }
+    else {
+        clearCep();
+        alert("Informe o CEP.");
+    }
+};
+
+function optionTypeResidenceEdit() {
+    var optionHomeEdit = document.getElementById("optionHomeEdit").checked;
+    var optionCondominiumEdit = document.getElementById("optionCondominiumEdit").checked;
+    if (optionHomeEdit) {
+        $('#modalEditPeople #edificeEdit').val("");
+        $('#modalEditPeople #blockEdit').val("");
+        $('#modalEditPeople #apartmentEdit').val("");
+        $('#modalEditPeople #streetCondominiumEdit').val("");
+        $('#modalEditPeople #numberEdit').val("");
+
+        $("#modalEditPeople #divEdificeEdit").hide();
+        $("#modalEditPeople #divBlockEdit").hide();
+        $("#modalEditPeople #divApartmentEdit").hide();
+        $("#modalEditPeople #divStreetCondominiumEdit").hide();
+        $("#modalEditPeople #divNumberEdit").show();
+    } else if (optionCondominiumEdit) {
+        $('#modalEditPeople #edificeEdit').val("");
+        $('#modalEditPeople #blockEdit').val("");
+        $('#modalEditPeople #apartmentEdit').val("");
+        $('#modalEditPeople #streetCondominiumEdit').val("");
+        $('#modalEditPeople #numberEdit').val("");
+
+        $("#modalEditPeople #divEdificeEdit").hide();
+        $("#modalEditPeople #divBlockEdit").hide();
+        $("#modalEditPeople #divApartmentEdit").hide();
+        $("#modalEditPeople #divStreetCondominiumEdit").show();
+        $("#modalEditPeople #divNumberEdit").show();
+    } else {
+        $('#modalEditPeople #edificeEdit').val("");
+        $('#modalEditPeople #blockEdit').val("");
+        $('#modalEditPeople #apartmentEdit').val("");
+        $('#modalEditPeople #streetCondominiumEdit').val("");
+        $('#modalEditPeople #numberEdit').val("");
+
+        $("#modalEditPeople #divEdificeEdit").show();
+        $("#modalEditPeople #divBlockEdit").show();
+        $("#modalEditPeople #divApartmentEdit").show();
+        $("#modalEditPeople #divStreetCondominiumEdit").hide();
+        $("#modalEditPeople #divNumberEdit").hide();
+    }
+}
+
+/* $("#btnNewContact").click(function () {
+    $("#tBodyTableContact").append("<tr> <td><input type='text' name='dateInsertEdit' class='form-control' id='dateInsertEdit'></td>" +
+    "<td><input type='text' name='dateInsertEdit' class='form-control' id='dateInsertEdit'></td>" +
+     "<td><input type='text' name='dateInsertEdit' class='form-control' id='dateInsertEdit'></td>" +
+     "<td> <div class='btn-group btn-group-sm'>" +
+     "<button type='button' name='saveContact' class='btn btn-success btn-save-contact'><i class='fas fa-save'></i> </button>" +
+     "<button type='button' name='deleteLine' class='btn btn-danger btn-delete-line'><i class='fas fa-minus'></i> </button> </div> </td> </tr>");
+});
+
+$(".btn-delete-line").on("click", function() {
+    $(".btn-delete-line").remove();
+  });
+
+
+window.onload = function () {
+    var select = document.getElementById("selectTypeContact").addEventListener('change', function () {
+        if (this.value === "telephone") {
+            $("#tdCellphone").hide();
+            $("#tdEmail").hide();
+            $("#tdTelephone").show();
+        } else if (this.value === "email") {
+            $("#tdCellphone").hide();
+            $("#tdTelephone").hide();            
+            $("#tdEmail").show();
+        } else {
+            $("#tdTelephone").hide();            
+            $("#tdEmail").hide();
+            $("#tdCellphone").show();
+        }
+    });
+} */
+

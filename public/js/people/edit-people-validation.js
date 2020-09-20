@@ -1,59 +1,59 @@
 $(document).ready(function () {
-  $('#formRegisterPeople').validate({
+  $('#formEditPeople').validate({
     rules: {
-      cpf: {
+      cpfEdit: {
         required: true,
         cpfBR: true,
       },
-      cnpj: {
+      cnpjEdit: {
         required: true,
         cnpjBR: true,
       },
-      name: {
+      nameEdit: {
         required: true
       },
-      surname: {
+      surnameEdit: {
         required: true
       },
-      companyName: {
+      companyNameEdit: {
         required: true
       },
-      fantasyName: {
+      fantasyNameEdit: {
         required: true
       },
-      cep: {
+      cepEdit: {
         required: true
       },
-      typeResidence: {
+      typeResidenceEdit: {
         required: true
       },
-      streetCondominium: {
+      streetCondominiumEdit: {
         required: true
       },
-      number: {
+      numberEdit: {
         required: true
       },
-      block: {
+      blockEdit: {
         required: true
       },
-      apartment: {
+      apartmentEdit: {
         required: true
       }
     },
 
     messages: {
-      cpf: { required: "Digite o CPF.", cpfBR: "CPF inválido."},
-      cnpj: { required: "Digite o CNPJ.", cnpjBR: "CNPJ inválido."},
-      name: { required: "Digite o Nome." },
-      surname: { required: "Digite o Sobrenome." },
-      companyName: { required: "Digite a Razão Social." },
-      fantasyName: { required: "Digite o Nome Fantasia." },
-      cep: { required: "Digite CEP." },
-      typeResidence: { required: "Selecione uma opção." },
-      streetCondominium: { required: "Digite a rua do Condomínio." },
-      number: { required: "Digite o número." },
-      block: { required: "Digite o Bloco." },
-      apartment: { required: "Digite o Apartamento." }
+      cpfEdit: { required: "Digite o CPF.", cpfBR: "CPF inválido."},
+      cnpjEdit: { required: "Digite o CNPJ.", cnpjBR: "CNPJ inválido."},
+      nameEdit: { required: "Digite o Nome." },
+      surnameEdit: { required: "Digite o Sobrenome." },
+      companyNameEdit: { required: "Digite a Razão Social." },
+      fantasyNameEdit: { required: "Digite o Nome Fantasia." },
+      cepEdit: { required: "Digite CEP." },
+      typeResidenceEdit: { required: "Selecione uma opção." },
+      streetCondominiumEdit: { required: "Digite a rua do Condomínio." },
+      numberEdit: { required: "Digite o número." },
+      blockEdit: { required: "Digite o Bloco." },
+      apartmentEdit: { required: "Digite o Apartamento." }
     },
 
     errorElement: 'span',
@@ -72,18 +72,17 @@ $(document).ready(function () {
       var dados = $(form).serialize();
       $.ajax({
         type: "POST",
-        url: "/pessoas/cadastrar",
+        url: "/pessoas/editar",
         data: dados,
         processData: false,
         success: function (returnAjax) {
-          if (returnAjax === 'insertPhysicalPerson') {
-            toastr.success('Sucesso: pessoa física cadastrada!');
-          } else if (returnAjax === 'noInsertPhysicalPerson') {
-            toastr.error('Erro: pessoa física não cadastrada!');
-          } else if (returnAjax === 'insertPhysicalLegal') {
-            toastr.success('Sucesso: pessoa jurídica cadastrada!');
-          } else if (returnAjax === 'noInsertPhysicalLegal') {
-            toastr.error('Erro: pessoa jurídica não cadastrada!');
+          if (returnAjax === "upDatePeople") {
+            toastr.success('Sucesso: pessoa editada!');
+            $('#modalEditPeople').modal('hide');
+            $('#formEditPeople').each(function () { this.reset(); });
+            $('#listPeople').DataTable().ajax.reload();
+          } else if(returnAjax === "noUpDatePeople") {
+            toastr.error('Erro: pessoa não editada!');
           }
         },
         error: function () {

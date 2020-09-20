@@ -1,6 +1,6 @@
 <?php
 //header("Content-Type: text/html; charset=utf-8");
-
+require_once '../app/View/login/check-login.php'; 
 # Sortear Imagem
 $image = array();
 $image[1] = DIRIMG . "user3-128x128.jpg";
@@ -43,8 +43,6 @@ $imageRandom = rand(1, $count);
 </head>
 
 <body class="hold-transition pace-primary pace-done sidebar-mini sidebar-collapse">
-  <?php require_once '../app/View/login/check-login.php'; ?>
-
   <!--layout-navbar-fixed-->
   <div class="pace pace-inactive">
     <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">

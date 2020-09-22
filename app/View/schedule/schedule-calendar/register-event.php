@@ -36,9 +36,9 @@ $valueStatus = "P";
 # Verificando se a opção "Agendar Horario" foi marcada como "Sim" 
 if ($dados['scheduleTime'] == "scheduleTimeYes") {
 
-    if ($dados['selectionTitleRegister'] == "Voltar na Obra" || $dados['selectionTitleRegister'] == "Início de Obra") {
+    if ($dados['selectionTitleRegister'] === "Voltar na Obra" || $dados['selectionTitleRegister'] === "Início de Obra") {
         # Query inserir na tb_eventos
-        $queryInsertEvent = "INSERT INTO tb_eventos 
+        $queryInsertEvent = " INSERT INTO tb_eventos 
         (even_titulo,
         even_cor,
         even_status,
@@ -46,7 +46,7 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         even_datahoraf, 
         even_observacao, 
         orca_numero) 
-        VALUES (:even_titulo, :even_cor, :even_status, :even_datahorai, :even_datahoraf, :even_observacao, :orca_numero)";
+        VALUES (:even_titulo, :even_cor, :even_status, :even_datahorai, :even_datahoraf, :even_observacao, :orca_numero) ";
 
         # Inserindo na tb_eventos
         $insertEvent = $connectionDataBase->prepare($queryInsertEvent);
@@ -59,14 +59,24 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $insertEvent->bindParam(':orca_numero',     $dados['clientRegister']);
 
         # Se inserir exibe a mensagem
-        if ($insertEvent->execute()) {
+/*         if ($insertEvent->execute()) {
             $returnAjax = 'insertEvent';
         } else {
             $returnAjax = 'noInsertEvent';
+        } */
+        # Se inserir exibe a mensagem
+        if ($insertEvent->execute()) { 
+            $msgInsertEvent         = "<script> toastr.success('Sucesso: evento cadastrado!'); </script>";
+            $retorna = ['sit' => true, 'msg' => $msgInsertEvent];
+            $_SESSION['msg'] = $msgInsertEvent;
+        } else {
+            $msgNoInsertEventBudget = "<script> toastr.error('Erro: evento não cadastrado!'); </script>";
+            $retorna = ['sit' => true, 'msg' => $msgNoInsertEventBudget];
         }
+
     } else {
         # Query inserir na tb_orcamento
-        $queryInsertBudget = "INSERT INTO tb_orcamento 
+        $queryInsertBudget = " INSERT INTO tb_orcamento 
         (orca_nome, 
         orca_sobrenome, 
         orca_tel, 
@@ -82,7 +92,7 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         orca_apartamento, 
         orca_logradouro_condominio, 
         orca_cep) 
-        VALUES (:orca_nome, :orca_sobrenome, :orca_tel, :orca_cel, :orca_email, :orca_logradouro, :orca_log_numero, :orca_bairro, :orca_cidade, :orca_estado, :orca_edificio, :orca_bloco, :orca_apartamento, :orca_logradouro_condominio, :orca_cep)";
+        VALUES (:orca_nome, :orca_sobrenome, :orca_tel, :orca_cel, :orca_email, :orca_logradouro, :orca_log_numero, :orca_bairro, :orca_cidade, :orca_estado, :orca_edificio, :orca_bloco, :orca_apartamento, :orca_logradouro_condominio, :orca_cep) ";
 
         # Inserindo na tb_orcamento
         $insertBudget = $connectionDataBase->prepare($queryInsertBudget);
@@ -107,7 +117,7 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $idBudget = $connectionDataBase->lastInsertId();
 
         # Query inserir na tb_eventos
-        $queryInsertEvent = "INSERT INTO tb_eventos 
+        $queryInsertEvent = " INSERT INTO tb_eventos 
         (even_titulo,
         even_cor,
         even_status,
@@ -115,7 +125,7 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         even_datahoraf, 
         even_observacao, 
         orca_numero) 
-        VALUES (:even_titulo, :even_cor, :even_status, :even_datahorai, :even_datahoraf, :even_observacao, :orca_numero)";
+        VALUES (:even_titulo, :even_cor, :even_status, :even_datahorai, :even_datahoraf, :even_observacao, :orca_numero) ";
 
         # Inserindo na tb_eventos
         $insertEvent = $connectionDataBase->prepare($queryInsertEvent);
@@ -134,13 +144,13 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
             $returnAjax = 'noInsertEventBudget';
         } */
 
-        $msgInsertEvent         = "<script> toastr.success('Sucesso: evento e orçamento cadastrados!'); </script>";
-        $msgNoInsertEventBudget = "<script> toastr.error('Erro: evento e orçamento não cadastrados!'); </script>";
         # Se inserir exibe a mensagem
         if ($insertEvent->execute()) { 
+            $msgInsertEvent         = "<script> toastr.success('Sucesso: evento e orçamento cadastrados!'); </script>";
             $retorna = ['sit' => true, 'msg' => $msgInsertEvent];
             $_SESSION['msg'] = $msgInsertEvent;
         } else {
+            $msgNoInsertEventBudget = "<script> toastr.error('Erro: evento e orçamento não cadastrados!'); </script>";
             $retorna = ['sit' => true, 'msg' => $msgNoInsertEventBudget];
         }
     }

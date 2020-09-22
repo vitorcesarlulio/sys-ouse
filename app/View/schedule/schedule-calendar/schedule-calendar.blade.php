@@ -1,12 +1,12 @@
 <?php
-require_once '../app/View/login/check-login.php'; 
-require_once '../app/Model/connection-mysqli.php';
+require_once '../app/View/login/check-login.php';
 
-
-$selectClient = " SELECT orca_numero, orca_nome, orca_sobrenome from tb_orcamento ORDER BY orca_numero DESC ";
-$resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
-
+include_once '../app/Model/connection-pdo.php';
+$querySelectClientBudget = " SELECT orca_numero, orca_nome, orca_sobrenome FROM tb_orcamento ORDER BY orca_numero DESC";
+$searchClientBudget = $connectionDataBase->prepare($querySelectClientBudget);
+$searchClientBudget->execute();
 ?>
+
 @extends('templates.default')
 @section('title', 'Calendário')
 @section('head')
@@ -18,12 +18,9 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'list/main.css' ?>">
 <!-- Date Picker -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
-<!-- Timer Picker -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
 <!-- Select 2 -->
 <link rel="stylesheet" href="<?= DIRPLUGINS . 'select2/css/select2.min.css' ?>">
 @endsection
-
 @section('css')
 <style>
     .fc-today {
@@ -51,8 +48,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
         <div class="col-md-9">
             <div class="card card-primary">
                 <div class="card-body p-0">
-                    <!-- THE CALENDAR -->
-
                     <div id="calendar"></div>
                 </div>
             </div>
@@ -73,7 +68,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
             <div class="modal-body">
                 <div class="divViewEvent">
                     <dl class="row">
-
                         <dt class="col-sm-3">Evento:</dt>
                         <dd class="col-sm-8" id="title"></dd>
 
@@ -119,8 +113,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                         <dt class="col-sm-3" id="dtObservation"> Observação: </dt>
                         <div class="col-sm-9" id="divObservation"> <textarea class="form-control" id="observation" rows="2" style="width: 100%;"> </textarea></div>
                     </dl>
-                    <!--se mudar o botao vai caga tudo por causa desse btn-canc-vis -->
-                    <!-- Botões Editar e Apagar -->
                     <div class="modal-footer" id="footer">
                         <a href="#" id="btnWpp" class="btn btn-success" target="_blank"><i class="fab fa-whatsapp"></i></a>
                         <button class="btn btn-warning btn-edit-event">Editar</button>
@@ -132,194 +124,175 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                 <div class="formedit">
                     <span id="msg-edit"></span>
                     <form id="formEditEvent" method="POST" enctype="multipart/form-data" autocomplete="off">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="row">
-                                     <input type="hidden" name="id" id="id"> 
-
-                                    <div class="col-sm-12" id="divTitleEdit">
-                                        <div class="form-group">
-                                            <label>Evento:</label>
-                                            <select name="selectionTitleEdit" id="selectionTitleEdit" class="form-control">
-                                                <option value="Realizar Orçamento">Realizar Orçamento</option>
-                                                <option value="Voltar na Obra">Voltar na Obra</option>
-                                                <option value="Início de Obra">Início de Obra</option>
-                                            </select>
-                                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <input type="hidden" name="idEvent" id="idEvent">
+                                <input type="hidden" name="idBudget" id="idBudget">
+                                <div class="col-sm-12" id="divTitleEdit">
+                                    <div class="form-group">
+                                        <label>Evento:</label>
+                                        <select name="selectionTitleEdit" id="selectionTitleEdit" class="form-control" disabled style="cursor: not-allowed;">
+                                            <option value="Realizar Orçamento" id="optionRealizarOrcamento">Realizar Orçamento</option>
+                                            <option value="Voltar na Obra" id="optionVoltarObra">Voltar na Obra</option>
+                                            <option value="Início de Obra" id="optionInicioObra">Início de Obra</option>
+                                        </select>
                                     </div>
-
-                                    <div class="col-sm-5" id="divStartDateEdit">
-                                        <div class="form-group">
-                                            <label>Data Inicial</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </span>
-                                                </div>
-                                                <input type="text" name="startDateEdit" id="startDateEdit" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
+                                </div>
+                                <div class="col-sm-5" id="divStartDateEdit">
+                                    <div class="form-group">
+                                        <label>Data Inicial</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </span>
                                             </div>
+                                            <input type="text" name="startDateEdit" id="startDateEdit" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false">
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-3" id="divStartTimeEdit">
-                                        <div class="form-group">
-                                            <label>Hora Inicial</label>
-                                            <div class="input-group">
-                                                <input type="time" name="startTimeEdit" id="startTimeEdit" class="form-control">
-                                            </div>
+                                </div>
+                                <div class="col-sm-3" id="divStartTimeEdit">
+                                    <div class="form-group">
+                                        <label>Hora Inicial</label>
+                                        <div class="input-group">
+                                            <input type="time" name="startTimeEdit" id="startTimeEdit" class="form-control" min="08:00" max="17:00">
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-3" id="divEndTimeEdit">
-                                        <div class="form-group">
-                                            <label>Hora Final</label>
-                                            <div class="input-group">
-                                                <input type="time" name="endTimeEdit" id="endTimeEdit" class="form-control">
-                                            </div>
+                                </div>
+                                <div class="col-sm-3" id="divEndTimeEdit">
+                                    <div class="form-group">
+                                        <label>Hora Final</label>
+                                        <div class="input-group">
+                                            <input type="time" name="endTimeEdit" id="endTimeEdit" class="form-control" min="08:00" max="17:00">
                                         </div>
                                     </div>
-
-                                    <!--
-                                    <div class="col-sm-6" id="divNameEdit">
-                                        <div class="form-group">
-                                            <label>Nome</label>
-                                            <input type="text" name="nameEdit" id="nameEdit" class="form-control">
+                                </div>
+                                <div class="col-sm-6" id="divNameEdit">
+                                    <div class="form-group">
+                                        <label>Nome</label>
+                                        <input type="text" name="nameEdit" id="nameEdit" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divSurnameEdit">
+                                    <div class="form-group">
+                                        <label>Sobrenome</label>
+                                        <input type="text" name="surnameEdit" id="surnameEdit" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divCellphoneEdit">
+                                    <div class="form-group">
+                                        <label>Celular</label>
+                                        <input type="tel" class="form-control contact" name="cellphoneEdit" id="cellphoneEdit" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divTelephoneEdit">
+                                    <div class="form-group">
+                                        <label>Telefone</label>
+                                        <input type="tel" class="form-control contact" name="telephoneEdit" id="telephoneEdit" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divEmaileEdit">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" name="emailEdit" id="emailEdit">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divCepEdit">
+                                    <div class="form-group">
+                                        <label>CEP</label>
+                                        <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
+                                        <input type="tel" class="form-control" name="cepEdit" id="cepEdit" data-inputmask="'mask': ['99999-999']" data-mask="" value="13" onblur="pesquisaCep(this.value);">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divStreetEdit">
+                                    <div class="form-group">
+                                        <label>Logradouro</label>
+                                        <input type="text" class="form-control" name="logradouroEdit" id="logradouroEdit" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divNeighBorhoodEdit">
+                                    <div class="form-group">
+                                        <label>Bairro</label>
+                                        <input type="text" name="bairroEdit" id="bairroEdit" class="form-control" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divCityEdit">
+                                    <div class="form-group">
+                                        <label>Cidade</label>
+                                        <input type="text" name="localidadeEdit" id="localidadeEdit" class="form-control" style="cursor: not-allowed;" readonly=“true”>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="divStateEdit">
+                                    <div class="form-group">
+                                        <label>Estado</label>
+                                        <input type="text" name="ufEdit" id="ufEdit" class="form-control" style="cursor: not-allowed;" readonly=“true”>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" id="divTypeResidenceEdit">
+                                    <div class="form-group">
+                                        <label>Tipo de Residência</label>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="optionHomeEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
+                                            <label for="optionHomeEdit" class="custom-control-label">Casa</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="optionBuildingEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
+                                            <label for="optionBuildingEdit" class="custom-control-label">Apartamento</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" id="optionCondominiumEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
+                                            <label for="optionCondominiumEdit" class="custom-control-label">Condomínio</label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6" id="divSurnameEdit">
-                                        <div class="form-group">
-                                            <label>Sobrenome</label>
-                                            <input type="text" name="surnameEdit" id="surnameEdit" class="form-control">
-                                        </div>
+                                </div>
+                                <div class="col-sm-2" id="divNumberEdit" style="display:none">
+                                    <div class="form-group">
+                                        <label>Número</label>
+                                        <input type="text" name="numberEdit" id="numberEdit" class="form-control">
                                     </div>
-                                    <div class="col-sm-6" id="divCellphoneEdit">
-                                        <div class="form-group">
-                                            <label>Celular</label>
-                                            <input type="tel" class="form-control contact" name="cellphoneEdit" id="cellphoneEdit" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="">
-                                        </div>
+                                </div>
+                                <div id="divEdificeEdit" class="col-sm-7" style="display:none">
+                                    <div class="form-group">
+                                        <label>Edifício</label>
+                                        <input type="text" name="edificeEdit" id="edificeEdit" class="form-control">
                                     </div>
-                                    <div class="col-sm-6" id="divTelephoneEdit">
-                                        <div class="form-group">
-                                            <label>Telefone</label>
-                                            <input type="tel" class="form-control contact" name="telephoneEdit" id="telephoneEdit" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="">
-                                        </div>
+                                </div>
+                                <div id="divBlockEdit" class="col-sm-2" style="display:none">
+                                    <div class="form-group">
+                                        <label>Bloco</label>
+                                        <input type="text" name="blockEdit" id="blockEdit" class="form-control">
                                     </div>
-                                    <div class="col-sm-6" id="divEmaileEdit">
-                                        <div class="form-group">
-                                            <label>Email</label>
-                                            <input type="email" class="form-control" name="emailEdit" id="emailEdit">
-                                        </div>
+                                </div>
+                                <div id="divApartmentEdit" class="col-sm-3" style="display:none">
+                                    <div class="form-group">
+                                        <label>Apartamento</label>
+                                        <input type="text" name="apartmentEdit" id="apartmentEdit" class="form-control">
                                     </div>
-
-                                   Não mudar nada do CEP
-                                    <div class="col-sm-6" id="divCepEdit">
-                                        <div class="form-group">
-                                            <label>CEP</label>
-                                            <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
-                                            <input type="tel" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" value="13">
-                                        </div>
-                                    </div> 
-                                    <div class="col-sm-6" id="divStreetEdit">
-                                        <div class="form-group">
-                                            <label>Logradouro</label>
-                                            <input type="text" class="form-control" name="logradouro" id="logradouro" style="cursor: not-allowed;" readonly=“true” readonly=“true”> 
-                                        </div>
+                                </div>
+                                <div id="divStreetCondominiumEdit" class="col-sm-5" style="display:none">
+                                    <div class="form-group">
+                                        <label>Rua do Condomínio</label>
+                                        <input type="text" name="streetCondominiumEdit" id="streetCondominiumEdit" class="form-control">
                                     </div>
-                                    <div class="col-sm-6" id="divNeighBorhoodEdit">
-                                        <div class="form-group">
-                                            <label>Bairro</label>
-                                            <input type="text" name="bairro" id="bairro" class="form-control" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
-                                        </div>
+                                </div>
+                                <div class="col-sm-12" id="divObservationEdit">
+                                    <div class="form-group">
+                                        <label>Observações:</label>
+                                        <textarea class="form-control" rows="3" name="observationEdit" id="observationEdit" style="height: 50px;"></textarea>
                                     </div>
-                                    <div class="col-sm-6" id="divCityEdit">
-                                        <div class="form-group">
-                                            <label>Cidade</label>
-                                            <input type="text" name="localidade" id="localidade" class="form-control" style="cursor: not-allowed;" readonly=“true”>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6" id="divStateEdit">
-                                        <div class="form-group">
-                                            <label>Estado</label>
-                                            <input type="text" name="uf" id="uf" class="form-control" style="cursor: not-allowed;" readonly=“true”>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12" id="divTypeResidenceEdit">
-                                        <div class="form-group">
-                                            <label>Tipo de Residência</label>
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" id="optionHomeEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
-                                                <label for="optionHomeEdit" class="custom-control-label">Casa</label>
-                                            </div>
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" id="optionBuildingEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
-                                                <label for="optionBuildingEdit" class="custom-control-label">Apartamento</label>
-                                            </div>
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" id="optionCondominiumEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
-                                                <label for="optionCondominiumEdit" class="custom-control-label">Condomínio</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div id="divStreetCondominiumEdit" class="col-sm-5">
-                                        <div class="form-group">
-                                            <label>Rua do Condomínio</label>
-                                            <input type="text" name="streetCondominiumEdit" id="streetCondominiumEdit" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div id="divNumberEdit" class="col-sm-2">
-                                        <div class="form-group">
-                                            <label>Número</label>
-                                            <input type="text" name="numberEdit" id="numberEdit" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div id="divEdificeEdit" class="col-sm-7">
-                                        <div class="form-group">
-                                            <label>Edifício</label>
-                                            <input type="text" name="edificeEdit" id="edificeEdit" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div id="divBlockEdit" class="col-sm-2">
-                                        <div class="form-group">
-                                            <label>Bloco</label>
-                                            <input type="text" name="blockEdit" id="blockEdit" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div id="divApartmentEdit" class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>Apartamento</label>
-                                            <input type="text" name="apartmentEdit" id="apartmentEdit" class="form-control">
-                                        </div>
-                                    </div>-->
-                                    <!--
-                                    <div class="col-sm-12" id="divObservationEdit">
-                                        <div class="form-group">
-                                            <label>Observações:</label>
-                                            <textarea class="form-control" rows="3" name="observationEdit" id="observationEdit" style="height: 50px;"></textarea>
-                                        </div>
-                                    </div>-->
-
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Botões Cancelar e Salvar -->
                         <div class="modal-footer" id="footer">
                             <button type="button" class="btn btn-primary btn-cancel-edit">Cancelar</button>
                             <button type="submit" name="upDateEvent" id="btnUpDateEvent" class="btn btn-warning">Salvar</button>
                         </div>
+                    </form>
                 </div>
-                </form>
             </div>
         </div>
-
     </div>
 </div>
-
 
 <div class="modal fade" id="modalRegisterEvent">
     <div class="modal-dialog">
@@ -332,10 +305,8 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!--<div class="visevent"></div>-->
                     <span id="msg-cad"></span>
                     <div class="row">
-
                         <div class="col-sm-12" id="divScheduleTimeRegister">
                             <div class="form-group">
                                 <label>Agendar Horário?</label>
@@ -349,19 +320,16 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-sm-12" id="divTitleRegister">
                             <div class="form-group">
                                 <label>Evento:</label>
                                 <select name="selectionTitleRegister" id="selectionTitleRegister" class="form-control">
-                                    <!--TITLE-->
                                     <option value="Realizar Orçamento">Realizar Orçamento</option>
                                     <option value="Voltar na Obra">Voltar na Obra</option>
                                     <option value="Início de Obra">Início de Obra</option>
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-sm-5" id="divStartDateRegister">
                             <div class="form-group">
                                 <label>Data Inicial</label>
@@ -375,31 +343,22 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-sm-3" id="divStartTimeRegister">
                             <div class="form-group">
                                 <label>Hora Inicial</label>
-                                <div class="input-group date" id="divStartTime" data-target-input="nearest">
-                                    <div class="input-group-append" data-target="#divStartTime" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                        <input type="tel" class="form-control datetimepicker-input" data-target="#divStartTime" name="startTimeRegister" id="startTimeRegister" onkeyup="onlyNumber(this);" maxlength="5" />
-                                    </div>
+                                <div class="input-group">
+                                    <input type="time" name="startTimeRegister" id="startTimeRegister" class="form-control" min="08:00" max="17:00">
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-sm-3" id="divEndTimeRegister">
                             <div class="form-group">
                                 <label>Hora Final</label>
-                                <div class="input-group date" id="divEndTime" data-target-input="nearest">
-                                    <div class="input-group-append" data-target="#divEndTime" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                        <input type="tel" class="form-control datetimepicker-input" data-target="#divEndTime" name="endTimeRegister" id="endTimeRegister" onkeyup="onlyNumber(this);" maxlength="5" />
-                                    </div>
+                                <div class="input-group">
+                                    <input type="time" name="endTimeRegister" id="endTimeRegister" class="form-control" min="08:00" max="17:00">
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-sm-6" id="divNameRegister">
                             <div class="form-group">
                                 <label>Nome</label>
@@ -430,8 +389,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                 <input type="email" class="form-control" name="emailRegister" id="emailRegister">
                             </div>
                         </div>
-
-                        <!-- Não mudar nada do CEP -->
                         <div class="col-sm-6" id="divCepRegister">
                             <div class="form-group">
                                 <label>CEP</label>
@@ -463,7 +420,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                 <input type="text" name="uf" id="uf" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                             </div>
                         </div>
-
                         <div class="col-sm-12" id="divTypeResidenceRegister">
                             <div class="form-group">
                                 <label>Tipo de Residência</label>
@@ -481,22 +437,18 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                 </div>
                             </div>
                         </div>
-
-
                         <div id="divStreetCondominiumRegister" class="col-sm-5" style="display:none">
                             <div class="form-group">
                                 <label>Rua do Condomínio</label>
                                 <input type="text" name="streetCondominiumRegister" id="streetCondominiumRegister" class="form-control">
                             </div>
                         </div>
-
                         <div id="divNumberRegister" class="col-sm-2" style="display:none">
                             <div class="form-group">
                                 <label>Número</label>
                                 <input type="text" name="numberRegister" id="numberRegister" class="form-control">
                             </div>
                         </div>
-
                         <div id="divEdificeRegister" class="col-sm-7" style="display:none">
                             <div class="form-group">
                                 <label>Edifício</label>
@@ -515,29 +467,25 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                                 <input type="text" name="apartmentRegister" id="apartmentRegister" class="form-control">
                             </div>
                         </div>
-
                         <div class="col-sm-12" id="divClientRegister" style="display:none;">
                             <div class="form-group">
                                 <label>Cliente:</label>
                                 <select class="form-control select2" name="clientRegister" id="clientRegister" style="width: 100%;">
-                                    <?php while ($showClient = mysqli_fetch_row($resultSelectClient)) { ?>
-                                        <option value="<?php echo $showClient[0] ?>">
-                                            <?php echo $showClient[1] . " " . $showClient[2]  ?>
+                                    <?php foreach ($searchClientBudget->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                        <option value="<?= $row['orca_numero'] ?>">
+                                            <?= $row['orca_nome'] . " " . $row['orca_sobrenome'] ?>
                                         </option>
                                     <?php } ?>
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Observações:</label>
                                 <textarea class="form-control" rows="3" name="observationRegister" id="observationRegister" style="height: 50px;"></textarea>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -564,7 +512,7 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelDelete">Cancelar</button>
                 <!-- <button type="button" class="btn btn-danger" id="btnConfirm">Sim</button> -->
-                <a href="#" id="btnConfirm" class="btn btn-danger">Sim</a> 
+                <a href="#" id="btnConfirm" class="btn btn-danger">Sim</a>
             </div>
         </div>
     </div>
@@ -585,7 +533,7 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelDelete">Cancelar</button>
-                <a href="#" id="btnConfirmDeleteEvent" class="btn btn-danger">Sim</a> 
+                <a href="#" id="btnConfirmDeleteEvent" class="btn btn-danger">Sim</a>
             </div>
         </div>
     </div>
@@ -604,11 +552,9 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
 <!-- Script do Calendário -->
 <script src="<?= DIRJS . 'schedule/schedule-calendar/calendar.js' ?>"></script>
-
 <!-- JQuery validation -->
 <script src="<?= DIRJS . 'schedule/schedule-calendar/register-event-validation.js' ?>"></script>
 <script src="<?= DIRJS . 'schedule/schedule-calendar/edit-event-validation.js' ?>"></script>
-
 <!-- InputMask -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
@@ -616,14 +562,13 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
 <script src="<?= DIRJS . 'search-zip/search-zip.js' ?>"></script>
 <!-- Date Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<!-- Timer Picker -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-
-<?php if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])) { echo $_SESSION['msg'];unset($_SESSION['msg']); } ?>
-
 <!-- Select2 -->
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
-
+<!-- Mensagem de crud -->
+<?php if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+} ?>
 <script type="text/javascript" language="javascript">
     /* Date Picker */
     $(document).ready(function() {
@@ -668,7 +613,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
                             .removeAttr('readonly');
                     });
             };
-
             $(document).ready(function($) {
                 // Impedir a exibição do teclado para o campo de data.
                 $('input[name=startDateRegister]').preventKeyboard();
@@ -679,7 +623,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
             });
         }(jQuery));
     });
-
     /* Tradução Date Picker */
     $.fn.datepicker.dates['pt-BR'] = {
         days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
@@ -691,7 +634,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
         /* Leverages same syntax as 'format' */
         weekStart: 0
     };
-
     $(document).ready(function() {
         /* Datemask */
         $('#datemask').inputmask('dd/mm/yyyy', {
@@ -700,34 +642,6 @@ $resultSelectClient = mysqli_query($connectionDataBase, $selectClient);
         /* Datemask */
         $('[data-mask]').inputmask();
     });
-
-
-    /* Função para bloquar a entrada de letras nos inputs de hora */
-    function onlyNumber(num) {
-        var er = /[^0-9:]/;
-        er.lastIndex = 0;
-        var campo = num;
-        if (er.test(campo.value)) {
-            campo.value = "";
-        }
-    }
-
-    /*Bloquear horarios nao permitidos*/
-    $(document).ready(function() {
-
-        $(function() {
-            $('#divEndTime').datetimepicker({
-                format: 'HH:mm',
-                enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-            });
-
-            $('#divStartTime').datetimepicker({
-                format: 'HH:mm',
-                enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-            });
-        });
-    });
-
     //Initialize Select2 Elements
     $('.select2').select2();
 </script>

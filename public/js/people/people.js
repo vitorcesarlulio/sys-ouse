@@ -391,105 +391,113 @@ function optionTypeResidence() {
 /* Editar Pessoa */
 $(document).on('click', '.btn-edit-people', function () {
     var id = $(this).attr("id");
+    //window.location.href='#?pess_codigo=' +  id;
     $.ajax({
-        url: "/pessoas/listar-editar",
-        type: 'POST',
-        data: { idPeopleEdit: id },
-        success: function (data) {
-            if (JSON.parse(data).length) {
-                var dadosJson = JSON.parse(data)[0];
-
-                $('#modalEditPeople #idPeopleEdit').val(dadosJson.pess_codigo);
-
-                if (dadosJson.pess_tipo === "F") {
-                    $("#modalEditPeople #divPhysicalPersonEdit").show();
-                    $("#modalEditPeople #divNameEdit").show();
-                    $("#modalEditPeople #divSurnameEdit").show();
-                    $("#modalEditPeople #divTypeResidenceEdit").show();
-
-                    $('#modalEditPeople #cpfEdit').val(dadosJson.pess_cpfcnpj);
-                    $('#modalEditPeople #nameEdit').val(dadosJson.pess_nome);
-                    $('#modalEditPeople #surnameEdit').val(dadosJson.pess_sobrenome);
-                    $('#modalEditPeople #cepEdit').val(dadosJson.pess_cep);
-                    $('#modalEditPeople #logradouroEdit').val(dadosJson.pess_logradouro);
-                    $('#modalEditPeople #bairroEdit').val(dadosJson.pess_bairro);
-                    $('#modalEditPeople #localidadeEdit').val(dadosJson.pess_cidade);
-                    $('#modalEditPeople #ufEdit').val(dadosJson.pess_estado);
-
-                    $("#modalEditPeople #physicalLegalEdit").hide();
-                    $("#modalEditPeople #divCompanyNameEdit").hide();
-                    $("#modalEditPeople #divFantasyNameEdit").hide();
-                    $("#modalEditPeople #divNumberEdit").hide();
-
-                    if (dadosJson.pess_edificio !== "") {
-                        $("#modalEditPeople #optionBuildingEdit").prop("checked", true);
-
-                        $("#modalEditPeople #divEdificeEdit").show();
-                        $("#modalEditPeople #divBlockEdit").show();
-                        $("#modalEditPeople #divApartmentEdit").show();
-                        $("#modalEditPeople #divStreetCondominiumEdit").hide();
-                        $("#modalEditPeople #divNumberEdit").hide();
-                    } else if (dadosJson.pess_logradouro_condominio !== "") {
-                        $("#modalEditPeople #optionCondominiumEdit").prop("checked", true);
-
-                        $("#modalEditPeople #divStreetCondominiumEdit").show();
-                        $("#modalEditPeople #divNumberEdit").show();
-                        $('#modalEditPeople #modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
-
-                        $("#modalEditPeople #divEdificeEdit").hide();
-                        $("#modalEditPeople #divBlockEdit").hide();
-                        $("#modalEditPeople #divApartmentEdit").hide();
-                    } else {
-                        $("#modalEditPeople #optionHomeEdit").prop("checked", true);
-
-                        $("#modalEditPeople #divNumberEdit").show();
-                        $('#modalEditPeople #modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
-                        $("#modalEditPeople #divEdificeEdit").hide();
-                        $("#modalEditPeople #divBlockEdit").hide();
-                        $("#modalEditPeople #divApartmentEdit").hide();
-                        $("#modalEditPeople #divStreetCondominiumEdit").hide();
+        url: "/pessoas",
+        type: 'GET',
+        data: { pess_codigo: id },
+        success: function () {
+            $.ajax({
+                url: "/pessoas/listar-editar",
+                type: 'POST',
+                data: { idPeopleEdit: id },
+                success: function (data) {
+                    if (JSON.parse(data).length) {
+                        var dadosJson = JSON.parse(data)[0];
+        
+                        $('#modalEditPeople #idPeopleEdit').val(dadosJson.pess_codigo);
+        
+                        if (dadosJson.pess_tipo === "F") {
+                            $("#modalEditPeople #divPhysicalPersonEdit").show();
+                            $("#modalEditPeople #divNameEdit").show();
+                            $("#modalEditPeople #divSurnameEdit").show();
+                            $("#modalEditPeople #divTypeResidenceEdit").show();
+        
+                            $('#modalEditPeople #cpfEdit').val(dadosJson.pess_cpfcnpj);
+                            $('#modalEditPeople #nameEdit').val(dadosJson.pess_nome);
+                            $('#modalEditPeople #surnameEdit').val(dadosJson.pess_sobrenome);
+                            $('#modalEditPeople #cepEdit').val(dadosJson.pess_cep);
+                            $('#modalEditPeople #logradouroEdit').val(dadosJson.pess_logradouro);
+                            $('#modalEditPeople #bairroEdit').val(dadosJson.pess_bairro);
+                            $('#modalEditPeople #localidadeEdit').val(dadosJson.pess_cidade);
+                            $('#modalEditPeople #ufEdit').val(dadosJson.pess_estado);
+        
+                            $("#modalEditPeople #physicalLegalEdit").hide();
+                            $("#modalEditPeople #divCompanyNameEdit").hide();
+                            $("#modalEditPeople #divFantasyNameEdit").hide();
+                            $("#modalEditPeople #divNumberEdit").hide();
+        
+                            if (dadosJson.pess_edificio !== "") {
+                                $("#modalEditPeople #optionBuildingEdit").prop("checked", true);
+        
+                                $("#modalEditPeople #divEdificeEdit").show();
+                                $("#modalEditPeople #divBlockEdit").show();
+                                $("#modalEditPeople #divApartmentEdit").show();
+                                $("#modalEditPeople #divStreetCondominiumEdit").hide();
+                                $("#modalEditPeople #divNumberEdit").hide();
+                            } else if (dadosJson.pess_logradouro_condominio !== "") {
+                                $("#modalEditPeople #optionCondominiumEdit").prop("checked", true);
+        
+                                $("#modalEditPeople #divStreetCondominiumEdit").show();
+                                $("#modalEditPeople #divNumberEdit").show();
+                                $('#modalEditPeople #modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
+        
+                                $("#modalEditPeople #divEdificeEdit").hide();
+                                $("#modalEditPeople #divBlockEdit").hide();
+                                $("#modalEditPeople #divApartmentEdit").hide();
+                            } else {
+                                $("#modalEditPeople #optionHomeEdit").prop("checked", true);
+        
+                                $("#modalEditPeople #divNumberEdit").show();
+                                $('#modalEditPeople #modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
+                                $("#modalEditPeople #divEdificeEdit").hide();
+                                $("#modalEditPeople #divBlockEdit").hide();
+                                $("#modalEditPeople #divApartmentEdit").hide();
+                                $("#modalEditPeople #divStreetCondominiumEdit").hide();
+                            }
+        
+                        } else {
+                            $("#modalEditPeople #physicalLegalEdit").show();
+                            $("#modalEditPeople #divCompanyNameEdit").show();
+                            $("#modalEditPeople #divFantasyNameEdit").show();
+                            $("#modalEditPeople #divNumberEdit").show();
+        
+                            $('#modalEditPeople #cnpjEdit').val(dadosJson.pess_cpfcnpj);
+                            $('#modalEditPeople #companyNameEdit').val(dadosJson.pess_razao_social);
+                            $('#modalEditPeople #fantasyNameEdit').val(dadosJson.pess_nome_fantasia);
+                            $('#modalEditPeople #cepEdit').val(dadosJson.pess_cep);
+                            $('#modalEditPeople #logradouroEdit').val(dadosJson.pess_logradouro);
+                            $('#modalEditPeople #bairroEdit').val(dadosJson.pess_bairro);
+                            $('#modalEditPeople #localidadeEdit').val(dadosJson.pess_cidade);
+                            $('#modalEditPeople #ufEdit').val(dadosJson.pess_estado);
+                            $('#modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
+        
+                            $("#modalEditPeople #divPhysicalPersonEdit").hide();
+                            $("#modalEditPeople #divNameEdit").hide();
+                            $("#modalEditPeople #divSurnameEdit").hide();
+                            $("#modalEditPeople #divTypeResidenceEdit").hide();
+                        }
+                        
+                        $('#modalEditPeople #dateInsertEdit').val(dadosJson.pess_data_cadastro);
+                        $('#modalEditPeople #observationEdit').val(dadosJson.pess_observacao);
+        
+                        /* <!-- <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                                        <tr>
+                                                            <td> <?php echo $row[''] ?> </td>
+                                                            <td> <?php echo $row[''] ?> </td>
+                                                            <td> <?php echo $row[''] ?> </td>
+                                                            <td>
+                                                                <div class="btn-group btn-group-sm">
+                                                                    <button type="button" name="deleteContact" class="btn btn-danger btn-delete-contact"><i class="fas fa-minus"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?> --> */
+        
+                        $('#modalEditPeople').modal('show');
                     }
-
-                } else {
-                    $("#modalEditPeople #physicalLegalEdit").show();
-                    $("#modalEditPeople #divCompanyNameEdit").show();
-                    $("#modalEditPeople #divFantasyNameEdit").show();
-                    $("#modalEditPeople #divNumberEdit").show();
-
-                    $('#modalEditPeople #cnpjEdit').val(dadosJson.pess_cpfcnpj);
-                    $('#modalEditPeople #companyNameEdit').val(dadosJson.pess_razao_social);
-                    $('#modalEditPeople #fantasyNameEdit').val(dadosJson.pess_nome_fantasia);
-                    $('#modalEditPeople #cepEdit').val(dadosJson.pess_cep);
-                    $('#modalEditPeople #logradouroEdit').val(dadosJson.pess_logradouro);
-                    $('#modalEditPeople #bairroEdit').val(dadosJson.pess_bairro);
-                    $('#modalEditPeople #localidadeEdit').val(dadosJson.pess_cidade);
-                    $('#modalEditPeople #ufEdit').val(dadosJson.pess_estado);
-                    $('#modalEditPeople #numberEdit').val(dadosJson.pess_log_numero);
-
-                    $("#modalEditPeople #divPhysicalPersonEdit").hide();
-                    $("#modalEditPeople #divNameEdit").hide();
-                    $("#modalEditPeople #divSurnameEdit").hide();
-                    $("#modalEditPeople #divTypeResidenceEdit").hide();
                 }
-                
-                $('#modalEditPeople #dateInsertEdit').val(dadosJson.pess_data_cadastro);
-                $('#modalEditPeople #observationEdit').val(dadosJson.pess_observacao);
-
-                /* <!-- <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                                <tr>
-                                                    <td> <?php echo $row[''] ?> </td>
-                                                    <td> <?php echo $row[''] ?> </td>
-                                                    <td> <?php echo $row[''] ?> </td>
-                                                    <td>
-                                                        <div class="btn-group btn-group-sm">
-                                                            <button type="button" name="deleteContact" class="btn btn-danger btn-delete-contact"><i class="fas fa-minus"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            <?php } ?> --> */
-
-                $('#modalEditPeople').modal('show');
-            }
+            });
         }
     });
 });

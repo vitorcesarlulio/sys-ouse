@@ -1,11 +1,5 @@
 <?php
 require_once '../app/View/login/check-login.php';
-
-include_once '../app/Model/connection-pdo.php';
-
-/* $querySelectContact = " SELECT * FROM tb_contato ";
-$searchContact = $connectionDataBase->prepare($querySelectContact);
-$searchContact->execute(); */
 ?>
 @extends('templates.default')
 
@@ -392,7 +386,7 @@ $searchContact->execute(); */
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">Contato</h3>
@@ -414,8 +408,29 @@ $searchContact->execute(); */
                                             </tr>
                                         </thead>
                                         <tbody id="tBodyTableContact">
-                                            
+                                            <?php
+                                                /* if (isset($_GET['pess_codigo'])) {} */
+                                                    $idPeople = filter_input_array(INPUT_GET, FILTER_DEFAULT);
 
+                                                    var_dump($_GET['pess_codigo']);
+
+                                                    /* include_once '../app/Model/connection-pdo.php';
+
+                                                    $querySelectContact = " SELECT * FROM tb_contatos WHERE pess_codigo=:pess_codigo ";
+                                                    $searchContact = $connectionDataBase->prepare($querySelectContact);
+                                                    $searchContact->bindParam(":pess_codigo", $idPeople);
+                                                    $searchContact->execute(); */
+                                                
+
+                                                /* foreach ($searchContact->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                                    <tr>
+                                                        <td>  <?php echo $row['cont_tipo'] ?> </td>
+                                                        <td>  <?php echo $row['cont_responsavel'] ?> </td>
+                                                        <td>  <?php echo $row['cont_contato'] ?> </td>
+                                                        
+                                                    </tr>
+                                                <?php }  */?> 
+                                            
                                             <tr>
                                                 <td>
                                                     <select class="form-control" name="selectTypeContact" id="selectTypeContact">
@@ -439,7 +454,7 @@ $searchContact->execute(); */
                                     </table>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="submit" class="btn btn-success" id="btnEditPeople">Salvar</button>
@@ -465,8 +480,12 @@ $searchContact->execute(); */
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
 <script>
-    $(function() { $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
-    $('[data-mask]').inputmask()});
+    $(function() {
+        $('#datemask').inputmask('dd/mm/yyyy', {
+            'placeholder': 'dd/mm/yyyy'
+        });
+        $('[data-mask]').inputmask()
+    });
     $('.select2').select2();
 </script>
 <script src="<?= DIRJS . 'search-zip/search-zip.js' ?>"></script>

@@ -30,7 +30,7 @@ if ($dataUserCheck['usu_permissoes'] === $_SESSION['permition']) {
         unset($_SESSION[$key]);
     }
     session_destroy();
-    echo " <script> alert('Sua permissao foi alterada. Faça login novamente!'); window.location.href='/'; </script> ";
+    echo " <script> alert('Sua permissão foi alterada. Faça login novamente!'); window.location.href='/'; </script> ";
 }
 
 # Verrificando se os dados do banco sao iguais as sessions, se eu trocar o status dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout

@@ -197,10 +197,20 @@ $(function () {
             //Rua do Condominio
             if (info.event.extendedProps.streetCondominium != "") {
                 $('#modalViewEvent #streetCondominium').text(info.event.extendedProps.streetCondominium);
+            
+                $("#modalViewEvent #optionCondominiumEdit").prop("checked", true);
+                $('#modalViewEvent #divNumberEdit').show();
+                $('#modalViewEvent #divStreetCondominiumEdit').show();
+                $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
+                $('#modalViewEvent #streetCondominiumEdit').val(info.event.extendedProps.streetCondominium);
             } else {
                 $("#modalViewEvent #dtStreetCondominium").hide();
                 $("#modalViewEvent #streetCondominium").hide();
+
+                $('#modalViewEvent #divStreetCondominiumEdit').hide();
+                $('#modalViewEvent #divNumberEdit').hide();
             }
+                
 
             //Observação
             if (info.event.extendedProps.observation != "") {
@@ -213,66 +223,62 @@ $(function () {
             //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
             //Editar
-            $('#modalViewEvent #id').val(info.event.id);
+            $('#modalViewEvent #idEvent').val(info.event.id);
+            $('#modalViewEvent #idBudget').val(info.event.extendedProps.idBudget);
+            if (info.event.title === "Realizar Orçamento") {
+                //$('#modalViewEvent #divClientEdit').val(info.event.extendedProps.name + " " + info.event.extendedProps.surname);
+                $('#modalViewEvent #optionVoltarObra').hide();
+                $('#modalViewEvent #optionInicioObra').hide();
+            } else if (info.event.title === "Voltar na Obra") {
+                $('#modalViewEvent #optionRealizarOrcamento').hide();
+                $('#modalViewEvent #optionInicioObra').hide();
+            } else {
+                $('#modalViewEvent #optionRealizarOrcamento').hide();
+                $('#modalViewEvent #optionVoltarObra').hide();
+            }
+
             $('#modalViewEvent #selectionTitleEdit').val(info.event.title);
             $('#modalViewEvent #startDateEdit').val(info.event.start.toLocaleString());
             $('#modalViewEvent #startTimeEdit').val(info.event.extendedProps.hourStart);
             $('#modalViewEvent #endTimeEdit').val(info.event.extendedProps.hourEnd);
 
-            if (info.event.title == "Voltar na Obra" || info.event.title == "Início de Obra") {
-                $('#modalViewEvent #divClientEdit').show();
-                $('#modalViewEvent #divClientEdit').val(info.event.extendedProps.name + " " + info.event.extendedProps.surname);
-            } else {
-                $('#modalViewEvent #divClientEdit').hide();
-            }
-
-            /*
             $('#modalViewEvent #nameEdit').val(info.event.extendedProps.name);
             $('#modalViewEvent #surnameEdit').val(info.event.extendedProps.surname);
             $('#modalViewEvent #cellphoneEdit').val(info.event.extendedProps.cellphone);
             $('#modalViewEvent #telephoneEdit').val(info.event.extendedProps.telephone);
             $('#modalViewEvent #emailEdit').val(info.event.extendedProps.email);
-            $('#modalViewEvent #cep').val(info.event.extendedProps.cep);
-            $('#modalViewEvent #logradouro').val(info.event.extendedProps.logradouro);
-            $('#modalViewEvent #bairro').val(info.event.extendedProps.bairro);
-            $('#modalViewEvent #localidade').val(info.event.extendedProps.localidade);
-            $('#modalViewEvent #uf').val(info.event.extendedProps.uf);
-        
-            /*Numero
+
+            $('#modalViewEvent #cepEdit').val(info.event.extendedProps.cep);
+            $('#modalViewEvent #logradouroEdit').val(info.event.extendedProps.logradouro);
+            $('#modalViewEvent #bairroEdit').val(info.event.extendedProps.bairro);
+            $('#modalViewEvent #localidadeEdit').val(info.event.extendedProps.localidade);
+            $('#modalViewEvent #ufEdit').val(info.event.extendedProps.uf);
+
+            //Numero
             if (info.event.extendedProps.number != "") {
-                $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
                 $("#modalViewEvent #optionHomeEdit").prop("checked", true);
-            } else {
-                $('#modalViewEvent #divNumberEdit').hide();
-            }
+                $('#modalViewEvent #divNumberEdit').show();
+                $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
+            } else { $('#modalViewEvent #divNumberEdit').hide(); }
         
             //Edificio
             if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
+                $("#modalViewEvent #optionBuildingEdit").prop("checked", true);
+                $('#modalViewEvent #divEdificeEdit').show();
+                $('#modalViewEvent #divBlockEdit').show();
+                $('#modalViewEvent #divApartmentEdit').show();
                 $('#modalViewEvent #edificeEdit').val(info.event.extendedProps.edifice);
                 $('#modalViewEvent #blockEdit').val(info.event.extendedProps.block);
                 $('#modalViewEvent #apartmentEdit').val(info.event.extendedProps.apartment);
-                $("#modalViewEvent #optionBuildingEdit").prop("checked", true);
             } else {
                 $('#modalViewEvent #divEdificeEdit').hide();
                 $('#modalViewEvent #divBlockEdit').hide();
                 $('#modalViewEvent #divApartmentEdit').hide();
             }
-        
-            //Condominio
-            if (info.event.extendedProps.number && info.event.extendedProps.streetCondominium != "") {
-                $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
-                $('#modalViewEvent #streetCondominiumEdit').val(info.event.extendedProps.streetCondominium);
-                $("#modalViewEvent #optionCondominiumEdit").prop("checked", true);
-            } else {
-                $('#modalViewEvent #divStreetCondominiumEdit').hide();
-                $('#modalViewEvent #divNumberEdit').hide();
-            }
-        
-            if (info.event.extendedProps.observation != "") {
-                $('#modalViewEvent #observationEdit').val(info.event.extendedProps.observation);
-            }else{
-                $('#modalViewEvent #divObservationEdit').hide();
-            } */
+            
+
+            
+            $('#modalViewEvent #observationEdit').val(info.event.extendedProps.observation);
 
             //Momento do dia (bom dia, boa tarde...)
             varDate = new Date();
@@ -294,7 +300,6 @@ $(function () {
                 var msgWhatsapp = momentDay + info.event.extendedProps.name + " " + info.event.extendedProps.surname + "! %0AVocê agendou uma visita para o *Dia:* " + info.event.extendedProps.dateStart + " das " + info.event.extendedProps.hourStart + " às " + info.event.extendedProps.hourEnd +
                     " no *Endereço:* " + adressJoin + ". Até mais, Gesso Cidade Nova.";
             }
-
             $("#btnWpp").attr("href", "https://api.whatsapp.com/send?phone=+55" + info.event.extendedProps.cellphone + "&text=" + msgWhatsapp);
 
 
@@ -323,7 +328,6 @@ $(function () {
 
 /* Ações do botão Editar e Canclar */
 $(document).ready(function () {
-
     //Botão Cancelar
     $('.btn-edit-event').on("click", function () {
         $('.divViewEvent').slideToggle();
@@ -436,24 +440,70 @@ function optionTypeResidenceRegister() {
     }
 }
 
-//Editar
+function clearCep() {
+    $('#modalViewEvent #logradouroEdit').val("");
+    $('#modalViewEvent #bairroEdit').val("");
+    $('#modalViewEvent #localidadeEdit').val("");
+    $('#modalViewEvent #ufEdit').val("");
+}
+function callbackCep(conteudo) {
+    if (!("erro" in conteudo)) {
+        $('#modalViewEvent #logradouroEdit').val(conteudo.logradouro);
+        $('#modalViewEvent #bairroEdit').val(conteudo.bairro);
+        $('#modalViewEvent #localidadeEdit').val(conteudo.localidade);
+        $('#modalViewEvent #ufEdit').val(conteudo.uf);
+    }
+    else { clearCep(); alert("CEP não encontrado."); }
+}
+function pesquisaCep(valor) {
+    var cep = valor.replace(/\D/g, '');
+    if (cep != "") {
+        var validaCep = /^[0-9]{8}$/;
+        if (validaCep.test(cep)) {
+            var script = document.createElement('script');
+            script.src = '//viacep.com.br/ws/' + cep + '/json/?callback=callbackCep';
+            document.body.appendChild(script);
+        }
+        else { clearCep(); alert("Formato de CEP inválido."); }
+    }
+    else { clearCep(); alert("Informe o CEP."); }
+};
+
 /* Função para mostrar ou ocultar campo de acordo com seleção (Tipo de Residência) - EDITAR */
 function optionTypeResidenceEdit() {
     var optionHomeEdit = document.getElementById("optionHomeEdit").checked;
     var optionCondominiumEdit = document.getElementById("optionCondominiumEdit").checked;
     if (optionHomeEdit) {
+        $('#edificeEdit').val("");
+        $('#blockEdit').val("");
+        $('#apartmentEdit').val("");
+        $('#streetCondominiumEdit').val("");
+        $('#numberEdit').val("");
+
         $("#divEdificeEdit").hide();
         $("#divBlockEdit").hide();
         $("#divApartmentEdit").hide();
         $("#divStreetCondominiumEdit").hide();
         $("#divNumberEdit").show();
     } else if (optionCondominiumEdit) {
+        $('#edificeEdit').val("");
+        $('#blockEdit').val("");
+        $('#apartmentEdit').val("");
+        $('#streetCondominiumEdit').val("");
+        $('#numberEdit').val("");
+
         $("#divEdificeEdit").hide();
         $("#divBlockEdit").hide();
         $("#divApartmentEdit").hide();
         $("#divStreetCondominiumEdit").show();
         $("#divNumberEdit").show();
     } else {
+        $('#edificeEdit').val("");
+        $('#blockEdit').val("");
+        $('#apartmentEdit').val("");
+        $('#streetCondominiumEdit').val("");
+        $('#numberEdit').val("");
+
         $("#divEdificeEdit").show();
         $("#divBlockEdit").show();
         $("#divApartmentEdit").show();

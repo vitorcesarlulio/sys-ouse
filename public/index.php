@@ -13,6 +13,10 @@ $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
  * Login
  */
 $route->get('/', function () {
+    #Verifico se ja esta logado e direciono para home
+/* if (isset($_SESSION['login']) && isset($_SESSION['name']) && isset($_SESSION['canary']) && isset($_SESSION['name']) && isset($_SESSION['loginUser']) && isset($_SESSION['permition'])) {
+    echo " <script> window.location.href='/home'; </script> ";
+} */
     include '../app/View/login/login.php';
 });
 
@@ -125,6 +129,15 @@ $route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
     $route->post('/editar', function () {
         include '../app/View/people/edit-people.php';
     });
+    $route->post('/listar-contatos', function () {
+        include '../app/View/people/list-people-contact.php';
+    });
+    $route->post('/deletar-contato', function () {
+        include '../app/View/people/delete-contact.php';
+    });
+    $route->post('/cadastrar-contato', function () {
+        include '../app/View/people/register-contact.php';
+    });
 
     $route->post('/apagar', function () {
         include '../app/View/people/delete-people.php';
@@ -165,9 +178,9 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
     });
 });
 
-# TESTES
+# Carregar
 $route->get('/carregar', function () {
-    include '../app/View/cadastro/oi.html';
+    include '../app/View/templates/loading.php';
 });
 
 $route->on();

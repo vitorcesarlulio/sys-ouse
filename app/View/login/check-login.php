@@ -23,25 +23,6 @@ if ($countRow === 0) {
     header("Location: /");
 }
 
-# Verrificando se os dados do banco sao iguais as sessions, se eu trocar a permissao dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
-if ($dataUserCheck['usu_permissoes'] === $_SESSION['permition']) {
-}else{
-    foreach (array_keys($_SESSION) as $key) {
-        unset($_SESSION[$key]);
-    }
-    session_destroy();
-    echo " <script> alert('Sua permissão foi alterada. Faça login novamente!'); window.location.href='/'; </script> ";
-}
-
-# Verrificando se os dados do banco sao iguais as sessions, se eu trocar o status dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
-if ($dataUserCheck['usu_status'] === "A") {
-}else{
-    foreach (array_keys($_SESSION) as $key) {
-        unset($_SESSION[$key]);
-    }
-    session_destroy();
-    echo " <script> alert('Seu status foi alterado. Faça login novamente!'); window.location.href='/'; </script> ";
-}
 
 # Pegando IP do usuário
 $ipAdressUser = '';
@@ -100,4 +81,24 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['permition']) || !isset($_SES
         echo " <script> alert('Sua sessão expirou. Faça login novamente!'); window.location.href='/'; </script> ";
 exit;
     }
+}
+
+# Verrificando se os dados do banco sao iguais as sessions, se eu trocar a permissao dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
+if ($dataUserCheck['usu_permissoes'] === $_SESSION['permition']) {
+}else{
+    foreach (array_keys($_SESSION) as $key) {
+        unset($_SESSION[$key]);
+    }
+    session_destroy();
+    echo " <script> alert('Sua permissão foi alterada. Faça login novamente!'); window.location.href='/'; </script> ";
+}
+
+# Verrificando se os dados do banco sao iguais as sessions, se eu trocar o status dele qaundo ele carrega a pagina ja faço ele fazer login dnv, se nao ele tem acesso ao sistema enquanto nao fizer logout
+if ($dataUserCheck['usu_status'] === "A") {
+}else{
+    foreach (array_keys($_SESSION) as $key) {
+        unset($_SESSION[$key]);
+    }
+    session_destroy();
+    echo " <script> alert('Seu status foi alterado. Faça login novamente!'); window.location.href='/'; </script> ";
 }

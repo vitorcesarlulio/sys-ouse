@@ -56,56 +56,93 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="author" content="Ouse Inteligência em Marcas">
     <title>Sys Ouse | Log in</title>
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= DIRPLUGINS . 'fontawesome-free/css/all.min.css' ?>">
-    <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- icheck bootstrap -->
     <link rel="stylesheet" href="<?= DIRPLUGINS . 'icheck-bootstrap/icheck-bootstrap.min.css' ?>">
-    <!-- Theme style -->
     <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.min.css' ?>">
-    <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
+    <style>
+        .login-page {
+            background-image: url("<?= DIRIMG . 'image-rio-janeiro-ouse-inteligencia-em-marcas.jpg' ?>");
+            max-width: 100%;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        .btn-primary {
+            background-color: #FE5000;
+            border-color: #FE5000;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #F23207;
+            border-color: #F23207;
+            color: #fff;
+        }
+
+        .btn.disabled, .btn:disabled{
+            background-color: #F23207;
+            border-color: #F23207;
+            color: #fff;
+        }
+
+        .icheck-primary>input:first-child:checked+input[type=hidden]+label::before,
+        .icheck-primary>input:first-child:checked+label::before {
+            background-color: #FE5000;
+            border-color: #FE5000;
+        }
+
+        .login-card-body,
+        .register-card-body {
+            color: #000;
+        }
+
+        /*         @font-face {
+            font-family: 'montserratmedium';
+            src: url("<?= DIRIMG . 'montserrat-medium-webfont.woff2' ?>") format('woff2'),
+                url("<?= DIRIMG . 'montserrat-medium-webfont.woff' ?>") format('woff');
+            font-weight: normal;
+            font-style: normal;
+
+        }
+
+        * {
+            font-family: 'montserratmedium';
+        } */
+    </style>
 </head>
 
 <body class="hold-transition login-page">
     <div class="login-box">
-        <div class="login-logo"><b>Admin</b>LTE</div>
-        <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
+                <div class="login-logo"><img src="<?= DIRIMG . 'logotipo-responsivo-ouse-inteligencia-em-marcas-200x37.png' ?>" value="Logotipo Ouse - inteligência em Marcas"></div>
                 <p class="login-box-msg">Faça login para iniciar sua sessão</p>
-
                 <form id="formLogin" method="POST" autocomplete="off">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Usuário" name="userLogin" id="userLogin" value="<?= $loginRemember ?>"> <!--autocomplete="username"-->
+                        <input type="text" class="form-control" placeholder="Usuário" name="userLogin" id="userLogin" value="<?= $loginRemember ?>">
                         <div class="input-group-append">
                             <div class="input-group-text">
                             </div>
                         </div>
                     </div>
-
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Senha" name="passwordLogin" id="passwordLogin" value="<?= $passwordRemember ?>"> <!--autocomplete="current-password"-->
+                        <input type="password" class="form-control" placeholder="Senha" name="passwordLogin" id="passwordLogin" value="<?= $passwordRemember ?>">
                         <div class="input-group-append">
                             <div class="input-group-text" id="divShowPassword">
-                                <span class="far fa-eye" onclick="myFunction()" style="cursor: pointer;" id="showPassword">
+                                <span class="far fa-eye" onclick="ShowHidePassword()" style="cursor: pointer;" id="showPassword">
                             </div>
                         </div>
                     </div>
-
-                   
-
                     <div id="divErrors">
                         <?php
                         if ($block === true) {
                             echo 'Tentativas excedidas, tente novamente daqui 20 minutos ou entre em contato com o Administrador do sistema!';
                         } ?>
                     </div>
-
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
@@ -123,37 +160,28 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
             </div>
         </div>
     </div>
-
-    <!-- PADRÃO jQuery -->
     <script src="<?= DIRPLUGINS . 'jquery/jquery.min.js' ?>"></script>
-    <!-- Bootstrap 4 (nao sei o que é) -->
     <script src="<?= DIRPLUGINS . 'bootstrap/js/bootstrap.bundle.min.js' ?>"></script>
-    <!-- AdminLTE App (nao sei o que é)-->
     <script src="<?= DIRJS . 'adminlte.min.js' ?>"></script>
-    <!-- JQuery validation -->
     <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
     <script src="<?= DIRJS . 'login/login.js' ?>"></script>
-    <!-- Alerta de cadastro - Toastr Examples -->
     <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
     <script>
-
-        function myFunction() {
+        function ShowHidePassword() {
             var x = document.getElementById("passwordLogin");
             var shwoPassword = document.getElementById("showPassword");
             if (x.type === "password") {
                 x.type = "text";
                 $('#showPassword').hide();
-                $('#divShowPassword').html('<span class="far fa-eye-slash" onclick="myFunction()" style="cursor: pointer;" id="showPassword">');
+                $('#divShowPassword').html('<span class="far fa-eye-slash" onclick="ShowHidePassword()" style="cursor: pointer;" id="showPassword">');
             } else {
                 x.type = "password";
                 $('#showPassword').hide();
-                $('#divShowPassword').html('<span class="far fa-eye" onclick="myFunction()" style="cursor: pointer;" id="showPassword">');
+                $('#divShowPassword').html('<span class="far fa-eye" onclick="ShowHidePassword()" style="cursor: pointer;" id="showPassword">');
             }
         }
-        
     </script>
-
 </body>
 
 </html>

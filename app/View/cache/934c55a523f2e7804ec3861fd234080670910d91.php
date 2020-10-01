@@ -138,9 +138,9 @@ $searchClientBudget->execute();
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-5" id="divStartDateEdit">
+                                <div class="col-sm-6" id="divStartDateEdit">
                                     <div class="form-group">
-                                        <label>Data Inicial</label>
+                                        <label>Data Inicial</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -153,7 +153,7 @@ $searchClientBudget->execute();
                                 </div>
                                 <div class="col-sm-3" id="divStartTimeEdit">
                                     <div class="form-group">
-                                        <label>Hora Inicial</label>
+                                        <label>Hora Inicial</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <div class="input-group">
                                             <input type="time" name="startTimeEdit" id="startTimeEdit" class="form-control" min="08:00" max="17:00">
                                         </div>
@@ -161,7 +161,7 @@ $searchClientBudget->execute();
                                 </div>
                                 <div class="col-sm-3" id="divEndTimeEdit">
                                     <div class="form-group">
-                                        <label>Hora Final</label>
+                                        <label>Hora Final</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <div class="input-group">
                                             <input type="time" name="endTimeEdit" id="endTimeEdit" class="form-control" min="08:00" max="17:00">
                                         </div>
@@ -169,13 +169,13 @@ $searchClientBudget->execute();
                                 </div>
                                 <div class="col-sm-6" id="divNameEdit">
                                     <div class="form-group">
-                                        <label>Nome</label>
+                                        <label>Nome</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="nameEdit" id="nameEdit" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-6" id="divSurnameEdit">
                                     <div class="form-group">
-                                        <label>Sobrenome</label>
+                                        <label>Sobrenome</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="surnameEdit" id="surnameEdit" class="form-control">
                                     </div>
                                 </div>
@@ -199,38 +199,38 @@ $searchClientBudget->execute();
                                 </div>
                                 <div class="col-sm-6" id="divCepEdit">
                                     <div class="form-group">
-                                        <label>CEP</label>
+                                        <label>CEP</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
                                         <input type="tel" class="form-control" name="cepEdit" id="cepEdit" data-inputmask="'mask': ['99999-999']" data-mask="" value="13" onblur="pesquisaCep(this.value);">
                                     </div>
                                 </div>
                                 <div class="col-sm-6" id="divStreetEdit">
                                     <div class="form-group">
-                                        <label>Logradouro</label>
+                                        <label>Logradouro</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" class="form-control" name="logradouroEdit" id="logradouroEdit" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
                                     </div>
                                 </div>
                                 <div class="col-sm-6" id="divNeighBorhoodEdit">
                                     <div class="form-group">
-                                        <label>Bairro</label>
+                                        <label>Bairro</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="bairroEdit" id="bairroEdit" class="form-control" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
                                     </div>
                                 </div>
                                 <div class="col-sm-6" id="divCityEdit">
                                     <div class="form-group">
-                                        <label>Cidade</label>
+                                        <label>Cidade</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="localidadeEdit" id="localidadeEdit" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                                     </div>
                                 </div>
                                 <div class="col-sm-6" id="divStateEdit">
                                     <div class="form-group">
-                                        <label>Estado</label>
+                                        <label>Estado</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="ufEdit" id="ufEdit" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                                     </div>
                                 </div>
                                 <div class="col-sm-12" id="divTypeResidenceEdit">
                                     <div class="form-group">
-                                        <label>Tipo de Residência</label>
+                                        <label>Tipo de Residência</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" id="optionHomeEdit" name="typeResidence" onclick="optionTypeResidenceEdit();">
                                             <label for="optionHomeEdit" class="custom-control-label">Casa</label>
@@ -245,33 +245,33 @@ $searchClientBudget->execute();
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-2" id="divNumberEdit" style="display:none">
+                                <div class="col-sm-3" id="divNumberEdit" style="display:none">
                                     <div class="form-group">
-                                        <label>Número</label>
+                                        <label>Número</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="numberEdit" id="numberEdit" class="form-control">
                                     </div>
                                 </div>
                                 <div id="divEdificeEdit" class="col-sm-7" style="display:none">
                                     <div class="form-group">
-                                        <label>Edifício</label>
+                                        <label>Edifício</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="edificeEdit" id="edificeEdit" class="form-control">
                                     </div>
                                 </div>
                                 <div id="divBlockEdit" class="col-sm-2" style="display:none">
                                     <div class="form-group">
-                                        <label>Bloco</label>
+                                        <label>Bloco</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="blockEdit" id="blockEdit" class="form-control">
                                     </div>
                                 </div>
                                 <div id="divApartmentEdit" class="col-sm-3" style="display:none">
                                     <div class="form-group">
-                                        <label>Apartamento</label>
+                                        <label>Apto.</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="apartmentEdit" id="apartmentEdit" class="form-control">
                                     </div>
                                 </div>
                                 <div id="divStreetCondominiumEdit" class="col-sm-5" style="display:none">
                                     <div class="form-group">
-                                        <label>Rua do Condomínio</label>
+                                        <label>Rua do Condomínio</label> <label style="color: red; font-size: 12px;"> * </label>
                                         <input type="text" name="streetCondominiumEdit" id="streetCondominiumEdit" class="form-control">
                                     </div>
                                 </div>
@@ -330,9 +330,9 @@ $searchClientBudget->execute();
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-5" id="divStartDateRegister">
+                        <div class="col-sm-6" id="divStartDateRegister">
                             <div class="form-group">
-                                <label>Data Inicial</label>
+                                <label>Data Inicial</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -345,7 +345,7 @@ $searchClientBudget->execute();
                         </div>
                         <div class="col-sm-3" id="divStartTimeRegister">
                             <div class="form-group">
-                                <label>Hora Inicial</label>
+                                <label>Hora Inicial</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <div class="input-group">
                                     <input type="time" name="startTimeRegister" id="startTimeRegister" class="form-control" min="08:00" max="17:00">
                                 </div>
@@ -353,7 +353,7 @@ $searchClientBudget->execute();
                         </div>
                         <div class="col-sm-3" id="divEndTimeRegister">
                             <div class="form-group">
-                                <label>Hora Final</label>
+                                <label>Hora Final</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <div class="input-group">
                                     <input type="time" name="endTimeRegister" id="endTimeRegister" class="form-control" min="08:00" max="17:00">
                                 </div>
@@ -361,68 +361,68 @@ $searchClientBudget->execute();
                         </div>
                         <div class="col-sm-6" id="divNameRegister">
                             <div class="form-group">
-                                <label>Nome</label>
+                                <label>Nome</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" autofocus name="nameRegister" id="nameRegister" class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-6" id="divSurnameRegister">
                             <div class="form-group">
-                                <label>Sobrenome</label>
+                                <label>Sobrenome</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="surnameRegister" id="surnameRegister" class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-6" id="divCellphoneRegister">
                             <div class="form-group">
                                 <label>Celular</label>
-                                <input type="tel" class="form-control contact" name="cellphoneRegister" id="cellphoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="">
+                                <input type="tel" class="form-control contact" name="cellphoneRegister" id="cellphoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" placeholder="Ex.: (xx) xxxxx-xxxx"> 
                             </div>
                         </div>
                         <div class="col-sm-6" id="divTelephoneRegister">
                             <div class="form-group">
-                                <label>Telefone</label>
-                                <input type="tel" class="form-control contact" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="">
+                                <label>Telefone</label> 
+                                <input type="tel" class="form-control contact" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" placeholder="Ex.: (xx) xxxx-xxxx">
                             </div>
                         </div>
                         <div class="col-sm-6" id="divEmaileRegister">
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" class="form-control" name="emailRegister" id="emailRegister">
+                                <input type="email" class="form-control" name="emailRegister" id="emailRegister" placeholder="Ex.: email@email.com">
                             </div>
                         </div>
                         <div class="col-sm-6" id="divCepRegister">
                             <div class="form-group">
-                                <label>CEP</label>
+                                <label>CEP</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
                                 <input type="tel" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" value="13">
                             </div>
                         </div>
                         <div class="col-sm-6" id="divStreetRegister">
                             <div class="form-group">
-                                <label>Logradouro</label>
+                                <label>Logradouro</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" class="form-control" name="logradouro" id="logradouro" style="cursor: not-allowed;" readonly=“true” readonly=“true”> <!-- ou readonly="readonly"-->
                             </div>
                         </div>
                         <div class="col-sm-6" id="divNeighBorhoodRegister">
                             <div class="form-group">
-                                <label>Bairro</label>
+                                <label>Bairro</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="bairro" id="bairro" class="form-control" style="cursor: not-allowed;" readonly=“true” readonly=“true”>
                             </div>
                         </div>
                         <div class="col-sm-6" id="divCityRegister">
                             <div class="form-group">
-                                <label>Cidade</label>
+                                <label>Cidade</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="localidade" id="localidade" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                             </div>
                         </div>
                         <div class="col-sm-6" id="divStateRegister">
                             <div class="form-group">
-                                <label>Estado</label>
+                                <label>Estado</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="uf" id="uf" class="form-control" style="cursor: not-allowed;" readonly=“true”>
                             </div>
                         </div>
                         <div class="col-sm-12" id="divTypeResidenceRegister">
                             <div class="form-group">
-                                <label>Tipo de Residência</label>
+                                <label>Tipo de Residência</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <div class="custom-control custom-radio">
                                     <input class="custom-control-input" type="radio" id="optionHomeRegister" name="typeResidence" onclick="optionTypeResidenceRegister();">
                                     <label for="optionHomeRegister" class="custom-control-label">Casa</label>
@@ -439,37 +439,37 @@ $searchClientBudget->execute();
                         </div>
                         <div id="divStreetCondominiumRegister" class="col-sm-5" style="display:none">
                             <div class="form-group">
-                                <label>Rua do Condomínio</label>
+                                <label>Rua do Condomínio</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="streetCondominiumRegister" id="streetCondominiumRegister" class="form-control">
                             </div>
                         </div>
-                        <div id="divNumberRegister" class="col-sm-2" style="display:none">
+                        <div id="divNumberRegister" class="col-sm-3" style="display:none">
                             <div class="form-group">
-                                <label>Número</label>
+                                <label>Número</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="numberRegister" id="numberRegister" class="form-control">
                             </div>
                         </div>
                         <div id="divEdificeRegister" class="col-sm-7" style="display:none">
                             <div class="form-group">
-                                <label>Edifício</label>
+                                <label>Edifício</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="edificeRegister" id="edificeRegister" class="form-control">
                             </div>
                         </div>
                         <div id="divBlockRegister" class="col-sm-2" style="display:none">
                             <div class="form-group">
-                                <label>Bloco</label>
+                                <label>Bloco</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="blockRegister" id="blockRegister" class="form-control">
                             </div>
                         </div>
                         <div id="divApartmentRegister" class="col-sm-3" style="display:none">
                             <div class="form-group">
-                                <label>Apartamento</label>
+                                <label>Apto.</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <input type="text" name="apartmentRegister" id="apartmentRegister" class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-12" id="divClientRegister" style="display:none;">
                             <div class="form-group">
-                                <label>Cliente:</label>
+                                <label>Cliente:</label> <label style="color: red; font-size: 12px;"> * </label>
                                 <select class="form-control select2" name="clientRegister" id="clientRegister" style="width: 100%;">
                                     <?php foreach ($searchClientBudget->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
                                         <option value="<?= $row['orca_numero'] ?>">

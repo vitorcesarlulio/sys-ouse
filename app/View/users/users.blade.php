@@ -146,7 +146,7 @@ $searchUser->execute();
                 </div>
                 <div class="card-body">
                     <table id="listUsers" class="table table-hover">
-                        <!--table table-bordered table-striped dataTable dtr-inline-->
+                        <!--table table-bordered table-striped dataTable dtr-inline ou  table table-striped-->
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -189,26 +189,26 @@ $searchUser->execute();
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Nome:</label>
+                                    <label>Nome:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="nameUserRegister" id="nameUserRegister" class="form-control" placeholder="Entre com o Nome" autofocus>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Sobrenome:</label>
+                                    <label>Sobrenome:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="surnameUserRegister" id="surnameUserRegister" class="form-control" placeholder="Entre com o Sobrenome">
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Login:</label>
+                                    <label>Login:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" autofocus name="loginUserRegister" id="loginUserRegister" class="form-control" placeholder="Entre com o Login" onblur="findLogin();">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Senha:</label>
+                                    <label>Senha:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="input-group">
                                         <input type="password" name="passwordUserRegister" id="passwordUserRegister" class="form-control" placeholder="Entre com a Senha" autocomplete="new-password">
                                         <div class="input-group-prepend">
@@ -222,7 +222,7 @@ $searchUser->execute();
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Confirmar Senha:</label>
+                                    <label>Confirmar Senha:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="input-group">
                                         <input type="password" name="confirmationPasswordRegister" id="confirmationPasswordRegister" class="form-control" placeholder="Confirmação da Senha" autocomplete="new-password">
                                         <div class="input-group-prepend">
@@ -246,7 +246,7 @@ $searchUser->execute();
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Permissões:</label>
+                                    <label>Permissões:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-secondary active focus" id="divPermitionUserRegister">
                                             <input type="radio" name="permitionUserRegister" id="permitionUserRegister" checked value="user"> Usuário
@@ -260,7 +260,7 @@ $searchUser->execute();
 
                             <div class="col-sm-5">
                                 <div class="form-group">
-                                    <label>Status:</label>
+                                    <label>Status:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-secondary active focus" id="divStatusActiveUserRegister">
                                             <input type="radio" name="statusActiveUserRegister" id="statusActiveUserRegister" checked value="A"> Ativo
@@ -301,26 +301,26 @@ $searchUser->execute();
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Nome:</label>
+                                    <label>Nome:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" autofocus name="nameUserEdit" id="nameUserEdit" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Sobrenome:</label>
+                                    <label>Sobrenome:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="surnameUserEdit" id="surnameUserEdit" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Login:</label>
+                                    <label>Login:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="loginUserEdit" id="loginUserEdit" class="form-control" disabled style="cursor: no-drop;">
                                 </div>
                             </div>
 
                             <div class="col-sm-6" id="divPasswordUserEdit">
                                 <div class="form-group">
-                                    <label>Senha:</label>
+                                    <label>Senha:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="input-group">
                                         <input type="password" name="passwordUserEdit" id="passwordUserEdit" class="form-control" autocomplete="new-password">
                                         <div class="input-group-prepend">
@@ -333,7 +333,7 @@ $searchUser->execute();
                             </div>
                             <div class="col-sm-6" id="divConfirmationPasswordEdit">
                                 <div class="form-group">
-                                    <label>Confirmar Senha:</label>
+                                    <label>Confirmar Senha:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="input-group">
                                         <input type="password" name="confirmationPasswordEdit" id="confirmationPasswordEdit" class="form-control" autocomplete="new-password">
                                         <div class="input-group-prepend">
@@ -357,7 +357,7 @@ $searchUser->execute();
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Permissões:</label>
+                                    <label>Permissões:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-secondary" id="labelUserPermition">
                                             <input type="radio" name="permitionUserEdit" id="permitionUserEdit" value="user"> Usuário
@@ -371,7 +371,7 @@ $searchUser->execute();
 
                             <div class="col-sm-5">
                                 <div class="form-group">
-                                    <label>Status:</label>
+                                    <label>Status:</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-secondary" id="labelUserStatusActive">
                                             <input type="radio" name="statusActiveUserEdit" id="statusActiveUserEdit" value="A"> Ativo

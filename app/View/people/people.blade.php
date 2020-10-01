@@ -43,9 +43,38 @@ require_once '../app/View/login/check-login.php';
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <form role="form" id="formFiltersUsers" autocomplete="off" enctype="multipart/form-data">
+        <form role="form" id="formFiltersPeople" autocomplete="off" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Data de:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" class="form-control" name="startDate" id="startDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Até:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" class="form-control" name="endDate" id="endDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Descrição do Relatório</label>
+                            <input type="text" name="descriptionReport" id="descriptionReport" class="form-control">
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -66,22 +95,22 @@ require_once '../app/View/login/check-login.php';
                     <table id="listPeople" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
+                                <th>Nome/Razão Social</th>
+                                <th>CPF/CNPJ</th>
+                                <th>Endereço</th>
+                                <th>Cidade</th>
+                                <th>CEP</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
+                                <th>Nome/Razão Social</th>
+                                <th>CPF/CNPJ</th>
+                                <th>Endereço</th>
+                                <th>Cidade</th>
+                                <th>CEP</th>
+                                <th>Ações</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -104,7 +133,7 @@ require_once '../app/View/login/check-login.php';
                         <div class="row">
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label>Tipo de Pessoa</label>
+                                    <label>Tipo de Pessoa</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="custom-control custom-radio">
                                         <input class="custom-control-input" type="radio" id="optionPhysicalPerson" name="typePerson" onclick="selTypePerson();" checked="" value="F">
                                         <label for="optionPhysicalPerson" class="custom-control-label">Pessoa Física</label>
@@ -117,45 +146,45 @@ require_once '../app/View/login/check-login.php';
                             </div>
                             <div id="divPhysicalPerson" class="col-sm-2">
                                 <div class="form-group">
-                                    <label for="cpf">CPF</label>
-                                    <input type="text" name="cpf" class="form-control" id="cpf" autofocus data-inputmask="'mask': ['999.999.999.99']" data-mask="" placeholder="Entre com CPF" onblur="findCPF();">
+                                    <label for="cpf">CPF</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="cpf" class="form-control" id="cpf" autofocus data-inputmask="'mask': ['999.999.999.99']" data-mask="" placeholder="Ex.: xxx.xxx.xxx-xx" onblur="findCPF();">
                                 </div>
                             </div>
                             <div id="physicalLegal" class="col-sm-2" style="display: none;">
                                 <div class="form-group">
-                                    <label for="cnpj">CNPJ</label>
-                                    <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Entre com CNPJ" onblur="ckeckCnpj(this.value);">
+                                    <label for="cnpj">CNPJ</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Ex.: xx.xxx.xxx/xxxx-xx" onblur="ckeckCnpj(this.value);">
                                 </div>
                             </div>
                             <div class="col-sm-2" id="divName">
                                 <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" name="name" class="form-control" id="name" placeholder="Entre com o Nome">
+                                    <label for="name">Nome</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="name" class="form-control" id="name">
                                 </div>
                             </div>
                             <div class="col-sm-2" id="divSurname">
                                 <div class="form-group">
-                                    <label for="surname">Sobrenome</label>
-                                    <input type="text" name="surname" class="form-control" id="surname" placeholder="Entre com o Sobrenome">
+                                    <label for="surname">Sobrenome</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="surname" class="form-control" id="surname">
                                 </div>
                             </div>
                             <div class="col-sm-2" style="display:none;" id="divCompanyName">
                                 <div class="form-group">
-                                    <label>Razão Social</label>
-                                    <input type="text" name="companyName" class="form-control" id="companyName" placeholder="Entre com a Razão Social">
+                                    <label>Razão Social</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="companyName" class="form-control" id="companyName">
                                 </div>
                             </div>
                             <div class="col-sm-2" style="display:none;" id="divFantasyName">
                                 <div class="form-group">
-                                    <label>Nome Fantasia</label>
-                                    <input type="text" name="fantasyName" class="form-control" id="fantasyName" placeholder="Entre com o Nome Fantasia">
+                                    <label>Nome Fantasia</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="fantasyName" class="form-control" id="fantasyName">
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label>CEP</label>
+                                    <label>CEP</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
-                                    <input type="text" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Entre com o CEP" value="">
+                                    <input type="text" class="form-control" name="cep" id="cep" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Ex.: xxxxx-xxx" value="">
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -184,7 +213,7 @@ require_once '../app/View/login/check-login.php';
                             </div>
                             <div class="col-sm-2" id="divTypeResidence">
                                 <div class="form-group">
-                                    <label>Tipo de Residência</label>
+                                    <label>Tipo de Residência</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="custom-control custom-radio">
                                         <input class="custom-control-input" type="radio" id="optionHome" name="typeResidence" onclick="optionTypeResidence();" value="casa">
                                         <label for="optionHome" class="custom-control-label">Casa</label>
@@ -201,31 +230,31 @@ require_once '../app/View/login/check-login.php';
                             </div>
                             <div id="divStreetCondominium" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Rua do Condomínio</label>
+                                    <label>Rua do Condomínio</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="streetCondominium" id="streetCondominium" class="form-control">
                                 </div>
                             </div>
                             <div id="divNumber" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Número</label>
+                                    <label>Número</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="number" id="number" class="form-control">
                                 </div>
                             </div>
                             <div id="divEdifice" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Edifício</label>
+                                    <label>Edifício</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="edifice" id="edifice" class="form-control">
                                 </div>
                             </div>
                             <div id="divBlock" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Bloco</label>
+                                    <label>Bloco</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="block" id="block" class="form-control">
                                 </div>
                             </div>
                             <div id="divApartment" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Apartamento</label>
+                                    <label>Apartamento</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="apartment" id="apartment" class="form-control">
                                 </div>
                             </div>
@@ -238,7 +267,7 @@ require_once '../app/View/login/check-login.php';
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success btn-register-people" id="btnRegisterPeople">Cadastrar</button>
                     </div>
                 </div>
@@ -251,13 +280,13 @@ require_once '../app/View/login/check-login.php';
             <form id="formEditPeople" method="POST" novalidate="novalidate" autocomplete="off">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Editar Pessoa</h4>
+                        <h4 class="modal-title"><b>Editar Pessoa</b></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
+                        <div class="row" id="divRow">
                             <input type="hidden" name="idPeopleEdit" class="form-control" id="idPeopleEdit">
                             <div id="divPhysicalPersonEdit" class="col-sm-2">
                                 <div class="form-group">
@@ -273,33 +302,33 @@ require_once '../app/View/login/check-login.php';
                             </div>
                             <div class="col-sm-2" id="divNameEdit">
                                 <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" name="nameEdit" class="form-control" id="nameEdit" placeholder="Entre com o Nome">
+                                    <label for="name">Nome</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="nameEdit" class="form-control" id="nameEdit">
                                 </div>
                             </div>
                             <div class="col-sm-2" id="divSurnameEdit">
                                 <div class="form-group">
-                                    <label for="surnameEdit">Sobrenome</label>
-                                    <input type="text" name="surnameEdit" class="form-control" id="surnameEdit" placeholder="Entre com o Sobrenome">
+                                    <label for="surnameEdit">Sobrenome</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="surnameEdit" class="form-control" id="surnameEdit">
                                 </div>
                             </div>
                             <div class="col-sm-2" style="display:none;" id="divCompanyNameEdit">
                                 <div class="form-group">
-                                    <label>Razão Social</label>
-                                    <input type="text" name="companyNameEdit" class="form-control" id="companyNameEdit" placeholder="Entre com a Razão Social">
+                                    <label>Razão Social</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="companyNameEdit" class="form-control" id="companyNameEdit">
                                 </div>
                             </div>
                             <div class="col-sm-2" style="display:none;" id="divFantasyNameEdit">
                                 <div class="form-group">
-                                    <label>Nome Fantasia</label>
-                                    <input type="text" name="fantasyNameEdit" class="form-control" id="fantasyNameEdit" placeholder="Entre com o Nome Fantasia">
+                                    <label>Nome Fantasia</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <input type="text" name="fantasyNameEdit" class="form-control" id="fantasyNameEdit">
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label>CEP</label>
+                                    <label>CEP</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm" target="_blank"> <i class="fas fa-question-circle"></i> </a>
-                                    <input type="text" class="form-control" name="cepEdit" id="cepEdit" data-inputmask="'mask': ['99999-999']" data-mask="" placeholder="Entre com o CEP" onblur="pesquisaCep(this.value);">
+                                    <input type="text" class="form-control" name="cepEdit" id="cepEdit" data-inputmask="'mask': ['99999-999']" data-mask="" onblur="pesquisaCep(this.value);">
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -328,7 +357,7 @@ require_once '../app/View/login/check-login.php';
                             </div>
                             <div class="col-sm-2" id="divTypeResidenceEdit">
                                 <div class="form-group">
-                                    <label>Tipo de Residência</label>
+                                    <label>Tipo de Residência</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="custom-control custom-radio">
                                         <input class="custom-control-input" type="radio" id="optionHomeEdit" name="typeResidenceEdit" onclick="optionTypeResidenceEdit();" value="casa">
                                         <label for="optionHomeEdit" class="custom-control-label">Casa</label>
@@ -345,31 +374,31 @@ require_once '../app/View/login/check-login.php';
                             </div>
                             <div id="divStreetCondominiumEdit" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Rua do Condomínio</label>
+                                    <label>Rua do Condomínio</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="streetCondominiumEdit" id="streetCondominiumEdit" class="form-control">
                                 </div>
                             </div>
                             <div id="divNumberEdit" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Número</label>
+                                    <label>Número</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="numberEdit" id="numberEdit" class="form-control">
                                 </div>
                             </div>
                             <div id="divEdificeEdit" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Edifício</label>
+                                    <label>Edifício</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="edificeEdit" id="edificeEdit" class="form-control">
                                 </div>
                             </div>
                             <div id="divBlockEdit" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Bloco</label>
+                                    <label>Bloco</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="blockEdit" id="blockEdit" class="form-control">
                                 </div>
                             </div>
                             <div id="divApartmentEdit" class="col-sm-2" style="display:none">
                                 <div class="form-group">
-                                    <label>Apartamento</label>
+                                    <label>Apartamento</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="apartmentEdit" id="apartmentEdit" class="form-control">
                                 </div>
                             </div>
@@ -386,67 +415,42 @@ require_once '../app/View/login/check-login.php';
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Contato</h3>
 
+                        <div class="col-md-7">
+                            <div class="card">
+                                <div class="card-header" style="color: #fff;background-color: #4FDBFF;">
+                                    <h3 class="card-title"><b>Contatos</b></h3>
                                     <div class="card-tools">
                                         <ul class="pagination pagination-sm float-right">
-                                            <button type="button" class="btn btn-block btn-success btn-sm" id="btnNewContact">Novo</button>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="card-body p-0">
-                                    <table class="table">
+                                    <table class="table" id="tableContact">
                                         <thead>
                                             <tr>
                                                 <th>Tipo</th>
-                                                <th>Responsavel</th>
+                                                <th>Responsável</th>
                                                 <th>Contato</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tBodyTableContact">
-                                            <?php
-                                                /* if (isset($_GET['pess_codigo'])) {} */
-                                                    $idPeople = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-
-                                                    var_dump($_GET['pess_codigo']);
-
-                                                    /* include_once '../app/Model/connection-pdo.php';
-
-                                                    $querySelectContact = " SELECT * FROM tb_contatos WHERE pess_codigo=:pess_codigo ";
-                                                    $searchContact = $connectionDataBase->prepare($querySelectContact);
-                                                    $searchContact->bindParam(":pess_codigo", $idPeople);
-                                                    $searchContact->execute(); */
-                                                
-
-                                                /* foreach ($searchContact->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                                    <tr>
-                                                        <td>  <?php echo $row['cont_tipo'] ?> </td>
-                                                        <td>  <?php echo $row['cont_responsavel'] ?> </td>
-                                                        <td>  <?php echo $row['cont_contato'] ?> </td>
-                                                        
-                                                    </tr>
-                                                <?php }  */?> 
-                                            
                                             <tr>
                                                 <td>
-                                                    <select class="form-control" name="selectTypeContact" id="selectTypeContact">
-                                                        <option value="cellphone" id="optionCellphone">Celular</option>
-                                                        <option value="telephone" id="optionTelephone">Telefone</option>
-                                                        <option value="email" id="optionEmail">Email</option>
+                                                    <select class="form-control" name="selectTypeContact" id="selectTypeContact" style="width: 100px">
+                                                        <option id="optionCellphone" value="Celular"> Celular </option>
+                                                        <option id="optionTelephone" value="Telefone"> Telefone </option>
+                                                        <option id="optionEmail" value="Email"> Email </option>
                                                     </select>
                                                 </td>
-                                                <td><input type="text" name="responsibleContatec" class="form-control" id="responsibleContatec"></td>
-                                                <td id="tdCellphone"><input type="tel" class="form-control contact" name="cellphoneRegister" id="cellphoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value=""></td>
-                                                <td style="display: none;" id="tdEmail"><input type="email" class="form-control" name="emailRegister" id="emailRegister"></td>
-                                                <td style="display: none;" id="tdTelephone"><input type="tel" class="form-control contact" name="telephoneRegister" id="telephoneRegister" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value=""></td>
+                                                <td><input type="text" name="responsibleContact" class="form-control" id="responsibleContact" placeholder="Ex.: Pamela"></td>
+                                                <td id="tdCellphone"><input type="tel" class="form-control contact" name="cellphoneContact" id="cellphoneContact" data-inputmask="&quot;mask&quot;: &quot;(99) 99999-9999&quot;" data-mask="" value="" im-insert="true" placeholder="Ex.: (xx) xxxxx-xxxx"></td>
+                                                <td id="tdTelephone" style="display: none;"><input type="tel" class="form-control contact" name="telephoneContact" id="telephoneContact" data-inputmask="&quot;mask&quot;: &quot;(99) 9999-9999&quot;" data-mask="" value="" im-insert="true" placeholder="Ex.: (xx) xxxx-xxxx"></td>
+                                                <td id="tdEmail" style="display: none;"><input type="email" class="form-control" name="emailContact" id="emailContact" placeholder="Ex.: email@email.com"></td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm">
-                                                        <button type="button" name="saveContact" class="btn btn-success btn-save-contact"><i class="fas fa-save"></i></button>
-                                                        <button type="button" name="deleteLine" class="btn btn-danger btn-delete-line"><i class="fas fa-minus"></i> </button>
+                                                        <button type="button" name="saveContact" class="btn btn-success btn-save-contact" id=""><i class="fas fa-save"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -457,15 +461,37 @@ require_once '../app/View/login/check-login.php';
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success" id="btnEditPeople">Salvar</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-</div>
+
+
+    <div class="modal fade" id="modalonfirmDeletePeople" data-toggle="modal" data-target="targetModalConfirmDeletePeople">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"> Excluir </h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="ppp">Deseja deletar?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="btnConfirmDeletePeople">Sim</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 </div>
+
 @endsection
 
 @section('script')
@@ -484,8 +510,9 @@ require_once '../app/View/login/check-login.php';
         $('#datemask').inputmask('dd/mm/yyyy', {
             'placeholder': 'dd/mm/yyyy'
         });
-        $('[data-mask]').inputmask()
+        $('[data-mask]').inputmask();
     });
+
     $('.select2').select2();
 </script>
 <script src="<?= DIRJS . 'search-zip/search-zip.js' ?>"></script>

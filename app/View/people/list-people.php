@@ -2,15 +2,26 @@
 include_once '../app/Model/connection-mysqli.php';
 
 $columns = [
-   0 => 'pess_tipo',
-   1 => 'pess_nome',
-   2 => 'pess_sobrenome',
-   3 => 'pess_cidade',
-   4 => 'pess_cpfcnpj',
-   5 => 'pess_logradouro'
+   0 => 'pess_nome',
+   1 => 'pess_cpfcnpj',
+   2 => 'pess_logradouro',
+   3 => 'pess_cep',
+   4 => 'pess_observacao'
 ];
 
  $query = " SELECT * FROM tb_pessoas WHERE ";
+
+# Filtros
+$dateStart = str_replace('/', '-',  $_POST['startDate']);
+$convertDateStart = date("Y-m-d", strtotime($dateStart));
+
+$dateEnd = str_replace('/', '-', $_POST['endDate']);
+$convertDateEnd = date("Y-m-d", strtotime($dateEnd));
+
+# Por Intervalo de Datas
+if ($_POST['startDate'] != "" && $_POST['endDate'] =! "") {
+$query .= ' pess_data_cadastro BETWEEN "'.$convertDateStart.'" AND "'.$convertDateEnd.'" AND ';
+}
 
 
 
@@ -35,12 +46,15 @@ $result = mysqli_query($connectionDataBase, $query . $query1);
 $data = [];
 while ($row = mysqli_fetch_array($result)) {
    $subArray   = [];
-   $subArray[] = $row["pess_tipo"];
-   $subArray[] = $row["pess_nome"] . " " . $row["pess_sobrenome"];
-   $subArray[] = $row["pess_cidade"];
+   $subArray[] = $row["pess_nome"] . " " . $row["pess_sobrenome"] . " " . $row["pess_razao_social"];
    $subArray[] = $row["pess_cpfcnpj"];
-   $subArray[] = $row["pess_logradouro"];
-   $subArray[] = '<div class="btn-group btn-group-sm"><button type="button" name="editPeople" class="btn btn-warning btn-edit-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-edit"></i></button>     <button type="button" name="deletePeople" class="btn btn-danger btn-delete-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-trash"></i></button></div>';
+   $subArray[] = $row["pess_logradouro"] . ", " . $row["pess_log_numero"] . " - " . $row["pess_bairro"] . ", " . $row["pess_cidade"] . " - " . $row["pess_estado"] . " - " . $row["pess_cep"];
+   $subArray[] = $row["pess_cep"];
+   $subArray[] = $row["pess_data_cadastro"];
+   $subArray[] = '<div class="btn-group btn-group-sm">
+                     <button type="button" name="editPeople" class="btn btn-warning btn-edit-people" id="' . $row["pess_codigo"] . '"><i class="fas fa-edit"></i></button>     
+                     <button type="button" name="deletePeople" class="btn btn-danger btn-delete-people" id="deletePeople" onclick="deletePeople(' .$row["pess_codigo"]. ');"><i class="fas fa-trash"></i></button>
+                  </div>';
    $data[]     = $subArray;
 }
 

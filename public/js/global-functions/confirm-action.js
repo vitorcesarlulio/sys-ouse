@@ -88,7 +88,7 @@ $(document).on('click', '.btn-delete-user', function () {
 });
 
 /* Excluir Pessoa */
-$(document).on('click', '.btn-delete-people', function () {
+/* $(document).on('click', '.btn-delete-people', function () {
     var idPeople = $(this).attr("id");
     showModal('#modalConfirm', 'Excluir Pessoa?', 'Realmente deseja excluir essa Pessoa?',
         function () {
@@ -111,4 +111,4 @@ $(document).on('click', '.btn-delete-people', function () {
             });
         }
     );
-});
+}); */

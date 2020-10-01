@@ -3,12 +3,14 @@
 require_once '../app/View/login/check-login.php'; 
 # Sortear Imagem
 $image = array();
-$image[1] = DIRIMG . "user3-128x128.jpg";
-$image[2] = DIRIMG . "user4-128x128.jpg";
-$image[3] = DIRIMG . "user5-128x128.jpg";
-$image[4] = DIRIMG . "user6-128x128.jpg";
-$image[5] = DIRIMG . "user7-128x128.jpg";
-$image[6] = DIRIMG . "user8-128x128.jpg";
+$image[1] = DIRIMG . "/images-user-128x128/image-user-1.png";
+$image[2] = DIRIMG . "/images-user-128x128/image-user-2.png";
+$image[3] = DIRIMG . "/images-user-128x128/image-user-3.png";
+$image[4] = DIRIMG . "/images-user-128x128/image-user-4.png";
+$image[5] = DIRIMG . "/images-user-128x128/image-user-5.png";
+$image[6] = DIRIMG . "/images-user-128x128/image-user-6.png";
+$image[7] = DIRIMG . "/images-user-128x128/image-user-7.png";
+$image[8] = DIRIMG . "/images-user-128x128/image-user-8.png";
 $count = count($image);
 $imageRandom = rand(1, $count);
 ?>
@@ -30,9 +32,7 @@ $imageRandom = rand(1, $count);
   <?php echo $__env->yieldContent('head'); ?>
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.min.css' ?>">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="<?= DIRPLUGINS . 'tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' ?>">
-  <!-- overlayScrollbars -->
+    <!-- overlayScrollbars -->
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'overlayScrollbars/css/OverlayScrollbars.min.css' ?>">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -40,6 +40,26 @@ $imageRandom = rand(1, $count);
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'pace-progress/themes/black/pace-theme-flat-top.css' ?>">
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
   <?php echo $__env->yieldContent('css'); ?>
+  <style>
+        .brand-link .brand-image{
+          margin-top: 3px !important;
+        }
+        .brand-text{
+          margin-left: 2px !important;
+        }
+        .elevation-2{
+          box-shadow: none !important; 
+        }
+        .main-header{
+          border-bottom:none;
+        }
+        [class*=sidebar-dark] .brand-link{
+          border-bottom:none;
+        }
+        [class*=sidebar-dark-] .sidebar a{
+          color: #fff;
+        }
+  </style>
 </head>
 
 <body class="hold-transition pace-primary pace-done sidebar-mini sidebar-collapse">
@@ -63,66 +83,9 @@ $imageRandom = rand(1, $count);
 
       <!-- Right navbar links -->
       <ul class="navbar-nav ml-auto">
-        <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-
-                <img src="<?= DIRIMG . 'user1-128x128.jpg' ?>" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">Call me whenever you can...</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?= DIRIMG . 'user2-160x160.jpg' ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
-
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    John Pierce
-                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">I got your message bro</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src=<?= DIRIMG . 'user3-128x128.jpg' ?> alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Nora Silvester
-                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">The subject goes here</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-          </div>
-        </li>
 
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
-
           <a class="nav-link" data-toggle="dropdown" href="#">
             <i class="far fa-bell"></i>
             <span class="badge badge-warning navbar-badge">15</span>
@@ -130,9 +93,6 @@ $imageRandom = rand(1, $count);
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <span class="dropdown-item dropdown-header">15 Notifications</span>
             <div class="dropdown-divider"></div>
-            <?php 
-            
-            ?>
             <a href="#" class="dropdown-item">
               <i class="fas fa-envelope mr-2"></i> 4 new messages
               <span class="float-right text-muted text-sm">3 mins</span>
@@ -180,8 +140,9 @@ $imageRandom = rand(1, $count);
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="/home" class="brand-link">
-        <img src=<?= DIRIMG . 'maior-128.png' ?> alt="AdminLTE Logo" class="brand-image " style="opacity: .8">
-        <span class="brand-text font-weight-light">OUSE</span>
+        <img src=<?= DIRIMG . 'pictograma-ouse-inteligencia-em-marcas-35x28.png' ?> alt="Ouse - Inteligência em Marcas - Pictograma" class="brand-image">
+        
+        <span class="brand-text font-weight-light"><img src=<?= DIRIMG . 'logotipo-responsivo-ouse-inteligencia-em-marcas-35x8.png' ?> alt="Ouse - Inteligência em Marcas - Logotipo"></span>
       </a>
 
       <!-- Sidebar -->
@@ -335,8 +296,8 @@ $imageRandom = rand(1, $count);
 <script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
   <?php echo $__env->yieldContent('script'); ?>
 
-  <!-- <script>
-    $(document).ready(function() {
+  <script>
+    /* $(document).ready(function() {
       $(document).keypress(function(e) {
         if (e.wich == 67 || e.keyCode == 67) {
           //window.location.replace("/agenda/calendario");
@@ -347,7 +308,9 @@ $imageRandom = rand(1, $count);
         }
       });
     });
-  </script>-->
+    */
+
+  </script>
   <!-- PADRÃO pace-progress (ao carregar a pagina faz o efeito na barra de favoritos)-->
   <script src="<?= DIRPLUGINS . 'pace-progress/pace.min.js' ?>"></script>
 

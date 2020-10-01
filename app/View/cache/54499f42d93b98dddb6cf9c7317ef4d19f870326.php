@@ -84,7 +84,7 @@ require_once '../app/View/login/check-login.php';
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <form role="form" id="formFilters" autocomplete="off" enctype="multipart/form-data">
+        <form role="form" id="formFiltersEvent" autocomplete="off" enctype="multipart/form-data">
         <div class="card-body">               
                     <div class="row">
 
@@ -175,7 +175,7 @@ require_once '../app/View/login/check-login.php';
                             <tr>
                                 <th>Evento</th>
                                 <th>Pessoa</th>
-                                <th>Data de início</th>
+                                <th>Data Inicial</th>
                                 <th>Hora Inicial</th>
                                 <th>Hora Final</th>
                                 <th>Status</th>
@@ -186,8 +186,8 @@ require_once '../app/View/login/check-login.php';
                             <tr>
                                 <th>Evento </th>
                                 <th>Pessoa </th>
-                                <th>Data de início</th>
-                                <th>Hora Inicial </th>
+                                <th>Data Inicial</th>
+                                <th>Hora Inicial</th>
                                 <th>Hora Final </th>
                                 <th>Status </th>
                                 <th>Ações </th>

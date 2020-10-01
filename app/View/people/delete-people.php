@@ -1,6 +1,6 @@
 <?php
 if (isset($_POST['idPeople']) && !empty($_POST['idPeople'])) {
-    
+
     include_once '../app/Model/connection-pdo.php';
 
     $idPeople = filter_input(INPUT_POST, 'idPeople', FILTER_SANITIZE_NUMBER_INT);
@@ -10,11 +10,11 @@ if (isset($_POST['idPeople']) && !empty($_POST['idPeople'])) {
 
     if ($deletePeople->execute()) {
         $returnAjax = true;
-    }else {
+    } else {
         $returnAjax = false;
     }
-    
+
     header('Content-Type: application/json');
     echo json_encode($returnAjax);
+    exit;
 }
-?>

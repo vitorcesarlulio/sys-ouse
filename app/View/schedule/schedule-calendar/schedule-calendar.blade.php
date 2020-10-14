@@ -34,6 +34,9 @@ $searchClientBudget->execute();
     .fc-day-number {
         color: #212529 !important;
     }
+    /* .col-md-9{
+        align-items: center !important;
+    } */
 </style>
 @endsection
 

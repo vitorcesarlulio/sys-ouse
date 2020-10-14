@@ -18,28 +18,6 @@ else if (getenv('REMOTE_ADDR'))
 else
     $ipAdressUser = 'UNKNOWN';
 
-# Contando as tentativas de erro
-$querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
-$selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
-$selectAttempt->bindParam('ten_ip', $ipAdressUser);
-$selectAttempt->execute();
-
-# Pegando a data de e hora de agora
-$dateNow = date('Y-m-d H:i:s');
-
-$r = 0;
-while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
-    if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
-        $r++;
-    }
-}
-
-if ($r >= 5) {
-    $block = true;
-} else {
-    $block = false;
-}
-
 # Lembre-me
 $loginRemember    = (isset($_COOKIE['CookieUser'])) ? base64_decode($_COOKIE['CookieUser']) : '';
 $passwordRemember = (isset($_COOKIE['CookiePassword'])) ? base64_decode($_COOKIE['CookiePassword']) : '';
@@ -64,60 +42,58 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
     <style>
-        .login-page {
-            background-image: url("<?= DIRIMG . 'image-rio-janeiro-ouse-inteligencia-em-marcas.jpg' ?>");
-            max-width: 100%;
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-        }
+         .login-page {
+            background-image: url("<?=DIRIMG . '/images-rio-de-janeiro-ouse-inteligencia-em-marcas/image-rio-janeiro-ouse-inteligencia-em-marcas-1.jpg' ?>") !important;
+            max-width: 100% !important;
+            background-size: 100% !important;
+            background-repeat: no-repeat !important;
+        } 
 
         .btn-primary {
-            background-color: #FE5000;
-            border-color: #FE5000;
-            color: #fff;
+            background-color: #FE5000 !important;
+            border-color: #FE5000 !important;
+            color: #fff !important;
         }
 
         .btn-primary:hover {
-            background-color: #F23207;
-            border-color: #F23207;
-            color: #fff;
+            background-color: #F23207 !important;
+            border-color: #F23207 !important;
+            color: #fff !important;
         }
 
-        .btn.disabled, .btn:disabled{
-            background-color: #F23207;
-            border-color: #F23207;
+        .btn.disabled,
+        .btn:disabled {
+            background-color: #F23207 !important;
+            border-color: #F23207 !important;
             color: #fff;
         }
 
         .icheck-primary>input:first-child:checked+input[type=hidden]+label::before,
         .icheck-primary>input:first-child:checked+label::before {
-            background-color: #FE5000;
-            border-color: #FE5000;
+            background-color: #FE5000 !important;
+            border-color: #FE5000 !important;
         }
 
         .login-card-body,
         .register-card-body {
-            color: #000;
+            color: #000 !important;
         }
 
-        /*         @font-face {
-            font-family: 'montserratmedium';
-            src: url("<?= DIRIMG . 'montserrat-medium-webfont.woff2' ?>") format('woff2'),
-                url("<?= DIRIMG . 'montserrat-medium-webfont.woff' ?>") format('woff');
-            font-weight: normal;
-            font-style: normal;
-
+        .alert {
+            text-align: center !important;
+            border-radius: .0rem !important;
+            background: #961500 !important;
+            border-color: #961500 !important;
         }
-
-        * {
-            font-family: 'montserratmedium';
-        } */
     </style>
+
 </head>
 
 <body class="hold-transition login-page">
     <div class="login-box">
+
         <div class="card">
+
             <div class="card-body login-card-body">
                 <div class="login-logo"><img src="<?= DIRIMG . 'logotipo-responsivo-ouse-inteligencia-em-marcas-200x37.png' ?>" value="Logotipo Ouse - inteligência em Marcas"></div>
                 <p class="login-box-msg">Faça login para iniciar sua sessão</p>
@@ -137,12 +113,7 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
                             </div>
                         </div>
                     </div>
-                    <div id="divErrors">
-                        <?php
-                        if ($block === true) {
-                            echo 'Tentativas excedidas, tente novamente daqui 20 minutos ou entre em contato com o Administrador do sistema!';
-                        } ?>
-                    </div>
+
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
@@ -151,9 +122,7 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
                             </div>
                         </div>
                         <div class="col-4" id="divBtnLogin">
-                            <button type="submit" value="Entrar" class="btn btn-primary btn-block" id="btnLogin" <?php if ($block === true) {
-                                                                                                                        echo ' disabled';
-                                                                                                                    } ?>>Entrar</button>
+                            <button type="submit" value="Entrar" class="btn btn-primary btn-block" id="btnLogin">Entrar</button>
                         </div>
                     </div>
                 </form>
@@ -165,8 +134,46 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <script src="<?= DIRJS . 'adminlte.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
+    <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
     <script src="<?= DIRJS . 'login/login.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
+
+
+    <?php
+    # Contando as tentativas de erro
+    $querySelectAttempt = " SELECT ten_ip, ten_data FROM tb_tentativas WHERE ten_ip=:ten_ip ";
+    $selectAttempt = $connectionDataBase->prepare($querySelectAttempt);
+    $selectAttempt->bindParam('ten_ip', $ipAdressUser);
+    $selectAttempt->execute();
+
+    # Pegando a data de e hora de agora
+    $dateNow = date('Y-m-d H:i:s');
+
+    $r = 0;
+    while ($f = $selectAttempt->fetch(\PDO::FETCH_ASSOC)) {
+        if (strtotime($f['ten_data']) > strtotime($dateNow) - 1200) { //20 minutos
+            $r++;
+        }
+    }
+
+    if ($r >= 5) {
+        echo '<script>
+                       /*  var data = new Date();
+                        var hora = data.getHours();
+                        var min = data.getMinutes();       
+                        var str_hora = hora + ":" + min;  
+                        var resultado = moment(str_hora, "hh:mm").add(20, "minutes").format("HH:mm");  */
+                        $(".login-box").html(`
+                        <div class="alert alert-danger alert-dismissible" id="divErrors">
+                            <h5><i class="icon fas fa-ban"></i> Bloqueado!</h5>
+                            Tentativas excedidas, tente novamente daqui <b>20 minutos</b> ou entre em contato com o Administrador do sistema!
+                        </div>`);
+                        </script>';
+    } else {
+        $block = false;
+    }
+    ?>
+    
     <script>
         function ShowHidePassword() {
             var x = document.getElementById("passwordLogin");

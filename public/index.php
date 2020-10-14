@@ -14,18 +14,24 @@ $route = new PlugRoute(new RouteContainer(), RequestCreator::create());
  */
 $route->get('/', function () {
     #Verifico se ja esta logado e direciono para home
-/* if (isset($_SESSION['login']) && isset($_SESSION['name']) && isset($_SESSION['canary']) && isset($_SESSION['name']) && isset($_SESSION['loginUser']) && isset($_SESSION['permition'])) {
+    /* if (isset($_SESSION['login']) && isset($_SESSION['name']) && isset($_SESSION['canary']) && isset($_SESSION['name']) && isset($_SESSION['loginUser']) && isset($_SESSION['permition'])) {
     echo " <script> window.location.href='/home'; </script> ";
 } */
     include '../app/View/login/login.php';
 });
 
+/**
+ * Verificar Login
+ */
 $route->post('/verificar-login', function () {
     include '../app/View/login/validation-login.php';
 });
 
-$route->get('/logout', function () {
-    include '../app/View/login/logout.php';
+/**
+ * Loading
+ */
+$route->get('/carregar', function () {
+    include '../app/View/templates/loading.php';
 });
 
 /**
@@ -33,13 +39,6 @@ $route->get('/logout', function () {
  */
 $route->get('/home', function () use ($blade) {
     echo $blade->render('home.home');
-});
-
-/**
- * Rota de Erros
- */
-$route->notFound(function () use ($blade) {
-    echo $blade->render('errors.404');
 });
 
 /**
@@ -145,6 +144,72 @@ $route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
 });
 
 /**
+ * Rotas Financeiro
+ */
+$route->group(['prefix' => '/financeiro'], function ($route) use ($blade) {
+
+
+    # Contas a Receber
+    $route->get('/contas-a-receber', function () use ($blade) {
+        echo $blade->render('finance.accounts-receivable.accounts-receivable');
+    });
+
+    $route->get('/contas-a-receber/listar', function () {
+        include '../app/View/finance/accounts-receivable/list-accounts-receivable.php';
+    });
+
+    $route->post('/contas-a-receber/cadastar', function () {
+        include '../app/View/finance/accounts-receivable/register-account-receivable.php';
+    });
+
+    $route->post('/contas-a-receber/editar', function () {
+        include '../app/View/finance/accounts-receivable/edit-account-receivable.php';
+    });
+
+    $route->post('/contas-a-receber/apagar', function () {
+        include '../app/View/finance/accounts-receivable/delete-account-receivable.php';
+    });
+
+    # Contas a Pagar
+    $route->get('/contas-a-pagar', function () use ($blade) {
+        echo $blade->render('finance.accounts-payable.account-payable');
+    });
+
+    $route->post('/contas-a-pagar/cadastar', function () {
+        include '../app/View/finance/accounts-payable/register-account-payable.php';
+    });
+
+    $route->post('/contas-a-pagar/listar', function () {
+        include '../app/View/finance/accounts-payable/list-account-payable.php';
+    });
+
+    $route->post('/contas-a-pagar/editar', function () {
+        include '../app/View/finance/accounts-payable/edit-account-payable.php';
+    });
+
+    $route->post('/contas-a-pagar/apagar', function () {
+        include '../app/View/finance/accounts-payable/delete-account-payable.php';
+    });
+
+    # Formas de Pagamento
+    $route->get('/formas-de-pagamento', function () use ($blade) {
+        echo $blade->render('finance.payment-method.payment-method');
+    });
+    $route->post('/formas-de-pagamento/listar', function () {
+        include '../app/View/finance/payment-method/list-payment-method.php';
+    });
+    $route->post('/formas-de-pagamento/verificar-existencia-forma-de-pagamento', function () {
+        include '../app/View/finance/payment-method/check-payment-method-existence.php';
+    });
+    $route->post('/formas-de-pagamento/cadastar', function () {
+        include '../app/View/finance/payment-method/register-payment-method.php';
+    });
+    $route->post('/formas-de-pagamento/apagar', function () {
+        include '../app/View/finance/payment-method/delete-payment-method.php';
+    });
+});
+
+/**
  * Usuários
  */
 $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
@@ -178,9 +243,18 @@ $route->group(['prefix' => '/usuarios'], function ($route) use ($blade) {
     });
 });
 
-# Carregar
-$route->get('/carregar', function () {
-    include '../app/View/templates/loading.php';
+/**
+ * Rota de Erros
+ */
+$route->notFound(function () use ($blade) {
+    echo $blade->render('templates.404');
+});
+
+/**
+ * Logout
+ */
+$route->get('/logout', function () {
+    include '../app/View/login/logout.php';
 });
 
 $route->on();

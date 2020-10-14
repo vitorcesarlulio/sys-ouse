@@ -112,3 +112,22 @@ $(document).on('click', '.btn-delete-user', function () {
         }
     );
 }); */
+
+function confirmDeleteRecord(data) {
+    if (confirm("Realmente deseja excluir esse registro?")) {
+        $.ajax({
+            url: "/financeiro/formas-de-pagamento/apagar",
+            method: "POST",
+            data: { data: data },
+            success: function (retunAjax) {
+                if (retunAjax) {
+                    toastr.success('Sucesso: forma de pagamento deletada!');
+                    $('#listPaymentMethod').DataTable().ajax.reload();
+                } else { toastr.error('Erro: forma de pagamento não deletada!'); }
+            },
+            error: function () {
+                toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+            }
+        });
+    }
+}

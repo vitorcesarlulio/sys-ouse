@@ -133,7 +133,6 @@ require_once '../app/View/login/check-login.php';
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Evento:</label>

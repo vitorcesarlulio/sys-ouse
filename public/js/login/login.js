@@ -41,14 +41,26 @@ $(document).ready(function () {
                         window.location.href = '/carregar'; //direciona eu para a home se o usuario existir
                     }
                     else if (returnAjax['errorStatus'] === true) {
-                        toastr.error('Erro: usuário inativo, entre em contato com Administrador do sistema!');//Status como inativo
+                        toastr.warning('Usuário inativo, entre em contato com Administrador do Sistema!');//Status como inativo
                     }
                     else if (returnAjax['errors'] === true && returnAjax['attempts'] === false && returnAjax['redirect'] === '/home') {
-                        toastr.error('Erro: usuário ou senha inválidos!');
+                        var opportunities = returnAjax['opportunities'] + 1;
+                        toastr.error('Erro: usuário ou senha inválidos, ' + opportunities + ' tentativa(s) de 6!');
                     }
-                    else if (returnAjax['attempts'] === true && returnAjax['errors'] === true && returnAjax['redirect'] === '/home') {
-                        $('#btnLogin').attr('disabled','disabled');
-                        $('#divErrors').html('Tentativas excedidas, tente novamente daqui 20 minutos ou entre em contato com o Administrador do sistema!');
+                    else if (returnAjax['attempts'] === true && returnAjax['errors'] === true && returnAjax['redirect'] === '/home' && returnAjax['opportunities'] === false) {
+                        toastr.error('Erro: usuário ou senha inválidos, 6 tentativa(s) de 6!');
+                        //$('#btnLogin').attr('disabled','disabled');
+
+                        var data = new Date();
+                        var hora = data.getHours();
+                        var min = data.getMinutes();       
+                        var str_hora = hora + ':' + min;  
+                        var resultado = moment(str_hora, 'hh:mm').add(20, 'minutes').format('HH:mm'); 
+                        $('.login-box').html(`
+                        <div class="alert alert-danger alert-dismissible" id="divErrors">
+                            <h5><i class="icon fas fa-ban"></i> Bloqueado!</h5>
+                            Tentativas excedidas, tente novamente às <b>` + resultado + ` (20 minutos)</b> ou entre em contato com o Administrador do sistema!
+                        </div>`);
 
                         /*var timeleft = 10;
                         var downloadTimer = setInterval(function () {

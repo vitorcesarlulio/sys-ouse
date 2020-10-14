@@ -124,7 +124,7 @@ require_once '../app/View/login/check-login.php';
             <form id="formRegisterPeople" method="POST" novalidate="novalidate" autocomplete="off">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Extra Large Modal</h4>
+                        <h4 class="modal-title">Cadastrar Pessoa</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -266,7 +266,7 @@ require_once '../app/View/login/check-login.php';
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer justify-content-between">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success btn-register-people" id="btnRegisterPeople">Cadastrar</button>
                     </div>
@@ -460,7 +460,7 @@ require_once '../app/View/login/check-login.php';
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer justify-content-between">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success" id="btnEditPeople">Salvar</button>
                     </div>

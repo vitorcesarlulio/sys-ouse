@@ -73,6 +73,7 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
             $attempts    = false;
             $errors      = false;
             $errorStatus = false;
+            $opportunities = false;
 
             # Criando Cookies para o "Lembre-me"
             if ($remember == 'rememberYes') {
@@ -89,6 +90,7 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
             $errorStatus = true;
             $attempts = "";
             $errors = "";
+            $opportunities = false;
         }
     } else {
         # Dizendo que houve tentativas
@@ -120,11 +122,14 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
             $insertAttempt = $connectionDataBase->prepare($queryinsertAttempt);
             $insertAttempt->bindParam(':ten_ip', $ipAdressUser);
             $insertAttempt->execute();
+
+            $opportunities = $r;
         }
 
         # Se errar mais de 5 vezes deixo a variavel $attempts como true
         if ($r >= 5) {
             $attempts = true;
+            $opportunities = false;
         } else {
             $attempts = false;
         }
@@ -133,7 +138,7 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
 
 
     # Retornando os resultados para o Ajax
-    $returnAjax = ['redirect' => '/home', 'attempts' => $attempts, 'errors' => $errors, 'errorStatus' => $errorStatus];
+    $returnAjax = ['redirect' => '/home', 'attempts' => $attempts, 'errors' => $errors, 'errorStatus' => $errorStatus, 'opportunities' => $opportunities];
     header('Content-Type: application/json');
     echo json_encode($returnAjax);
 }

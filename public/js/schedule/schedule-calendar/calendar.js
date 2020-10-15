@@ -76,58 +76,82 @@ $(function () {
             /* Modal confirma excluir evento */
             $(document).on('click', '#deleteEvent', function () {
                 $('#modalViewEvent').modal('hide');
-
-                $('#modalConfirmDeleteEvent').modal('show');
-
-                /*showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?', function () {
-                    $("#btnConfirm").attr("href", "/agenda/calendario/apagar/" + "?idEvent=" + info.event.id);
-                });*/
-
-                /* showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?',
-                    function () {
-                        $.ajax({
-                            url: "/agenda/calendario/apagar/",
-                            method: "POST",
-                            data: { idEvent: info.event.id },
-                            success: function (retunAjax) {
-                                if (retunAjax === true) {
-                                    toastr.success('Sucesso: evento apagado!');
-                                } else {
-                                    toastr.error('Erro: evento não apagado!');
+                if (info.event.title === "Realizar Orçamento") {
+                    $.confirm({
+                        title: 'Atenção!',
+                        content: 'Realmente deseja excluir esse evento e o orçamento veiculado a ele?',
+                        type: 'red',
+                        buttons: {
+                            omg: {
+                                text: 'Sim',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                    $.ajax({
+                                        url: "/agenda/calendario/apagar",
+                                        method: "POST",
+                                        data: { idEventBudget: info.event.id },
+                                        success: function (retorna) { retorna['sit'] ? location.reload() : $("#msg-cad").html(retorna['msg']); },
+                                        error: function () { toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!'); }
+                                    });
                                 }
                             },
-                            error: function () {
-                                toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+                            close: {
+                                text: 'Não',
+                                action: function () {
+                                    $.confirm({
+                                        title: 'Atenção!',
+                                        content: 'Realmente deseja excluir somente o evento?',
+                                        type: 'red',
+                                        buttons: {
+                                            omg: {
+                                                text: 'Sim',
+                                                btnClass: 'btn-red',
+                                                action: function () {
+                                                    $.ajax({
+                                                        url: "/agenda/calendario/apagar",
+                                                        method: "POST",
+                                                        data: { idEvent: info.event.id },
+                                                        success: function (retorna) { retorna['sit'] ? location.reload() : $("#msg-cad").html(retorna['msg']); },
+                                                        error: function () { toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!'); }
+                                                    });
+                                                }
+                                            },
+                                            close: {
+                                                text: 'Não',
+                                            }
+                                        }
+                                    });
+                                }
                             }
-                        });
-                    }
-                ); */
-            });
-
-            /* Se clicar no cancelar da confirmação exibe o modal de visualizar */
-            $(document).on('click', '#btnCancelDelete', function () {
-                $('#modalViewEvent').modal('show');
-            });
-
-            /* Excluir evento */
-            $(document).on('click', '#btnConfirmDeleteEvent', function () {
-                $.ajax({
-                    url: "/agenda/calendario/apagar",
-                    method: "POST",
-                    dataType: 'JSON',
-                    data: { idDelete: info.event.id },
-                    success: function (retorna) {
-                        if (retorna['sit']) {
-                            location.reload();
-                        } else {
-                            $("#msg-cad").html(retorna['msg']);
                         }
-                    },
-                    error: function () {
-                        toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
-                    }
-                });
+                    });
+                } else {
+                    $.confirm({
+                        title: 'Atenção!',
+                        content: 'Realmente deseja excluir esse evento?',
+                        type: 'red',
+                        buttons: {
+                            omg: {
+                                text: 'Sim',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                    $.ajax({
+                                        url: "/agenda/calendario/apagar",
+                                        method: "POST",
+                                        data: { idEvent: info.event.id },
+                                        success: function (retorna) { retorna['sit'] ? location.reload() : $("#msg-cad").html(retorna['msg']); },
+                                        error: function () { toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!'); }
+                                    });
+                                }
+                            },
+                            close: {
+                                text: 'Não',
+                            }
+                        }
+                    });
+                }
             });
+
 
             info.jsEvent.preventDefault();
 
@@ -197,7 +221,7 @@ $(function () {
             //Rua do Condominio
             if (info.event.extendedProps.streetCondominium != "") {
                 $('#modalViewEvent #streetCondominium').text(info.event.extendedProps.streetCondominium);
-            
+
                 $("#modalViewEvent #optionCondominiumEdit").prop("checked", true);
                 $('#modalViewEvent #divNumberEdit').show();
                 $('#modalViewEvent #divStreetCondominiumEdit').show();
@@ -210,7 +234,7 @@ $(function () {
                 $('#modalViewEvent #divStreetCondominiumEdit').hide();
                 $('#modalViewEvent #divNumberEdit').hide();
             }
-                
+
 
             //Observação
             if (info.event.extendedProps.observation != "") {
@@ -260,7 +284,7 @@ $(function () {
                 $('#modalViewEvent #divNumberEdit').show();
                 $('#modalViewEvent #numberEdit').val(info.event.extendedProps.number);
             } else { $('#modalViewEvent #divNumberEdit').hide(); }
-        
+
             //Edificio
             if (info.event.extendedProps.edifice && info.event.extendedProps.block && info.event.extendedProps.apartment != "") {
                 $("#modalViewEvent #optionBuildingEdit").prop("checked", true);
@@ -275,9 +299,9 @@ $(function () {
                 $('#modalViewEvent #divBlockEdit').hide();
                 $('#modalViewEvent #divApartmentEdit').hide();
             }
-            
 
-            
+
+
             $('#modalViewEvent #observationEdit').val(info.event.extendedProps.observation);
 
             //Momento do dia (bom dia, boa tarde...)

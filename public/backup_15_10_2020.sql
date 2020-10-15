@@ -71,19 +71,13 @@ INSERT INTO tb_eventos VALUES('56', 'Realizar Orçamento', '', 'P', '2020-09-17 
 ', '83')
 ,('78', 'Realizar Orçamento', '', 'P', '2020-10-17 08:00:00', '2020-10-17 08:00:00', '', '82')
 ,('79', 'Realizar Orçamento', '', 'P', '2020-10-24 07:30:00', '2020-10-24 07:31:00', '', '83')
-,('80', 'Voltar na Obra', '', 'P', '2020-10-23 08:10:00', '2020-10-23 10:30:00', 'aP TERREO
-', '83')
 ,('81', 'Realizar Orçamento', '', 'P', '2020-10-02 08:00:00', '2020-10-02 08:01:00', '', '82')
-,('83', 'Voltar na Obra', '', 'P', '2020-10-23 08:00:00', '2020-10-23 10:30:00', 'aP TERREO
-', '83')
 ,('84', 'Realizar Orçamento', '', 'P', '2020-10-18 08:00:00', '2020-10-18 08:00:00', '', '82')
 ,('85', 'Realizar Orçamento', '', 'P', '2020-10-19 07:30:00', '2020-10-19 07:31:00', '', '83')
 ,('86', 'Voltar na Obra', '', 'P', '2020-10-20 08:10:00', '2020-10-20 10:30:00', 'aP TERREO
 ', '83')
 ,('87', 'Realizar Orçamento', '', 'P', '2020-10-21 08:00:00', '2020-10-21 08:01:00', '', '82')
 ,('88', 'Realizar Orçamento', '', 'P', '2020-10-22 07:30:00', '2020-10-22 07:31:00', 'sdfsd', '83')
-,('89', 'Voltar na Obra', '', 'P', '2020-10-23 08:01:00', '2020-10-23 10:40:00', 'aP TERREO
-', '83')
 ,('90', 'Realizar Orçamento', '', 'P', '2020-11-18 08:00:00', '2020-11-18 08:00:00', '', '82')
 ,('91', 'Realizar Orçamento', '', 'P', '2020-11-19 07:30:00', '2020-11-19 07:31:00', '', '83')
 ,('92', 'Voltar na Obra', '', 'P', '2020-11-20 08:10:00', '2020-11-20 10:30:00', 'aP TERREO
@@ -303,14 +297,14 @@ CREATE TABLE `tb_tipo_pagamento` (
   `tpg_observacao` varchar(510) DEFAULT NULL,
   PRIMARY KEY (`tpg_codigo`),
   UNIQUE KEY `tpg_descricao` (`tpg_descricao`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
 #
 
-INSERT INTO tb_tipo_pagamento VALUES('10', 'Boleto bancário 2x', '2', 'Somente para cliente com valor total acima de R$ 15.000,00')
-,('13', 'Dinheiro 1x', '1', '1')
+INSERT INTO tb_tipo_pagamento VALUES('15', 'Dinheiro 2x', '2', '')
+,('16', 'Dinheiro 23x', '23', '')
 ;
 
 #

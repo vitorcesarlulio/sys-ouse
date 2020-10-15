@@ -44,7 +44,7 @@ $nameUser = $nameUser[0];
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'fontawesome-free/css/all.min.css' ?>">
   <?php echo $__env->yieldContent('head'); ?>
   <!-- Theme style -->
-  <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.css' ?>">
+  <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.css' ?>"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'overlayScrollbars/css/OverlayScrollbars.min.css' ?>">
   <!-- Google Font: Source Sans Pro -->
@@ -148,7 +148,7 @@ $nameUser = $nameUser[0];
 
       <div class="sidebar">
         <nav class="mt-2">
-          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <ul class="nav nav-pills nav-sidebar flex-column nav-legacy" data-widget="treeview" role="menu" data-accordion="false"> <!-- se quiser tirar o nav-legacy -->
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-calendar-alt"></i>
@@ -305,27 +305,6 @@ $nameUser = $nameUser[0];
       </section>
     </div>
 
-    <!-- Modal de confirmação Global -->
-    <div class="modal fade" id="modalConfirm" data-toggle="modal" data-target="targetModalConfirm">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="titulo"></h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p id="texto"></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" id="btnConfirm">Sim</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <footer class="main-footer">
       <strong>Copyright &copy; <?php echo e(date('Y')); ?> <a href="https://ouse.com.br" target="_blank">Ouse</a>.</strong>
       Todos os direitos reservados.
@@ -380,6 +359,7 @@ $nameUser = $nameUser[0];
   </script>
   <!-- PADRÃO pace-progress (ao carregar a pagina faz o efeito na barra de favoritos)-->
   <script src="<?= DIRPLUGINS . 'pace-progress/pace.min.js' ?>"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 </body>
 
 </html><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/templates/default.blade.php ENDPATH**/ ?>

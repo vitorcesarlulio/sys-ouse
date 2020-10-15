@@ -1,23 +1,32 @@
 <?php
-session_start();
+if (isset($_POST) && !empty($_POST)) {
+    include_once '../app/Model/connection-pdo.php';
+    session_start();
 
-include_once '../app/Model/connection-pdo.php';
+    if (isset($_POST['idEventBudget']) && !empty($_POST['idEventBudget'])) {
+        $idEventBudget = filter_input(INPUT_POST, 'idEventBudget', FILTER_SANITIZE_NUMBER_INT);
 
-if (isset($_POST['idDelete']) && !empty($_POST['idDelete'])) {
-    $idEvent = filter_input(INPUT_POST, 'idDelete', FILTER_SANITIZE_NUMBER_INT);
-} else {
-    $idEvent = filter_input(INPUT_POST, 'idEvent', FILTER_SANITIZE_NUMBER_INT);
-}
+        # Consultando evento para pegar numero do orçamento
+        $querySelectEvent = " SELECT even_codigo, orca_numero FROM tb_eventos WHERE even_codigo=:even_codigo ";
+        $selectEvent = $connectionDataBase->prepare($querySelectEvent);
+        $selectEvent->bindParam(':even_codigo', $idEventBudget);
+        $selectEvent->execute();
+        $idbudget = $selectEvent->fetch(\PDO::FETCH_ASSOC);
 
-if (isset($idEvent) && !empty($idEvent)) {
-    $queryDeleteEvent = " DELETE FROM tb_eventos WHERE even_codigo=:even_codigo ";
-    $deleteEvent = $connectionDataBase->prepare($queryDeleteEvent);
-    $deleteEvent->bindParam(":even_codigo", $idEvent);
+        # Deletando Orçamento
+        $queryDeleteBudget = " DELETE FROM tb_orcamento WHERE orca_numero=:orca_numero ";
+        $deleteBudget = $connectionDataBase->prepare($queryDeleteBudget);
+        $deleteBudget->bindParam(":orca_numero", $idbudget['orca_numero']);
+        $deleteBudget->execute();
 
-    if (isset($_POST['idDelete']) && !empty($_POST['idDelete'])) {
+        # Deletando Evento
+        $queryDeleteEvent = " DELETE FROM tb_eventos WHERE even_codigo=:even_codigo ";
+        $deleteEvent = $connectionDataBase->prepare($queryDeleteEvent);
+        $deleteEvent->bindParam(":even_codigo", $idEventBudget);
 
-        $msgDeleteEvent   = "<script> toastr.success('Sucesso: evento deletado!'); </script>";
-        $msgNoDeleteEvent = "<script> toastr.error('Erro: evento não deletado!'); </script>";
+        $msgDeleteEvent   = "<script> toastr.success('Sucesso: evento e orçamento deletados!'); </script>";
+        $msgNoDeleteEvent = "<script> toastr.error('Erro: evento e orçamento não deletados!'); </script>";
+
         # Se inserir exibe a mensagem
         if ($deleteEvent->execute()) {
             $retorna = ['sit' => true, 'msg' => $msgDeleteEvent];
@@ -28,14 +37,27 @@ if (isset($idEvent) && !empty($idEvent)) {
 
         header('Content-Type: application/json');
         echo json_encode($retorna);
-    } else {
+        exit;
+    } else if (isset($_POST['idEvent']) && !empty($_POST['idEvent'])) {
+        $idEvent = filter_input(INPUT_POST, 'idEvent', FILTER_SANITIZE_NUMBER_INT);
 
+        $queryDeleteEvent = " DELETE FROM tb_eventos WHERE even_codigo=:even_codigo ";
+        $deleteEvent = $connectionDataBase->prepare($queryDeleteEvent);
+        $deleteEvent->bindParam(":even_codigo", $idEvent);
+
+        $msgDeleteEvent   = "<script> toastr.success('Sucesso: evento deletado!'); </script>";
+        $msgNoDeleteEvent = "<script> toastr.error('Erro: evento não deletado!'); </script>";
+
+        # Se inserir exibe a mensagem
         if ($deleteEvent->execute()) {
-            $returnAjax = true;
+            $retorna = ['sit' => true, 'msg' => $msgDeleteEvent];
+            $_SESSION['msg'] = $msgDeleteEvent;
         } else {
-            $returnAjax = false;
+            $retorna = ['sit' => true, 'msg' => $msgNoDeleteEvent];
         }
+
         header('Content-Type: application/json');
-        echo json_encode($returnAjax);
+        echo json_encode($retorna);
+        exit;
     }
 }

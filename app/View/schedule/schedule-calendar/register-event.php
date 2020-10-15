@@ -59,12 +59,6 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $insertEvent->bindParam(':orca_numero',     $dados['clientRegister']);
 
         # Se inserir exibe a mensagem
-/*         if ($insertEvent->execute()) {
-            $returnAjax = 'insertEvent';
-        } else {
-            $returnAjax = 'noInsertEvent';
-        } */
-        # Se inserir exibe a mensagem
         if ($insertEvent->execute()) { 
             $msgInsertEvent         = "<script> toastr.success('Sucesso: evento cadastrado!'); </script>";
             $retorna = ['sit' => true, 'msg' => $msgInsertEvent];
@@ -137,12 +131,8 @@ if ($dados['scheduleTime'] == "scheduleTimeYes") {
         $insertEvent->bindParam(':even_observacao', $dados['observationRegister']);
         $insertEvent->bindParam(':orca_numero',     $idBudget);
 
-        /* # Se inserir exibe a mensagem
-        if ($insertEvent->execute()) {
-            $returnAjax = 'insertEventBudget';
-        } else {
-            $returnAjax = 'noInsertEventBudget';
-        } */
+        # Google Contato
+
 
         # Se inserir exibe a mensagem
         if ($insertEvent->execute()) { 
@@ -200,12 +190,10 @@ else if ($dados['scheduleTime'] == "scheduleTimeNo") {
     $msgInsertBudget   = "<script> toastr.success('Sucesso: orçamento cadastrado!'); </script>";
     $msgNoInsertBudget = "<script> toastr.error('Erro: orçamento não cadastrado!'); </script>";
     # Se inserir exibe a mensagem
-    if ($insertBudget->execute()) {
-        //$returnAjax = 'insertBudget'; 
+    if ($insertBudget->execute()) { 
         $retorna = ['sit' => true, 'msg' => $msgInsertBudget];
         $_SESSION['msg'] = $msgInsertBudget;
     } else {
-        //$returnAjax = 'noInsertBudget'; //se der ruim so descomentar e desomentar o js unico bo é que a pessoa tem que recarregar a pagina
         $retorna = ['sit' => true, 'msg' => $msgNoInsertBudget];
     }
 }

@@ -287,8 +287,8 @@ $searchClientBudget->execute();
                             </div>
                         </div>
                         <div class="modal-footer" id="footer">
-                            <button type="button" class="btn btn-primary btn-cancel-edit">Cancelar</button>
-                            <button type="submit" name="upDateEvent" id="btnUpDateEvent" class="btn btn-warning">Salvar</button>
+                            <button type="button" class="btn btn-default btn-cancel-edit">Cancelar</button>
+                            <button type="submit" name="upDateEvent" id="btnUpDateEvent" class="btn btn-success">Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -491,54 +491,11 @@ $searchClientBudget->execute();
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Cadastrar</button>
                 </div>
             </div>
         </form>
-    </div>
-</div>
-
-<!-- Modal de confirmação -->
-<div class="modal fade" id="modalConfirm" data-toggle="modal" data-target="targetModalConfirm">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="titulo"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="texto"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelDelete">Cancelar</button>
-                <!-- <button type="button" class="btn btn-danger" id="btnConfirm">Sim</button> -->
-                <a href="#" id="btnConfirm" class="btn btn-danger">Sim</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de confirmação -->
-<div class="modal fade" id="modalConfirmDeleteEvent" data-toggle="modal" data-target="targetModalConfirmDeleteEvent">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Excluir Evento?</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Realmente deseja excluir esse evento?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelDelete">Cancelar</button>
-                <a href="#" id="btnConfirmDeleteEvent" class="btn btn-danger">Sim</a>
-            </div>
-        </div>
     </div>
 </div>
 @endsection

@@ -85,7 +85,8 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
                 setCookie('CookieRemember');
                 setCookie('CookieUser');
                 setCookie('CookiePassword');
-            }
+            }    
+
         } else {
             $errorStatus = true;
             $attempts = "";
@@ -134,8 +135,6 @@ if (!empty($userLogin) && !empty($passwordLogin)) {
             $attempts = false;
         }
     }
-
-
 
     # Retornando os resultados para o Ajax
     $returnAjax = ['redirect' => '/home', 'attempts' => $attempts, 'errors' => $errors, 'errorStatus' => $errorStatus, 'opportunities' => $opportunities];

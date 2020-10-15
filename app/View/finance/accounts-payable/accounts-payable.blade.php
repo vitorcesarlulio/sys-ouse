@@ -1,9 +1,5 @@
 <?php
 require_once '../app/View/login/check-login.php';
-if ($_SESSION["permition"] === "admin") {
-} else {
-    echo " <script> alert('Você não tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
-}
 
 include_once '../app/Model/connection-pdo.php';
 

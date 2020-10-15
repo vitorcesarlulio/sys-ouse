@@ -19,6 +19,8 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 0); //% estao sendo usados
 <?php $__env->startSection('title', 'Home'); ?>
 
 <?php $__env->startSection('head'); ?>
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('css'); ?>
@@ -27,7 +29,8 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 0); //% estao sendo usados
         background-image: none !important;
         background-color: #FE5000 !important;
     }
-    sup{
+
+    sup {
         top: .0em !important;
     }
 </style>
@@ -51,13 +54,19 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 0); //% estao sendo usados
                 </i>
                 <!-- <i class="far fa-hdd"></i> -->
             </div>
-            
             <a href="malito:boraousar@gmail.com" class="small-box-footer" target="_blank">Adquira mais espaço</a>
         </div>
+    </div>
+
+    <div class="card-body">
+        <a href="/backup" class="btn btn-app">
+            <i class="fas fa-download"></i> Backup
+        </a>
     </div>
 </div>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
+<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('templates.default', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/home/home.blade.php ENDPATH**/ ?>

@@ -1,15 +1,15 @@
 <?php
 require_once '../app/View/login/check-login.php';
-if ($_SESSION["permition"] === "admin") {
-} else {
-    echo " <script> alert('Você não tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
-}
 
 include_once '../app/Model/connection-pdo.php';
 
-$querySelectPeople = " SELECT pess_codigo, pess_nome, pess_sobrenome, pess_razao_social FROM tb_pessoas ";
+$querySelectPeople = " SELECT pess_codigo, pess_nome, pess_sobrenome, pess_razao_social FROM tb_pessoas ORDER BY pess_codigo DESC ";
 $searchPeople = $connectionDataBase->prepare($querySelectPeople);
 $searchPeople->execute();
+
+$querySelectPaymentMethod = " SELECT tpg_codigo, tpg_descricao, tpg_parcelas FROM tb_tipo_pagamento ";
+$searchPaymentMethod = $connectionDataBase->prepare($querySelectPaymentMethod);
+$searchPaymentMethod->execute();
 ?>
 @extends('templates.default')
 
@@ -77,7 +77,7 @@ $searchPeople->execute();
                 <div class="card-header">
                     <h3 class="card-title">Resultado do Filtro</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#modalRegisteAccountsReceivable">Novo</button>
+                        <button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#modalRegisterAccountsReceivable">Novo</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -124,8 +124,8 @@ $searchPeople->execute();
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Pessoa</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <select class="form-control select2" name="filterLogin" id="filterLogin" style="width: 100%;">
-                                        <option value="">Todos</option>
+                                    <select class="form-control select2" name="peopleRegister" id="peopleRegister" style="width: 100%;">
+                                    <!-- <option value="">Escolha...</option> -->
                                         <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
                                             <option value="<?php echo $row['pess_codigo'] ?>">
                                                 <?php echo $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social']  ?>
@@ -138,28 +138,29 @@ $searchPeople->execute();
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Tipo de Pagamento</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <select class="form-control select2" name="filterLogin" id="filterLogin" style="width: 100%;">
-                                        <option value="">Todos</option>
-                                        <!-- <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                            <option value="<?php echo $row['pess_codigo'] ?>">
-                                                <?php echo $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social']  ?>
+                                    <select class="form-control select2" name="paymentMethodRegister" id="paymentMethodRegister" style="width: 100%;">
+                                        <?php foreach ($searchPaymentMethod->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                            <!-- <option value="">Escolha...</option> -->
+                                            <option data-valor="<?php echo $row['tpg_parcelas']; ?>" value="<?php echo $row['tpg_codigo'] ?>">
+                                                <?php echo $row['tpg_descricao'] ?>
                                             </option>
-                                        <?php } ?> -->
+                                        <?php } ?>
                                     </select>
                                 </div>
                             </div>
 
+
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Parcelas</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <input type="text" name="installmentRegister" id="installmentRegister" class="form-control">
+                                    <input type="text" name="installmentRegister" id="installmentRegister" class="form-control" disabled>
                                 </div>
                             </div>
 
                             <div id="divApartmentEdit" class="col-sm-6">
                                 <div class="form-group">
                                     <label>Valor Total:</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <input type="text" name="money" id="money" class="form-control">
+                                    <input type="text" name="money" id="money" class="form-control" autofocus>
                                 </div>
                             </div>
 
@@ -186,13 +187,13 @@ $searchPeople->execute();
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4" id="divSettledRegister" style="display: none;"> 
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="settledRegister" name="settledRegister" value="settledRegisterYes" onchange="showDivPayday();">
-                                <label for="settledRegister">Quitado</label>
+                            <div class="col-4" id="divSettledRegister" style="display: none;">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="settledRegister" name="settledRegister" value="settledRegisterYes" onchange="showDivPayday();">
+                                    <label for="settledRegister">Quitado</label>
+                                </div>
                             </div>
-                        </div>
-                            <div class="col-sm-6" id="divPaydayRegister" style="display: none;"> 
+                            <div class="col-sm-6" id="divPaydayRegister" style="display: none;">
                                 <div class="form-group">
                                     <label>Pagamento</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <div class="input-group">
@@ -227,6 +228,14 @@ $searchPeople->execute();
 @endsection
 
 @section('script')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#paymentMethodRegister').change(function() {
+            $('#installmentRegister').val(($(this).find(':selected').data('valor')));
+        });
+    });
+</script>
+
 <script src="<?= DIRPLUGINS . 'datatables/jquery.dataTables.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-bs4/js/dataTables.bootstrap4.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
@@ -243,19 +252,19 @@ $searchPeople->execute();
         $('[data-mask]').inputmask();
     });
 
-/*     $(document).ready(function() {
-        $("#money").inputmask('currency', {
-            "autoUnmask": true,
-            radixPoint: ",",
-            groupSeparator: ".",
-            allowMinus: false,
-            prefix: 'R$ ',
-            digits: 2,
-            digitsOptional: false,
-            rightAlign: false,
-            unmaskAsNumber: true
-        });
-    }); */
+    /*     $(document).ready(function() {
+            $("#money").inputmask('currency', {
+                "autoUnmask": true,
+                radixPoint: ",",
+                groupSeparator: ".",
+                allowMinus: false,
+                prefix: 'R$ ',
+                digits: 2,
+                digitsOptional: false,
+                rightAlign: false,
+                unmaskAsNumber: true
+            });
+        }); */
 
     $('.select2').select2();
 </script>

@@ -257,4 +257,11 @@ $route->get('/logout', function () {
     include '../app/View/login/logout.php';
 });
 
+/**
+ * Backup
+ */
+$route->get('/backup', function () {
+    include '../app/View/backup/backup.php';
+});
+
 $route->on();

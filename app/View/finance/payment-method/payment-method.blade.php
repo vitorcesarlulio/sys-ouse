@@ -215,14 +215,6 @@ $searchPeople->execute();
 <script src="<?= DIRJS . 'finance/payment-method/register-payment-method.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
-<script>
-    $(function() {
-        $('#datemask').inputmask('dd/mm/yyyy', {
-            'placeholder': 'dd/mm/yyyy'
-        });
-        $('[data-mask]').inputmask();
-    });
-</script>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fh-3.1.7/kt-2.5.2/datatables.min.css" />
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>

@@ -43,6 +43,7 @@ $(document).ready(function () {
         "keys": true,
         "fixedHeader": true,
         "colReorder": true,
+        "order": [0, 'desc'], //ordenar coluna
         "dom": 'B <"clear"> lfrtip',
         lengthMenu: [
             [10, 25, 50, 100, -1],

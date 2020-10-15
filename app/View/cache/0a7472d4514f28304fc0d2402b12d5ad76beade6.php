@@ -42,8 +42,6 @@ $nameUser = $nameUser[0];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'fontawesome-free/css/all.min.css' ?>">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <?php echo $__env->yieldContent('head'); ?>
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.css' ?>">
@@ -211,17 +209,39 @@ $nameUser = $nameUser[0];
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="/financeiro/contas-a-pagar" class="nav-link">
+                  <i class="nav-icon fas fa-dollar-sign"></i>
+                    <p>Contas a Pagar</p>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
                   <a href="/financeiro/formas-de-pagamento" class="nav-link">
                     <i class="nav-icon fas fa-credit-card"></i>
                     <p>Formas de Pagamento</p>
                   </a>
                 </li>
               </ul>
+            </li>';
+            }else{
+              echo '<li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-cash-register"></i>
+                <p> Financeiro <i class="right fas fa-angle-left"></i> </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/financeiro/contas-a-receber" class="nav-link">
+                    <i class="nav-icon fas fa-hand-holding-usd"></i>
+                    <p>Contas a Receber</p>
+                  </a>
+                </li>
+              </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="/financeiro/contas-a-pagar" class="nav-link">
-                    <ion-icon name="cash-outline"></ion-icon>
-                    &nbsp;
+                  <i class="nav-icon fas fa-dollar-sign"></i>
                     <p>Contas a Pagar</p>
                   </a>
                 </li>
@@ -229,6 +249,7 @@ $nameUser = $nameUser[0];
             </li>';
             }
             ?>
+            
 
             <?php
             if ($_SESSION["permition"] === "admin") {
@@ -236,7 +257,7 @@ $nameUser = $nameUser[0];
             }
             ?>
                         <li class="nav-item">
-              <a href="/" class="nav-link">
+              <a href="/backup" class="nav-link">
                 <i class="nav-icon far fas fa-cloud-download-alt"></i>
                 <p class="text">Backup</p>
               </a>
@@ -357,10 +378,8 @@ $nameUser = $nameUser[0];
     });
     */
   </script>
-  <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
   <!-- PADRÃO pace-progress (ao carregar a pagina faz o efeito na barra de favoritos)-->
   <script src="<?= DIRPLUGINS . 'pace-progress/pace.min.js' ?>"></script>
-
 </body>
 
 </html><?php /**PATH C:\xampp\htdocs\sys-ouse\app\View/templates/default.blade.php ENDPATH**/ ?>

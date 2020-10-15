@@ -1,0 +1,35 @@
+﻿<?php
+    function backup(){
+        include_once '../app/Model/connection-pdo.php';
+
+        $arquivo = fopen(date('d-m-Y').'.sql','wt'); 
+        $tables = $connectionDataBase->query('SHOW TABLES');
+        
+        foreach ($tables as $table) {
+            $sql = '-- TABLE: '.$table[0].PHP_EOL; 
+            $create = $connectionDataBase->query('SHOW CREATE TABLE `'.$table[0].'`')->fetch(); 
+            $sql.=$create['Create Table'].';'.PHP_EOL;
+            fwrite($arquivo, $sql); 
+            $linhas = $connectionDataBase->query('SELECT * FROM `'.$table[0].'`'); 
+            $linhas->setFetchMode(PDO::FETCH_ASSOC); 
+
+            foreach ($linhas as $linha) {
+                $linha = array_map(array($connectionDataBase,'quote'),$linha); 
+                $sql = 'INSERT INTO `'.$table[0].'` (`'.implode('`, `',array_keys($linha)).'`) VALUES ('.utf8_encode(implode(', ',$linha)).');'. PHP_EOL;
+                fwrite($arquivo, $sql); 
+            }
+
+            $sql = PHP_EOL; 
+            $resultado = fwrite($arquivo, $sql); 
+            flush();          
+        }
+
+        if($resultado !== false){
+            echo 'BACKUP FEITO COM SUCESSO!';
+        }else{
+            echo 'OPS FALHOU!';
+        }
+        fclose($arquivo); 
+    }   
+    backup();
+?>

@@ -17,7 +17,8 @@ $imageRandom = rand(1, $count);
 
 
 # Periodos do dia para Saudar User
-$hour = date("H");
+$hour = new DateTime("now", (new DateTimeZone("America/Sao_Paulo")));
+$hour = date_format($hour, 'H');
 if ($hour >= 12 && $hour < 18) {
   $periodDay = "Boa tarde, ";
 } else if ($hour >= 0 && $hour < 12) {
@@ -192,9 +193,7 @@ $nameUser = $nameUser[0];
               </a>
             </li>
 
-            <?php
-            if ($_SESSION["permition"] === "admin") {
-              echo '<li class="nav-item has-treeview">
+            <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-cash-register"></i>
                 <p> Financeiro <i class="right fas fa-angle-left"></i> </p>
@@ -217,46 +216,32 @@ $nameUser = $nameUser[0];
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/financeiro/formas-de-pagamento" class="nav-link">
-                    <i class="nav-icon fas fa-credit-card"></i>
-                    <p>Formas de Pagamento</p>
+                  <a href="/home" class="nav-link">
+                  <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                    <p>Boletos</p>
                   </a>
                 </li>
               </ul>
-            </li>';
-            }else{
-              echo '<li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-cash-register"></i>
-                <p> Financeiro <i class="right fas fa-angle-left"></i> </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/financeiro/contas-a-receber" class="nav-link">
-                    <i class="nav-icon fas fa-hand-holding-usd"></i>
-                    <p>Contas a Receber</p>
-                  </a>
-                </li>
-              </ul>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/financeiro/contas-a-pagar" class="nav-link">
-                  <i class="nav-icon fas fa-dollar-sign"></i>
-                    <p>Contas a Pagar</p>
-                  </a>
-                </li>
-              </ul>
-            </li>';
-            }
-            ?>
-            
+              <?php 
+                if ($_SESSION["permition"] === "admin") {
+                  echo '
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="/financeiro/formas-de-pagamento" class="nav-link">
+                        <i class="nav-icon fas fa-credit-card"></i>
+                        <p>Formas de Pagamento</p>
+                      </a>
+                    </li>
+                  </ul>'; }
+              ?>
+            </li>
 
             <?php
             if ($_SESSION["permition"] === "admin") {
               echo '<li class="nav-item has-treeview"> <a href="/usuarios" class="nav-link"> <i class="nav-icon fas fa-users"></i> <p> Usuários </p> </a> </li>';
             }
             ?>
-                        <li class="nav-item">
+            <li class="nav-item">
               <a href="/backup" class="nav-link">
                 <i class="nav-icon far fas fa-cloud-download-alt"></i>
                 <p class="text">Backup</p>

@@ -19,15 +19,15 @@ $(document).ready(function () {
         },
         "autoWidth": false,
         "columnDefs": [
-            { "targets": 5, "width": "10%", "orderable": false, "searchable": false },
-            { "targets": 4, "width": "12%" },
+            { "targets": 6, "width": "10%", "orderable": false, "searchable": false },
+            { "targets": 5, "width": "12%" },
         ],
         "responsive": true,
         "lengthChange": true,
         "keys": true,
         "fixedHeader": true,
         "colReorder": true,
-        "order": [4, 'asc'],
+        //"order": [4, 'asc'],
         "dom": 'B <"clear"> lfrtip',
         lengthMenu: [
             [10, 25, 50, 100, -1],
@@ -56,16 +56,17 @@ $(document).ready(function () {
                             download: 'open',
                             header: true,
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4],
+                                columns: [0, 1, 2, 3, 4, 5],
                                 order: "applied"
                             },
                             customize: function (doc) {
                                 doc.content[1].table.widths = [
                                     '25%',
+                                    '10%',
+                                    '10%',
                                     '25%',
-                                    '15%',
-                                    '15%',
-                                    '20%'
+                                    '20%',
+                                    '10%'
                                 ];
                                 doc.pageMargins = [20, 65, 20, 35];
                                 doc.defaultStyle.fontSize = 10;
@@ -297,6 +298,12 @@ $(document).on('click', '.btn-edit-people', function () {
                 var dadosJson = JSON.parse(data)[0];
 
                 $('#modalEditPeople #idPeopleEdit').val(dadosJson.pess_codigo);
+
+                if (dadosJson.pess_classificacao === "C") {
+                    $('#modalEditPeople #classificationPersonCEdit').prop("checked", true);
+                }else{
+                    $('#modalEditPeople #classificationPersonFEdit').prop("checked", true);
+                }
 
                 if (dadosJson.pess_tipo === "F") {
                     $("#modalEditPeople #divPhysicalPersonEdit").show();

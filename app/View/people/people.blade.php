@@ -97,6 +97,7 @@ require_once '../app/View/login/check-login.php';
                             <tr>
                                 <th>Nome/Razão Social</th>
                                 <th>CPF/CNPJ</th>
+                                <th>Classificação</th>
                                 <th>Endereço</th>
                                 <th>Cidade</th>
                                 <th>CEP</th>
@@ -107,6 +108,7 @@ require_once '../app/View/login/check-login.php';
                             <tr>
                                 <th>Nome/Razão Social</th>
                                 <th>CPF/CNPJ</th>
+                                <th>Classificação</th>
                                 <th>Endereço</th>
                                 <th>Cidade</th>
                                 <th>CEP</th>
@@ -154,6 +156,19 @@ require_once '../app/View/login/check-login.php';
                                 <div class="form-group">
                                     <label for="cnpj">CNPJ</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Ex.: xx.xxx.xxx/xxxx-xx" onblur="ckeckCnpj(this.value);">
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Classificação</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="classificationPersonC" name="classificationPerson" checked="" value="C">
+                                        <label for="classificationPersonC" class="custom-control-label">Cliente</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="classificationPersonF" name="classificationPerson" value="F">
+                                        <label for="classificationPersonF" class="custom-control-label">Forncededor</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2" id="divName">
@@ -300,6 +315,21 @@ require_once '../app/View/login/check-login.php';
                                     <input type="text" name="cnpjEdit" class="form-control" id="cnpjEdit" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" style="cursor: not-allowed;" disabled>
                                 </div>
                             </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Classificação</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="classificationPersonCEdit" name="classificationPersonEdit" value="C">
+                                        <label for="classificationPersonCEdit" class="custom-control-label">Cliente</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="classificationPersonFEdit" name="classificationPersonEdit" value="F">
+                                        <label for="classificationPersonFEdit" class="custom-control-label">Forncededor</label>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-sm-2" id="divNameEdit">
                                 <div class="form-group">
                                     <label for="name">Nome</label> <label style="color: red; font-size: 12px;"> * </label>
@@ -483,6 +513,7 @@ require_once '../app/View/login/check-login.php';
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'select2/js/i18n/pt-BR.js' ?>"></script>
 <script>
     $(function() {
         $('#datemask').inputmask('dd/mm/yyyy', {
@@ -491,7 +522,9 @@ require_once '../app/View/login/check-login.php';
         $('[data-mask]').inputmask();
     });
 
-    $('.select2').select2();
+    $(".select2").select2({
+        language: "pt-BR"
+    });
 </script>
 <script src="<?= DIRJS . 'search-zip/search-zip.js' ?>"></script>
 

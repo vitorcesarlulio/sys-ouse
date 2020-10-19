@@ -43,7 +43,9 @@ while ($row = mysqli_fetch_array($result)) {
     $subArray[] = $row["tpg_parcelas"];
     $subArray[] = $row["tpg_observacao"];
     $subArray[] = '<div class="btn-group btn-group-sm">
-                     <button type="button" name="deletePaymentMethod" class="btn btn-danger btn-delete-payment-method" id="deletePaymentMethod" onclick="confirmDeleteRecord(' . $row["tpg_codigo"] . ');"><i class="fas fa-trash"></i></button>
+                     <button type="button" name="deletePaymentMethod" class="btn btn-danger btn-delete-payment-method" id="deletePaymentMethod" onclick="confirmDeleteRecord(' . $row["tpg_codigo"] . ', `/financeiro/formas-de-pagamento/apagar`, `#listPaymentMethod`, `Sucesso: forma de pagamento deletada!`, `Erro: forma de pagamento não deletada!`);">
+                     <i class="fas fa-trash"></i>
+                     </button>
                   </div>';
     $data[]     = $subArray;
 }

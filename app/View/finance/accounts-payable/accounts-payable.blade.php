@@ -231,6 +231,7 @@ $searchPeople->execute();
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'select2/js/i18n/pt-BR.js' ?>"></script>
 <script>
     $(function() {
         $('#datemask').inputmask('dd/mm/yyyy', {
@@ -239,21 +240,9 @@ $searchPeople->execute();
         $('[data-mask]').inputmask();
     });
 
-/*     $(document).ready(function() {
-        $("#money").inputmask('currency', {
-            "autoUnmask": true,
-            radixPoint: ",",
-            groupSeparator: ".",
-            allowMinus: false,
-            prefix: 'R$ ',
-            digits: 2,
-            digitsOptional: false,
-            rightAlign: false,
-            unmaskAsNumber: true
-        });
-    }); */
-
-    $('.select2').select2();
+    $(".select2").select2({
+        language: "pt-BR"
+    });
 </script>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fh-3.1.7/kt-2.5.2/datatables.min.css" />

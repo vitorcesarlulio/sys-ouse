@@ -15,17 +15,17 @@ if (isset($_POST['idPeopleEdit']) && !empty($_POST['idPeopleEdit'])) {
     $searchPeople = $connectionDataBase->prepare($querySelectPeople);
     $searchPeople->execute($parametros);
 
-    $users = [];
     while ($rowPeople = $searchPeople->fetch(PDO::FETCH_ASSOC)) {
 
-        #Somente as Datas
+        # Somente as Datas
         $dateInsertPeople = substr($rowPeople['pess_data_cadastro'], 0, 10);
         $dateInsertPeople = explode("-", $dateInsertPeople);
         $dateInsertPeople = $dateInsertPeople[2] . "/" . $dateInsertPeople[1] . "/" . $dateInsertPeople[0];
 
-        $users[] = [
+        $peoples[] = [
             'pess_codigo'                => $rowPeople['pess_codigo'],
             'pess_tipo'                  => $rowPeople['pess_tipo'],
+            'pess_classificacao'         => $rowPeople['pess_classificacao'],
             'pess_nome'                  => $rowPeople['pess_nome'],
             'pess_razao_social'          => $rowPeople['pess_razao_social'],
             'pess_sobrenome'             => $rowPeople['pess_sobrenome'],
@@ -46,5 +46,6 @@ if (isset($_POST['idPeopleEdit']) && !empty($_POST['idPeopleEdit'])) {
         ];
     }
 
-    echo json_encode($users);
+    echo json_encode($peoples);
+    exit;
 }

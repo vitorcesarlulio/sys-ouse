@@ -1,140 +1,103 @@
-/* Função para Exibir modal de confirmação */
-function showModal(id, titulo, texto, callback) {
-    $(id).find('#titulo').text(titulo);
-    $(id).find('#texto').text(texto);
-    $(id).modal('show');
-    if (typeof callback === 'function') {
-        $(id).find('#btnConfirm').click(function () { $(id).modal('hide'); });
-        $(id).find('#btnConfirm').click(function () { callback(); });
+//Agenda esta separado no arquvo calendar.js
+
+// Deletando evento e orçamento
+function confirmDeleteEventBudget(idEvent, titleEvent) {
+    if (titleEvent === "Realizar Orçamento") {
+        $.confirm({
+            title: 'Atenção!',
+            content: 'Realmente deseja excluir esse evento e o orçamento veiculado a ele?',
+            type: 'red',
+            buttons: {
+                omg: {
+                    text: 'Sim',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        $.ajax({
+                            url: "/agenda/calendario/apagar",
+                            method: "POST",
+                            data: { idEventBudget: idEvent },
+                            success: function (retorna) { retorna['sit'] ? location.reload() : $("#msg-cad").html(retorna['msg']); },
+                            error: function () { toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!'); }
+                        });
+                    }
+                },
+                close: {
+                    text: 'Não',
+                    action: function () {
+                        $.confirm({
+                            title: 'Atenção!',
+                            content: 'Realmente deseja excluir somente o evento?',
+                            type: 'red',
+                            buttons: {
+                                omg: {
+                                    text: 'Sim',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        $.ajax({
+                                            url: "/agenda/calendario/apagar",
+                                            method: "POST",
+                                            data: { idEvent: idEvent },
+                                            success: function (retorna) { retorna['sit'] ? location.reload() : $("#msg-cad").html(retorna['msg']); },
+                                            error: function () { toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!'); }
+                                        });
+                                    }
+                                },
+                                close: {
+                                    text: 'Não',
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    } else {
+        $.confirm({
+            title: 'Atenção!',
+            content: 'Realmente deseja excluir esse evento?',
+            type: 'red',
+            buttons: {
+                omg: {
+                    text: 'Sim',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        $.ajax({
+                            url: "/agenda/calendario/apagar",
+                            method: "POST",
+                            data: { idEvent: idEvent },
+                            success: function (retorna) { retorna['sit'] ? location.reload() : $("#msg-cad").html(retorna['msg']); },
+                            error: function () { toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!'); }
+                        });
+                    }
+                },
+                close: {
+                    text: 'Não',
+                }
+            }
+        });
     }
 }
 
-/* Excluir evento */
-$(document).on('click', '.btn-delete-event', function () {
-    var idEvent = $(this).attr("id");
-    showModal('#modalConfirm', 'Excluir Evento?', 'Realmente deseja excluir esse evento?',
-        function () {
-            $.ajax({
-                url: "/agenda/eventos/apagar",
-                method: "POST",
-                data: { idEvent: idEvent },
-                success: function (retunAjax) {
-                    if (retunAjax === true) {
-                        toastr.success('Sucesso: evento apagado!');
-                        $('#listEvents').DataTable().ajax.reload();
-                    } else {
-                        toastr.error('Erro: evento não apagado!');
-                        $('#listEvents').DataTable().ajax.reload();
-                    }
-                },
-                error: function () {
-                    toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
-                }
-            });
-        }
-    );
-});
-
-/* Modal confirma mudar status evento */
-$(document).on('click', '.span-update-status', function () {
-    var id = $(this).attr("id");
-
-
-    showModal('#modalConfirm', 'Alterar Status', 'Realmente deseja alterar o status desse registro?',
-        function () {
-            $.ajax({
-                url: "/agenda/eventos/mudar-status",
-                method: "POST",
-                data: { id: id },
-                success: function () {
-                    $("#alertMessage").show();
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-success" aria-live="polite" style=""><div class="toast-message">Sucesso: status alterado!</div></div></div>');
-                    $('#listEvents').DataTable().ajax.reload();
-                },
-                error: function () {
-                    $("#alertMessage").show();
-                    $('#alertMessage').html('<div id="toast-container" class="toast-top-right"><div class="toast toast-error" aria-live="polite" style=""><div class="toast-message">Erro: status não alterado!</div></div></div>');
-                    $('#listEvents').DataTable().ajax.reload();
-                }
-            });
-        }
-    );
-});
-
-/* Excluir Usuario */
-$(document).on('click', '.btn-delete-user', function () {
-    var idUser = $(this).attr("id");
-    showModal('#modalConfirm', 'Excluir Usuário?', 'Realmente deseja excluir esse usuário?',
-        function () {
-            $.ajax({
-                url: "/usuarios/apagar",
-                method: "POST",
-                data: { idUser: idUser },
-                success: function (retunAjax) {
-                    if (retunAjax === true) {
-                        toastr.success('Sucesso: usuário apagado!');
-                        $('#listUsers').DataTable().ajax.reload();
-                    } else {
-                        toastr.error('Erro: usuário não apagado!');
-                        $('#listUsers').DataTable().ajax.reload();
-                    }
-                },
-                error: function () {
-                    toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
-                }
-            });
-        }
-    );
-});
-
-/* Excluir Pessoa */
-/* $(document).on('click', '.btn-delete-people', function () {
-    var idPeople = $(this).attr("id");
-    showModal('#modalConfirm', 'Excluir Pessoa?', 'Realmente deseja excluir essa Pessoa?',
-        function () {
-            $.ajax({
-                url: "/pessoas/apagar",
-                method: "POST",
-                data: { idPeople: idPeople },
-                success: function (retunAjax) {
-                    if (retunAjax === true) {
-                        toastr.success('Sucesso: pessoas apagada!');
-                        $('#listPeople').DataTable().ajax.reload();
-                    } else {
-                        toastr.error('Erro: pessoas não apagada!');
-                        $('#listPeople').DataTable().ajax.reload();
-                    }
-                },
-                error: function () {
-                    toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
-                }
-            });
-        }
-    );
-}); */
-
-
-
-
-function confirmDeleteRecord(data) {
+// Atualizar status 
+function confirmUpdateStatusRecord(data, url, idTable, msgSuccess, msgError) {
     $.confirm({
         title: 'Atenção!',
-        content: 'Realmente deseja excluir esse registro?',
-        type: 'red',
+        content: 'Realmente deseja atualizar o status esse registro?',
+        type: 'orange',
         buttons: {
             omg: {
                 text: 'Sim',
-                btnClass: 'btn-red',
+                btnClass: 'btn-orange',
                 action: function () {
                     $.ajax({
-                        url: "/financeiro/formas-de-pagamento/apagar",
+                        url: url,
                         method: "POST",
                         data: { data: data },
                         success: function (retunAjax) {
                             if (retunAjax) {
-                                toastr.success('Sucesso: forma de pagamento deletada!');
-                                $('#listPaymentMethod').DataTable().ajax.reload();
-                            } else { toastr.error('Erro: forma de pagamento não deletada!'); }
+                                toastr.success(msgSuccess);
+                                $(idTable).DataTable().ajax.reload();
+                            } else { toastr.error(msgError); }
                         },
                         error: function () {
                             toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
@@ -147,20 +110,38 @@ function confirmDeleteRecord(data) {
             }
         }
     });
-    /*  if (confirm("Realmente deseja excluir esse registro?")) {
-         $.ajax({
-             url: "/financeiro/formas-de-pagamento/apagar",
-             method: "POST",
-             data: { data: data },
-             success: function (retunAjax) {
-                 if (retunAjax) {
-                     toastr.success('Sucesso: forma de pagamento deletada!');
-                     $('#listPaymentMethod').DataTable().ajax.reload();
-                 } else { toastr.error('Erro: forma de pagamento não deletada!'); }
-             },
-             error: function () {
-                 toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
-             }
-         });
-     } */
+}
+
+// Funcção global
+function confirmDeleteRecord(data, url, idTable, msgSuccess, msgError) {
+    $.confirm({
+        title: 'Atenção!',
+        content: 'Realmente deseja excluir esse registro?',
+        type: 'red',
+        buttons: {
+            omg: {
+                text: 'Sim',
+                btnClass: 'btn-red',
+                action: function () {
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: { data: data },
+                        success: function (retunAjax) {
+                            if (retunAjax) {
+                                toastr.success(msgSuccess);
+                                $(idTable).DataTable().ajax.reload();
+                            } else { toastr.error(msgError); }
+                        },
+                        error: function () {
+                            toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+                        }
+                    });
+                }
+            },
+            close: {
+                text: 'Não',
+            }
+        }
+    });
 }

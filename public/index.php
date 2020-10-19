@@ -76,11 +76,7 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
         include '../app/View/schedule/schedule-events/list-events.php';
     });
 
-    $route->post('/eventos/apagar', function () {
-        include '../app/View/schedule/schedule-events/delete-event.php';
-    });
-
-    $route->post('/eventos/mudar-status', function () {
+    $route->post('/eventos/atualizar-status', function () {
         include '../app/View/schedule/schedule-events/update-status.php';
     });
 });
@@ -89,15 +85,12 @@ $route->group(['prefix' => '/agenda'], function ($route) use ($blade) {
  * Orçamento
  */
 $route->group(['prefix' => '/orcamentos'], function ($route) use ($blade) {
-
     $route->get('', function () use ($blade) {
         echo $blade->render('budgets.budgets');
     });
-
     $route->get('/editar', function () use ($blade) {
         echo $blade->render('budgets.edit-budget.edit-budget');
     });
-
     $route->post('/listar', function () {
         include '../app/View/budgets/list-budgets.php';
     });
@@ -148,13 +141,12 @@ $route->group(['prefix' => '/pessoas'], function ($route) use ($blade) {
  */
 $route->group(['prefix' => '/financeiro'], function ($route) use ($blade) {
 
-
     # Contas a Receber
     $route->get('/contas-a-receber', function () use ($blade) {
         echo $blade->render('finance.accounts-receivable.accounts-receivable');
     });
 
-    $route->get('/contas-a-receber/listar', function () {
+    $route->post('/contas-a-receber/listar', function () {
         include '../app/View/finance/accounts-receivable/list-accounts-receivable.php';
     });
 

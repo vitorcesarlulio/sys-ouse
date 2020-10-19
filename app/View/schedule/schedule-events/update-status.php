@@ -1,18 +1,22 @@
 <?php
-include_once '../app/Model/connection-pdo.php';
-include_once '../app/Model/connection-mysqli.php';
-            
-$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+if (isset($_POST['data']) && !empty($_POST['data'])) {
+	include_once '../app/Model/connection-pdo.php';
 
-$valueStatus = "R";
-$valueCor ="#28A745";
+	$idEvent = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_NUMBER_INT);
+	$valueStatus = "R";
+	$valueCor = "#28A745";
 
-$sql = "update tb_eventos set 
-even_status = '$valueStatus',
-even_cor = '$valueCor'
-				where 
-				even_codigo = '$id'";
-								
-mysqli_query($connectionDataBase, $sql) or die ("Erro na sql!") ;
+	# Deletando Orçamento
+	$queryUpdateStatusEvent = " UPDATE tb_eventos SET even_status=:even_status, even_cor=:even_cor WHERE even_codigo=:even_codigo ";
+	$updateStatusEvent = $connectionDataBase->prepare($queryUpdateStatusEvent);
+	$updateStatusEvent->bindParam(":even_status", $valueStatus);
+	$updateStatusEvent->bindParam(":even_cor", $valueCor);
+	$updateStatusEvent->bindParam(":even_codigo", $idEvent);
+	$updateStatusEvent->execute();
 
-header("Location: /agenda/eventos");
+	$updateStatusEvent->execute() ? $returnAjax = true : $returnAjax = false;
+
+	header('Content-Type: application/json');
+	echo json_encode($returnAjax);
+	exit;
+}

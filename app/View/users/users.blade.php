@@ -407,9 +407,12 @@ $searchUser->execute();
 <script src="<?= DIRJS . 'users/users.js' ?>"></script>
 <!-- Select2 -->
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'select2/js/i18n/pt-BR.js' ?>"></script>
 <script>
     //Initialize Select2 Elements
-    $('.select2').select2();
+    $(".select2").select2({
+        language: "pt-BR"
+    });
 </script>
 <!-- Vaidação -->
 <script src="<?= DIRJS . 'users/register-user-validation.js' ?>"></script>

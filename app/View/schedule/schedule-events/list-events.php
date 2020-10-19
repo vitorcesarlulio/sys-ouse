@@ -13,7 +13,7 @@ $columns = [
 
 # Query puxando os Eventos
 $query =
-"SELECT even_codigo, 
+" SELECT even_codigo, 
 even_titulo, 
 even_status, 
 DATE_FORMAT(even_datahorai,'%d/%m/%Y') AS even_datai,
@@ -22,7 +22,6 @@ DATE_FORMAT(even_datahoraf,'%H:%i') AS even_horaf,
 
 orca_nome, 
 orca_sobrenome,
-
 orca_cep
 
 FROM tb_eventos e
@@ -98,8 +97,8 @@ $checkStatus = [
 
 # Array que funciona como um if, verificando qual o status para trocar a class com a cor referente
 $checkStatusClass = [
-   "P" => "badge badge-warning",
-   "R" => "badge badge-success"
+   "P" => "btn-warning",
+   "R" => "btn-success"
 ];
 
 $data = [];
@@ -109,10 +108,17 @@ while ($row = mysqli_fetch_array($result)) {
    $sub_array[] = $row["orca_nome"] . " " . $row["orca_sobrenome"];
    $sub_array[] = $row["even_datai"];
    $sub_array[] = $row["even_horai"];
-   $sub_array[] = $row["even_horaf"];
-   $sub_array[] = '<a href="#" id="' . $row["even_codigo"] . '" class="span-update-status"><span class="' . $checkStatusClass[$row["even_status"]] . '">' . $checkStatus[$row["even_status"]] . '</span></a>';
-   $sub_array[] = '<div class="btn-group btn-group-sm"><a href="#" class="btn btn-info btn-view-event" id="' . $row["even_codigo"] . '" name="viewEvent"><i class="fas fa-eye"></i></a><button type="button" name="deleteEvent" class="btn btn-danger btn-delete-event" id="' . $row["even_codigo"] . '"><i class="fas fa-trash"></i></button></div>';
-   
+   $sub_array[] = $row["even_horaf"]; 
+   $sub_array[] = ' <button type="button" name="updateStatusEvent" class="btn btn-block ' . $checkStatusClass[$row["even_status"]] . ' btn-xs" id="updateStatusEvent" onclick="confirmUpdateStatusRecord(' . $row["even_codigo"] . ', `/agenda/eventos/atualizar-status`, `#listEvents`, `Sucesso: status do evento alterado!`, `Erro: status do evento não alterado!`);"> <b>' . $checkStatus[$row["even_status"]] . ' <b></button> ';
+   $sub_array[] =
+   '<div class="btn-group btn-group-sm">
+      <a href="#" class="btn btn-info btn-view-event" id="' . $row["even_codigo"] . '" name="viewEvent">
+         <i class="fas fa-eye"></i>
+      </a>
+      <button type="button" name="deleteEvent" class="btn btn-danger btn-delete-event" id="deleteEvent" onclick="confirmDeleteEventBudget(' . $row["even_codigo"] . ', `'. $row["even_titulo"] .'`);">
+         <i class="fas fa-trash"></i>
+      </button>
+   </div>';
    $data[] = $sub_array;
 }
 

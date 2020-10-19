@@ -74,7 +74,15 @@ while ($row = mysqli_fetch_array($result)) {
    $subArray[] = $permitionUser[$row["usu_permissoes"]];
    $subArray[] = $statusUser[$row["usu_status"]];
    $subArray[] = $row["usu_data_cadastro"];
-   $subArray[] = '<div class="btn-group btn-group-sm"><button type="button" name="editUser" class="btn btn-warning btn-edit-user" id="' . $row["usu_codigo"] . '"><i class="fas fa-edit"></i></button>     <button type="button" name="deleteUser" class="btn btn-danger btn-delete-user" id="' . $row["usu_codigo"] . '"><i class="fas fa-trash"></i></button></div>';
+   $subArray[] = '
+   <div class="btn-group btn-group-sm">
+      <button type="button" name="editUser" class="btn btn-warning btn-edit-user" id="' . $row["usu_codigo"] . '">
+         <i class="fas fa-edit"></i>
+      </button>    
+      <button type="button" name="deleteUser" class="btn btn-danger btn-delete-user" id="deleteUser" onclick="confirmDeleteRecord(' . $row["usu_codigo"] . ', `/usuarios/apagar`, `#listUsers`, `Sucesso: usuário apagado!`, `Erro: usuário não apagado!`);">
+         <i class="fas fa-trash"></i>
+      </button>
+   </div>';
    $data[]     = $subArray;
 }
 

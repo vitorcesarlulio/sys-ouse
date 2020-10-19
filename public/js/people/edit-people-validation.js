@@ -76,12 +76,12 @@ $(document).ready(function () {
         data: dados,
         processData: false,
         success: function (returnAjax) {
-          if (returnAjax === "upDatePeople") {
+          if (returnAjax) {
             toastr.success('Sucesso: pessoa editada!');
             $('#modalEditPeople').modal('hide');
             $('#formEditPeople').each(function () { this.reset(); });
             $('#listPeople').DataTable().ajax.reload();
-          } else if(returnAjax === "noUpDatePeople") {
+          } else {
             toastr.error('Erro: pessoa não editada!');
           }
         },

@@ -71,6 +71,8 @@ $searchClientBudget->execute();
             <div class="modal-body">
                 <div class="divViewEvent">
                     <dl class="row">
+                        <dd class="col-sm-8" id="idEventView" style="display: none;"></dd>
+
                         <dt class="col-sm-3">Evento:</dt>
                         <dd class="col-sm-8" id="title"></dd>
 
@@ -119,7 +121,7 @@ $searchClientBudget->execute();
                     <div class="modal-footer" id="footer">
                         <a href="#" id="btnWpp" class="btn btn-success" target="_blank"><i class="fab fa-whatsapp"></i></a>
                         <button class="btn btn-warning btn-edit-event">Editar</button>
-                        <a href="#" id="deleteEvent" class="btn btn-danger">Apagar</a>
+                        <button class="btn btn-danger btn-delete-event" onclick="confirmDeleteEvent();" id="deleteEvent">Apagar</button>                       
                     </div>
                 </div>
 
@@ -524,6 +526,7 @@ $searchClientBudget->execute();
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <!-- Select2 -->
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'select2/js/i18n/pt-BR.js' ?>"></script>
 <!-- Mensagem de crud -->
 <?php if (isset($_SESSION['msg']) && !empty($_SESSION['msg'])) {
     echo $_SESSION['msg'];
@@ -603,7 +606,9 @@ $searchClientBudget->execute();
         $('[data-mask]').inputmask();
     });
     //Initialize Select2 Elements
-    $('.select2').select2();
+    $(".select2").select2({
+        language: "pt-BR"
+    });
 </script>
 
 @endsection

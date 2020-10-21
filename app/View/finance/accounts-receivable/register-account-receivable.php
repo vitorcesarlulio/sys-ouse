@@ -32,10 +32,27 @@ $num_parcelas = floatval($installmentRegister); //3
 # Calculando valor das parcelas (sem jogar a diferença na ultima)
 $valueInstallment = round($amountFormated / $num_parcelas, 2, PHP_ROUND_HALF_DOWN);
 
+# Algoritmo para gerar as datas de vencimento
+$parc[] = $dateExpiryRegister;
+list($ano, $mes, $dia) = explode("-", $dateExpiryRegister);
+for ($i = 1; $i < $installmentRegister; $i++) {
+    $mes++;
+    if ((int)$mes == 13) {
+        $ano++;
+        $mes = 1;
+    }
+    $tira = $dia;
+    while (!checkdate($mes, $tira, $ano)) {
+        $tira--;
+    }
+    $parc[] = sprintf("%02d-%02d-%02d", $ano, $mes, $tira);
+}
+
+$o = 0;
 for ($i = 1; $i <= $installmentRegister; $i++) {
 
     # Se existir mais que 1 parcela ai eu faço somar os meses (data de vencimento)
-    $installmentRegister == 1 ? $date = $dateExpiryRegister : $date = $today->modify("+ 1 month")->format("Y-m-d");
+    //$installmentRegister == 1 ? $date = $dateExpiryRegister : $date = $today->modify("+ 1 month")->format("Y-m-d");
 
     if ($installmentRegister == $i) {
         // se $i valer o que o user digitou entao faço essa conta pra ver se tem diferença para jogar na ultima parcela 333.34
@@ -44,7 +61,7 @@ for ($i = 1; $i <= $installmentRegister; $i++) {
         //se nao, continua o valor normal da parcela 333.33, 333.33
         $valueInstallment = $valueInstallment;
     }
-    
+
     $queryInsertAccountReceivable = " INSERT INTO tb_receber_pagar (pess_codigo, tpg_codigo, crp_parcela, crp_valor, crp_emissao, crp_vencimento, crp_status, crp_tipo, crp_classificacao ,crp_obs) 
                                                                VALUES (:pess_codigo, :tpg_codigo, :crp_parcela, :crp_valor, :crp_emissao, :crp_vencimento, :crp_status, :crp_tipo, :crp_classificacao, :crp_obs) ";
     $insertAccountReceivable = $connectionDataBase->prepare($queryInsertAccountReceivable);
@@ -53,10 +70,11 @@ for ($i = 1; $i <= $installmentRegister; $i++) {
     $insertAccountReceivable->bindParam(':crp_parcela', $i);
     $insertAccountReceivable->bindParam(':crp_valor', $valueInstallment);
     $insertAccountReceivable->bindParam(':crp_emissao', $dateIssueRegister);
-    $insertAccountReceivable->bindParam(':crp_vencimento', $date);
+    $insertAccountReceivable->bindParam(':crp_vencimento', $parc[$o]);
     $insertAccountReceivable->bindParam(':crp_status', $status);
     $insertAccountReceivable->bindParam(':crp_tipo', $typeAccount);
     $insertAccountReceivable->bindParam(':crp_classificacao', $classificationRegister);
     $insertAccountReceivable->bindParam(':crp_obs', $observationRegister);
     $insertAccountReceivable->execute();
+    $o++;
 }

@@ -5,11 +5,19 @@ if ($_SESSION["permition"] === "admin") {
     echo " <script> alert('Você não tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
 }
 
-$querySelectPeople = " SELECT orca_nome, count(q.orca_numero) / t.total * 100 as perc, count(*) as Qtde from tb_orcamento q,
-(SELECT count(*) as total from tb_orcamento) t
-GROUP BY q.orca_nome ORDER BY Qtde DESC ";
-$searchPeople = $connectionDataBase->prepare($querySelectPeople);
-$searchPeople->execute();
+$querySelectPaymentMethodMoreUsed = " SELECT tpg_descricao, count(crp.tpg_codigo) / crp_2.total * 100 AS percentual, count(*) AS qtde FROM tb_receber_pagar crp, 
+(SELECT count(*) AS total FROM tb_receber_pagar) crp_2
+GROUP BY crp.tpg_descricao ORDER BY qtde DESC ";
+$paymentMethodMoreUsed = $connectionDataBase->prepare($querySelectPaymentMethodMoreUsed);
+$paymentMethodMoreUsed->execute();
+
+/* SELECT tpg_descricao, count(crp.tpg_codigo) / crp_2.total * 100 AS percentual, count(*) AS qtde FROM tb_receber_pagar crp, 
+	(SELECT count(*) AS total FROM tb_receber_pagar) crp_2
+
+INNER JOIN tb_tipo_pagamento tpg 
+ON crp.tpg_codigo = tpg.tpg_codigo
+
+GROUP BY tpg.tpg_descricao ORDER BY qtde DESC */
 ?>
 @extends('templates.default')
 
@@ -79,33 +87,33 @@ $searchPeople->execute();
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                        <?php foreach ($paymentMethodMoreUsed->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
                                             <tr>
-                                                <td><?php echo $row['orca_nome']; ?></td>
-                                                <td><?php echo $row['Qtde']; ?></td>
+                                                <td><?php echo $row['tpg_descricao']; ?></td>
+                                                <td><?php echo $row['qtde']; ?></td>
                                                 <td>
                                                     <div class="progress progress-xs">
                                                         <div class="<?php //mais uma cor = azul
-                                                                    if ($row['perc'] >= 30) {
+                                                                    if ($row['percentual'] >= 30) {
                                                                         echo 'progress-bar progress-bar-danger';
-                                                                    } else if ($row['perc'] >= 30 && $row['perc'] <= 60) {
+                                                                    } else if ($row['percentual'] >= 30 && $row['percentual'] <= 60) {
                                                                         echo 'progress-bar progress-bar-warning';
                                                                     } else {
                                                                         echo 'progress-bar progress-bar-success';
                                                                     }
-                                                                    ?>" style="width: <?php echo $row['perc'] . "%"; ?>"></div>
+                                                                    ?>" style="width: <?php echo $row['percentual'] . "%"; ?>"></div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <span class="<?php
-                                                                    if ($row['perc'] <= 30) {
+                                                                    if ($row['percentual'] <= 30) {
                                                                         echo 'badge bg-danger';
-                                                                    } else if ($row['perc'] >= 30 && $row['perc'] <= 60) {
+                                                                    } else if ($row['percentual'] >= 30 && $row['percentual'] <= 60) {
                                                                         echo 'badge bg-warning';
                                                                     } else {
                                                                         echo 'badge bg-success';
                                                                     }
-                                                                    ?>"> <?php echo number_format($row['perc'], 2, '.', '') . "%"; ?></span>
+                                                                    ?>"> <?php echo number_format($row['percentual'], 2, '.', '') . "%"; ?></span>
                                                 </td>
                                             </tr>
                                         <?php } ?>

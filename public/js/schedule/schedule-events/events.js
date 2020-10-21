@@ -37,6 +37,25 @@ $(document).ready(function () {
             }
           }, */ 
 
+          /*  PINTAR CELULA
+            "columnDefs": [
+            {
+              "targets": 3,
+              "render": function(data, type, full, meta) {
+                var cellText = $(data).text(); //Stripping html tags !!!
+                if (type === 'display' &&  (cellText == "Done" || data=='Done')) {
+                  var rowIndex = meta.row+1;
+                  var colIndex = meta.col+1;
+                  $('#example tbody tr:nth-child('+rowIndex+')').addClass('lightRed');
+                  $('#example tbody tr:nth-child('+rowIndex+') td:nth-child('+colIndex+')').addClass('red');
+                  return data;
+                } else {
+                  return data;
+                }
+              }
+            }
+          ] */
+
         "autoWidth": false, //Largura automática
         //Largura e tirar ordenaçao das colunas
         "columnDefs": [

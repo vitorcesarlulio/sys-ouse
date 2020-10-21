@@ -44,9 +44,10 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <style>
          .login-page {
             background-image: url("<?=DIRIMG . '/images-rio-de-janeiro-ouse-inteligencia-em-marcas/image-rio-janeiro-ouse-inteligencia-em-marcas-1.jpg' ?>") !important;
-            max-width: 100% !important;
+            /* max-width: 100% !important;
             background-size: 100% !important;
-            background-repeat: no-repeat !important;
+            background-repeat: no-repeat !important; */
+            background-size: cover !important;
         } 
 
         .btn-primary {

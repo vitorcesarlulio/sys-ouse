@@ -37,6 +37,18 @@ INNER JOIN tb_tipo_pagamento tpg
 ON crp.tpg_codigo = tpg.tpg_codigo 
 WHERE ";
 
+
+/* $dateEnd = str_replace('/', '-', $_POST['endDate']);
+$convertDateEnd = date("Y-m-d", strtotime($dateEnd)); */
+# Por Intervalo de Datas
+if ($_POST['startDateExpiry'] !== "" && $_POST['endDateExpiry'] !== "") {
+    $query .= ' crp_vencimento BETWEEN CAST("'.$_POST['startDateExpiry'].'" AS DATE) AND CAST("'.$_POST['endDateExpiry'].'" AS DATE) AND';
+}
+
+if ($_POST['startDateIssue'] !== "" && $_POST['endDateIssue'] !== "") {
+    $query .= ' crp_emissao BETWEEN CAST("'.$_POST['startDateIssue'].'" AS DATE) AND CAST("'.$_POST['endDateIssue'].'" AS DATE) AND';
+}
+
 if (isset($_POST["search"]["value"])) {
     if (isset($_POST["search"]["value"])) {
         $query .= ' (
@@ -45,8 +57,8 @@ if (isset($_POST["search"]["value"])) {
      OR pess_nome_fantasia  LIKE "%' . $_POST["search"]["value"] . '%"  
      OR tpg_descricao  LIKE "%' . $_POST["search"]["value"] . '%"  
      OR crp_valor  LIKE "%' . $_POST["search"]["value"] . '%"  
-     OR crp_emissao  LIKE "%' . $_POST["search"]["value"] . '%"  
-     OR crp_vencimento  LIKE "%' . $_POST["search"]["value"] . '%"  
+     OR date_format(crp_emissao,"%d/%m/%Y")  LIKE "%' . $_POST["search"]["value"] . '%"  
+     OR date_format(crp_vencimento,"%d/%m/%Y")  LIKE "%' . $_POST["search"]["value"] . '%"  
      OR crp_status  LIKE "%' . $_POST["search"]["value"] . '%"  
      OR crp_classificacao  LIKE "%' . $_POST["search"]["value"] . '%"  
      ) ';
@@ -67,6 +79,13 @@ if ($_POST["length"] != -1) {
 $numberFilteredRow = mysqli_num_rows(mysqli_query($connectionDataBase, $query));
 $result = mysqli_query($connectionDataBase, $query . $query1);
 
+$total_order = 0;
+
+$statusClass = [
+    "Aberto" => '<span class="badge badge-danger">ABERTO</span>',
+    "Pago" => '<span class="badge badge-success">PAGO</span>'
+];
+
 $data = [];
 while ($row = mysqli_fetch_array($result)) {
     $subArray   = [];
@@ -77,13 +96,22 @@ while ($row = mysqli_fetch_array($result)) {
     $subArray[] = "R$ " . number_format($row["crp_valor"], 2, ',', '.');
     $subArray[] = $row["crp_emissao"];
     $subArray[] = $row["crp_vencimento"];
-    $subArray[] = $row["crp_status"];
+    $subArray[] =$statusClass[$row["crp_status"]];
     $subArray[] = $row["crp_classificacao"];
     $subArray[] = '<div class="btn-group btn-group-sm">
+                     <button type="button" name="viewPaymentMethod" class="btn btn-primary btn-view-payment-method" id="viewPaymentMethod" onclick="viewPaymentMethod(' . $row["crp_numero"] . ');">
+                        <i class="fas fa-eye"></i>
+                     </button>
+
+                     <button type="button" name="updatePaymentMethod" class="btn btn-warning btn-update-payment-method" id="updatePaymentMethod" onclick="updatePaymentMethod('.$row["crp_numero"] . ');">
+                        <i class="fas fa-edit"></i>
+                     </button>
+
                      <button type="button" name="deletePaymentMethod" class="btn btn-danger btn-delete-payment-method" id="deletePaymentMethod" onclick="confirmDeleteRecord(' . $row["crp_numero"] . ', `/financeiro/formas-de-pagamento/apagar`, `#listPaymentMethod`, `Sucesso: forma de pagamento deletada!`, `Erro: forma de pagamento não deletada!`);">
-                     <i class="fas fa-trash"></i>
+                        <i class="fas fa-trash"></i>
                      </button>
                   </div>';
+    $total_order = $total_order + floatval($row["crp_valor"]);
     $data[]     = $subArray;
 }
 
@@ -98,7 +126,8 @@ $output = [
     "draw"            => intval($_POST["draw"]),
     "recordsTotal"    => getAllData($connectionDataBase),
     "recordsFiltered" => $numberFilteredRow,
-    "data"            => $data
+    "data"            => $data,
+    'total'    => number_format($total_order, 2)
 ];
 
 echo json_encode($output);

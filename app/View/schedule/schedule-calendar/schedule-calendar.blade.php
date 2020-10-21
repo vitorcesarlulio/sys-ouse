@@ -48,7 +48,7 @@ $searchClientBudget->execute();
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="card card-primary">
                 <div class="card-body p-0">
                     <div id="calendar"></div>

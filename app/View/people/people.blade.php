@@ -158,19 +158,6 @@ require_once '../app/View/login/check-login.php';
                                     <input type="text" name="cnpj" class="form-control" id="cnpj" data-inputmask="'mask': ['99.999.999/9999-99']" data-mask="" placeholder="Ex.: xx.xxx.xxx/xxxx-xx" onblur="ckeckCnpj(this.value);">
                                 </div>
                             </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label>Classificação</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="classificationPersonC" name="classificationPerson" checked="" value="C">
-                                        <label for="classificationPersonC" class="custom-control-label">Cliente</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input class="custom-control-input" type="radio" id="classificationPersonF" name="classificationPerson" value="F">
-                                        <label for="classificationPersonF" class="custom-control-label">Forncededor</label>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-sm-2" id="divName">
                                 <div class="form-group">
                                     <label for="name">Nome</label> <label style="color: red; font-size: 12px;"> * </label>
@@ -193,6 +180,19 @@ require_once '../app/View/login/check-login.php';
                                 <div class="form-group">
                                     <label>Nome Fantasia</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="fantasyName" class="form-control" id="fantasyName">
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Classificação</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="classificationPersonC" name="classificationPerson" checked="" value="C">
+                                        <label for="classificationPersonC" class="custom-control-label">Cliente</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="classificationPersonF" name="classificationPerson" value="F">
+                                        <label for="classificationPersonF" class="custom-control-label">Forncededor</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2">

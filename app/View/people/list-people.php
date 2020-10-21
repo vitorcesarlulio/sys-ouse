@@ -24,8 +24,6 @@ if ($_POST['startDate'] != "" && $_POST['endDate'] =! "") {
 $query .= ' pess_data_cadastro BETWEEN "'.$convertDateStart.'" AND "'.$convertDateEnd.'" AND ';
 }
 
-
-
 if (isset($_POST["search"]["value"])) {
    $query .= ' (pess_tipo LIKE "%' . $_POST["search"]["value"] . '%" OR pess_nome LIKE "%' . $_POST["search"]["value"] . '%" OR pess_sobrenome LIKE "%' . $_POST["search"]["value"] . '%" OR pess_logradouro LIKE "%' . $_POST["search"]["value"] . '%" OR pess_cidade LIKE "%' . $_POST["search"]["value"] . '%" ) ';
 }

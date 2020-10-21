@@ -294,7 +294,7 @@ $nameUser = $nameUser[0];
       <strong>Copyright &copy; <?php echo e(date('Y')); ?> <a href="https://ouse.com.br" target="_blank">Ouse</a>.</strong>
       Todos os direitos reservados.
       <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 1.0.0
+        <b>Version</b> 1.10.43
       </div>
     </footer>
   </div>

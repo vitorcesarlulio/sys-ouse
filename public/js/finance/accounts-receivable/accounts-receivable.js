@@ -8,12 +8,12 @@ function showDivPayday() {
 function showSettledRegister() {
     if ($("#installmentRegister").val() === "1") {
         $("#divSettledRegister").show();
-    }else{
+    } else {
         $("#divSettledRegister").hide();
     }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     $("#amountRegister").inputmask('decimal', {
         radixPoint: ",",
         groupSeparator: ".",
@@ -22,13 +22,13 @@ $(document).ready(function() {
         digitsOptional: false,
         placeholder: '0',
         rightAlign: false,
-        onBeforeMask: function (value, opts){
+        onBeforeMask: function (value, opts) {
             return value;
         }
     });
-}); 
+});
 
-window.onload = function () {
+/* window.onload = function () {
     var select = document.getElementById("statusRegister").addEventListener('change', function () {
         if (this.value === "Outro") {
             $("#divOtherStatus").show();
@@ -36,7 +36,7 @@ window.onload = function () {
             $("#divOtherStatus").hide();
         }
     });
-}
+} */
 
 $(document).ready(function () {
     var dataTable = $("#listAccountsReceivable").DataTable({
@@ -47,9 +47,30 @@ $(document).ready(function () {
             "url": "/financeiro/contas-a-receber/listar",
             "type": "POST",
             "data": function (data) {
+                var startDateExpiry = $('#formFiltersAccountsReceivable #startDateExpiry').val();
+                data.startDateExpiry = startDateExpiry;
+
+                var endDateExpiry = $('#formFiltersAccountsReceivable #endDateExpiry').val();
+                data.endDateExpiry = endDateExpiry;
+
+                var startDateIssue = $('#formFiltersAccountsReceivable #startDateIssue').val();
+                data.startDateIssue = startDateIssue;
+
+                var endDateIssue = $('#formFiltersAccountsReceivable #endDateIssue').val();
+                data.endDateIssue = endDateIssue;
             }
         },
         "language": { "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json" },
+        drawCallback: function (settings) {
+            $('#total_order').html('Total: R$ ' + settings.json.total);
+        },
+        /* rowCallback: function (row, data) {
+            if (data[7] == '<span class="badge badge-success">PAGO</span>') {
+                $('td:eq(7)', row).css('background-color', '#56e376');
+            }else{
+                $('td:eq(7)', row).css('background-color', '#e34830');
+            }
+        }, */
         "autoWidth": false,
         "columnDefs": [
             { "targets": 4, "width": "10%", "orderable": false, "searchable": false },
@@ -134,10 +155,46 @@ $(document).ready(function () {
                             exportOptions: { columns: [0, 1, 2, 3, 4], },
                         },
                         {
+                            extend: 'copy',
+                            text: 'Copiar',
+                            exportOptions: {
+                                modifier: {
+                                    page: 'current'
+                                }
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'CSV',
+                            charset: 'UTF-8',
+                            fieldSeparator: ';',
+                            //filename: 'export',
+                            //bom: true, fica igual excel
+                            //extension: '.csv',
+                            exportOptions: {
+                                modifier: {
+                                    search: 'none'
+                                }
+                            }
+                        },
+                        {
                             collectionTitle: 'Visibilidade da coluna', text: 'Visibilidade da coluna', extend: 'colvis', collectionLayout: 'two-column'
                         }
                     ]
             }
         ]
     });
+
+    if($('#formFiltersAccountsReceivable #startDateExpiry').val != "" && $('#formFiltersAccountsReceivable #endDateExpiry').val != ""){
+        $('#formFiltersAccountsReceivable #endDateExpiry').change(function () {
+            dataTable.draw();
+        });
+    };
+
+    if($('#formFiltersAccountsReceivable #startDateIssue').val != "" && $('#formFiltersAccountsReceivable #endDateIssue').val != ""){
+        $('#formFiltersAccountsReceivable #endDateIssue').change(function () {
+            dataTable.draw();
+        });
+    };
+   
 });

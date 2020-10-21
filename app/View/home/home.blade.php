@@ -105,7 +105,7 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 1);
     <div class="col-lg-3 col-6">
         <div class="small-box bg-light">
             <div class="inner">
-                <p>Contas a receber (mês)</p>
+                <b><p>Contas a receber (mês)</p></b>
                 <h3><sup style="font-size: 20px">R$&nbsp;</sup><?= number_format($countReceivableOpen[0]['SUM(crp_valor)'], 2, ',', '.'); ?></h3>
             </div>
             <div class="icon"><i class="ion ion-stats-bars icon-warning"></i></div>
@@ -114,7 +114,7 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 1);
     </div>
 
     <div class="col-lg-3 col-6">
-        <div class="small-box bg-lightsuccess">
+        <div class="small-box bg-light">
             <div class="inner">
                 <p>Contas recebidas (mês)</p>
                 <h3><sup style="font-size: 20px">R$&nbsp;</sup></h3>
@@ -186,6 +186,9 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 1);
     </div>
 
     <a href="/backup" class="btn btn-app"><i class="fas fa-download"></i>Backup</a>
+
+    Saldo do mes??
+    
 </div>
 @endsection
 

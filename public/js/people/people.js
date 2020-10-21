@@ -218,7 +218,7 @@ function ckeckCnpj(cnpj) {
             $('#formRegisterPeople #companyName').val(data.nome);
             $('#formRegisterPeople #fantasyName').val(data.fantasia);
             //var cep = data.cep.replace(/[^0-9]/g, '');
-            var cep = data.cep.replace(/\.|\-/g, '');
+            cep = cep.replace(/\.|\-/g, '');
             $('#formRegisterPeople #cep').val(cep);
         }
     })

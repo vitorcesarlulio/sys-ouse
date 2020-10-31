@@ -33,7 +33,7 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="author" content="Ouse Inteligência em Marcas">
-    <title>Sys Ouse | Log in</title>
+    <title>Sys Ouse</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?= DIRPLUGINS . 'fontawesome-free/css/all.min.css' ?>">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -42,13 +42,13 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="<?= DIRPLUGINS . 'toastr/toastr.min.css' ?>">
     <style>
-         .login-page {
-            background-image: url("<?=DIRIMG . '/images-rio-de-janeiro-ouse-inteligencia-em-marcas/image-rio-janeiro-ouse-inteligencia-em-marcas-1.jpg' ?>") !important;
+        .login-page {
+            background-image: url("<?= DIRIMG . '/images-rio-de-janeiro-ouse-inteligencia-em-marcas/image-rio-janeiro-ouse-inteligencia-em-marcas-1.jpg' ?>") !important;
             /* max-width: 100% !important;
             background-size: 100% !important;
             background-repeat: no-repeat !important; */
             background-size: cover !important;
-        } 
+        }
 
         .btn-primary {
             background-color: #FE5000 !important;
@@ -158,23 +158,28 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     }
 
     if ($r >= 5) {
-        echo '<script>
-                       /*  var data = new Date();
-                        var hora = data.getHours();
-                        var min = data.getMinutes();       
-                        var str_hora = hora + ":" + min;  
-                        var resultado = moment(str_hora, "hh:mm").add(20, "minutes").format("HH:mm");  */
-                        $(".login-box").html(`
-                        <div class="alert alert-danger alert-dismissible" id="divErrors">
-                            <h5><i class="icon fas fa-ban"></i> Bloqueado!</h5>
-                            Tentativas excedidas, tente novamente daqui <b>20 minutos</b> ou entre em contato com o Administrador do sistema!
-                        </div>`);
-                        </script>';
+        //pegando a ultimo registro daquele ip bloqueado so para exibir para o user e somar 20 minutos
+        $querySelectAttemp2 = " SELECT ten_id, ten_data, ten_ip FROM tb_tentativas WHERE ten_ip=:ten_ip ORDER BY ten_id DESC ";
+        $selectAttemp2 = $connectionDataBase->prepare($querySelectAttemp2);
+        $selectAttemp2->bindParam('ten_ip', $ipAdressUser);
+        $selectAttemp2->execute();
+        $selectAttemp2 = $selectAttemp2->fetch(\PDO::FETCH_ASSOC); //não esta pegando a ultima data ele pega a primeira vez que o user errou
+
+        //Somando 20 minutos
+        $dateTime = new DateTime(date("H:i", strtotime($selectAttemp2['ten_data'])));
+        
+        echo '
+        <script>
+            $(".login-box").html(`
+                <div class="alert alert-danger alert-dismissible" id="divErrors">
+                    <h5><i class="icon fas fa-ban"></i>Tentativas excedidas!</h5>Tente novamente às <b>'.$dateTime->modify("+20 minutes")->format("H:i").' (20 minutos)</b> ou entre em contato com o Administrador do sistema!
+                </div>`);
+        </script>';
     } else {
-        $block = false;
+        echo ` $(".alert alert-danger").remove();` ;//if ($(this).hasClass(".alert alert-danger")) {  }
     }
     ?>
-    
+
     <script>
         function ShowHidePassword() {
             var x = document.getElementById("passwordLogin");

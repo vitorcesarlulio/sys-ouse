@@ -12,7 +12,7 @@ mysqli_select_db($con, $dbname) or die(mysqli_connect_errno());
 // gerando um arquivo sql. Como?
 // a função fopen, abre um arquivo, que no caso, será chamado como: backup + data.sql
 //  concatenando dinamicamente o nome do banco com a extensão .sql.
-$back = fopen('backup_' . date("d_m_Y") . ".sql", "w");
+$back = fopen('backup-' . date("d-m-Y") . ".sql", "w");
 
 // aqui, listo todas as tabelas daquele banco selecionado acima
 $res = mysqli_query($con, "SHOW TABLES FROM $dbname");
@@ -94,7 +94,7 @@ while ($row = mysqli_fetch_array($res)) {
 fclose($back);
 
 // gerando o arquivo para download, com o nome do banco e extensão sql.
-$arquivo = 'backup_' . date("d_m_Y") . ".sql";
+$arquivo = 'backup-' . date("d-m-Y") . ".sql";
 Header("Content-type: application/sql");
 Header("Content-Disposition: attachment; filename=$arquivo");
 

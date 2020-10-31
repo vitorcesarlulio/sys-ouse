@@ -5,19 +5,33 @@ if ($_SESSION["permition"] === "admin") {
     echo " <script> alert('Você não tem permissão para acessar essa página, contate o Administrador do sistema!'); window.location.href='/home'; </script> ";
 }
 
-$querySelectPaymentMethodMoreUsed = " SELECT tpg_descricao, count(crp.tpg_codigo) / crp_2.total * 100 AS percentual, count(*) AS qtde FROM tb_receber_pagar crp, 
-(SELECT count(*) AS total FROM tb_receber_pagar) crp_2
-GROUP BY crp.tpg_descricao ORDER BY qtde DESC ";
-$paymentMethodMoreUsed = $connectionDataBase->prepare($querySelectPaymentMethodMoreUsed);
-$paymentMethodMoreUsed->execute();
-
-/* SELECT tpg_descricao, count(crp.tpg_codigo) / crp_2.total * 100 AS percentual, count(*) AS qtde FROM tb_receber_pagar crp, 
-	(SELECT count(*) AS total FROM tb_receber_pagar) crp_2
+$querySelectPaymentMethodMoreUsed = " SELECT 
+tpg.tpg_descricao, 
+count(crp.tpg_codigo) AS quantidade_de_vezes_utilizado,
+sum(crp_valor) AS valor_total_cada_forma_pagto,
+(count(crp.tpg_codigo) / (SELECT count(*) FROM tb_receber_pagar WHERE crp_tipo = 'R') * 100) porcentagem
+FROM tb_receber_pagar crp
 
 INNER JOIN tb_tipo_pagamento tpg 
 ON crp.tpg_codigo = tpg.tpg_codigo
 
-GROUP BY tpg.tpg_descricao ORDER BY qtde DESC */
+WHERE crp_tipo = 'R' GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC ";
+$paymentMethodMoreUsed = $connectionDataBase->prepare($querySelectPaymentMethodMoreUsed);
+$paymentMethodMoreUsed->execute();
+
+/* 
+SELECT 
+tpg.tpg_descricao, 
+count(crp.tpg_codigo) AS quantidade_de_vezes_utilizado,
+sum(crp_valor) AS valor_total_cada_forma_pagto,
+(count(crp.tpg_codigo) / (SELECT count(*) FROM tb_receber_pagar) * 100) porcentagem
+FROM tb_receber_pagar crp
+
+INNER JOIN tb_tipo_pagamento tpg 
+ON crp.tpg_codigo = tpg.tpg_codigo
+
+GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC
+ */
 ?>
 @extends('templates.default')
 
@@ -61,59 +75,65 @@ GROUP BY tpg.tpg_descricao ORDER BY qtde DESC */
                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
-        <form role="form" id="formFiltersPeople" autocomplete="off" enctype="multipart/form-data">
+        <form role="form" id="formFiltersPaymentMethod" autocomplete="off" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="row">
+
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label>Descrição do Relatório</label>
-                            <input type="text" name="descriptionReport" id="descriptionReport" class="form-control">
+                            <label>Filtros</label>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="optionPaymentMethodsMoreUsed" name="optionPaymentMethodsMoreUsed" onclick="filtersPaymentMethod();" value="casa">
+                                <label for="optionPaymentMethodsMoreUsed" class="custom-control-label">Formas de Pagamento mais lucrativas</label>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-5">
+                    <div class="col-6" id="paymentMethodsMoreUsed" style="display: none;">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Formas de Pagamento mais utilizadas</h3>
+                                <h3 class="card-title"> <b>Formas de Pagamento mais lucrativas</b> </h3>
                             </div>
                             <div class="card-body table-responsive p-0" style="height: 200px;">
                                 <table class="table table-head-fixed text-nowrap">
                                     <thead>
                                         <tr>
-                                            <th>Descrição</th>
-                                            <th>Quantidade</th>
-                                            <th>Progesso</th>
-                                            <th>Percentual</th>
+                                            <th>Forma de Pagto.</th>
+                                            <th>Vezes usada</th>
+                                            <th>Valor</th>
+                                            <th>Frequência</th>
+                                            <th>Percentual (Qtde.)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($paymentMethodMoreUsed->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
                                             <tr>
                                                 <td><?php echo $row['tpg_descricao']; ?></td>
-                                                <td><?php echo $row['qtde']; ?></td>
+                                                <td><?php echo $row['quantidade_de_vezes_utilizado']; ?></td>
+                                                <td><?php echo "R$ " . number_format($row['valor_total_cada_forma_pagto'], 2, ',', '.'); ?></td>
                                                 <td>
                                                     <div class="progress progress-xs">
                                                         <div class="<?php //mais uma cor = azul
-                                                                    if ($row['percentual'] >= 30) {
-                                                                        echo 'progress-bar progress-bar-danger';
-                                                                    } else if ($row['percentual'] >= 30 && $row['percentual'] <= 60) {
-                                                                        echo 'progress-bar progress-bar-warning';
+                                                                    if ($row['porcentagem'] <= 30) {
+                                                                        echo 'progress-bar bg-danger progress-bar-striped';
+                                                                    } else if ($row['porcentagem'] >= 30 && $row['porcentagem'] <= 60) {
+                                                                        echo 'progress-bar bg-warning progress-bar-striped';
                                                                     } else {
-                                                                        echo 'progress-bar progress-bar-success';
+                                                                        echo 'progress-bar bg-warning progress-bar-sucess';
                                                                     }
-                                                                    ?>" style="width: <?php echo $row['percentual'] . "%"; ?>"></div>
+                                                                    ?>" style="width: <?php echo $row['porcentagem'] . "%"; ?>"></div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <span class="<?php
-                                                                    if ($row['percentual'] <= 30) {
+                                                                    if ($row['porcentagem'] <= 30) {
                                                                         echo 'badge bg-danger';
-                                                                    } else if ($row['percentual'] >= 30 && $row['percentual'] <= 60) {
+                                                                    } else if ($row['porcentagem'] >= 30 && $row['porcentagem'] <= 60) {
                                                                         echo 'badge bg-warning';
                                                                     } else {
                                                                         echo 'badge bg-success';
                                                                     }
-                                                                    ?>"> <?php echo number_format($row['percentual'], 2, '.', '') . "%"; ?></span>
+                                                                    ?>"> <?php echo number_format($row['porcentagem'], 2, '.', '') . "%"; ?></span>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -122,6 +142,14 @@ GROUP BY tpg.tpg_descricao ORDER BY qtde DESC */
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Descrição do Relatório</label>
+                            <input type="text" name="descriptionReport" id="descriptionReport" class="form-control">
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </form>

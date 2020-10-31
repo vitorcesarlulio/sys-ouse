@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('#formRegisterAccountsReceivable').validate({
         rules: {
+            numberDocumentRegister: { required: true },
             peopleRegister: { required: true },
             paymentMethodRegister: { required: true },
             installmentRegister: { required: true, integer: true, digits: true, positiveNumber: true, max: 100 },
@@ -8,9 +9,11 @@ $(document).ready(function () {
             dateIssueRegister: { required: true },
             dateExpiryRegister: { required: true },
             statusRegister: { required: true },
-            otherStatusRegister: { required: true },
+            payDayRegister: {required: true},
+            categoryRegister: {required: true},
         },
         messages: {
+            numberDocumentRegister: { required: "Digite o número de um documento." },
             peopleRegister: { required: "Selecione uma pessoa." },
             paymentMethodRegister: { required: "Selecione um tipo de pagamento." },
             installmentRegister: { required: "Digite a(s) parcela(s).", integer: "Digite apenas números inteiros.", digits: "Digite apenas números.", positiveNumber: "Digite apenas números positivos.", max: "Número de parcelas excedido." },
@@ -18,8 +21,8 @@ $(document).ready(function () {
             dateIssueRegister: { required: "Digite uma data de emissão." },
             dateExpiryRegister: { required: "Digite uma data de vencimento." },
             statusRegister: { required: "Selecione um status." },
-            otherStatusRegister: { required: "Digite um status." },
-            classificationRegister: { required: "Selecione uma classificação." },
+            payDayRegister: { required: "Digite uma data de pagamento." },
+            categoryRegister: { required: "Selecione uma categoria." },
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

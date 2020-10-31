@@ -3,13 +3,22 @@ require_once '../app/View/login/check-login.php';
 
 include_once '../app/Model/connection-pdo.php';
 
+/* Pessoas */
 $querySelectPeople = " SELECT pess_codigo, pess_nome, pess_sobrenome, pess_razao_social, pess_classificacao FROM tb_pessoas ORDER BY pess_codigo DESC";
 $searchPeople = $connectionDataBase->prepare($querySelectPeople);
 $searchPeople->execute();
 
+/* Formas de pagametno */
 $querySelectPaymentMethod = " SELECT tpg_codigo, tpg_descricao, tpg_parcelas FROM tb_tipo_pagamento ";
 $searchPaymentMethod = $connectionDataBase->prepare($querySelectPaymentMethod);
 $searchPaymentMethod->execute();
+$searchPaymentMethod = $searchPaymentMethod->fetchAll(\PDO::FETCH_ASSOC);
+
+/* Categorias */
+$querySelectCategory = " SELECT * FROM tb_categoria ";
+$searchCategory = $connectionDataBase->prepare($querySelectCategory);
+$searchCategory->execute();
+$searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
 ?>
 @extends('templates.default')
 
@@ -41,6 +50,26 @@ $searchPaymentMethod->execute();
     .card-title {
         margin-top: 0.3rem;
     }
+
+    .badge-open {
+
+        background-color: #d9a407 !important;
+        color: #fff !important;
+    }
+
+    .badge-negotiated {
+        background-color: #286E80 !important;
+        color: #fff !important;
+    }
+
+    .badge-protested {
+        background-color: #000 !important;
+        color: #fff !important;
+    }
+
+    .label-not-bold {
+        font-weight: normal !important;
+    }
 </style>
 @endsection
 
@@ -62,67 +91,121 @@ $searchPaymentMethod->execute();
         <form role="form" id="formFiltersAccountsReceivable" autocomplete="off" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="row">
+
                     <div class="col-sm-2">
-                        <h5><b>Data de vencimento</b></h5>
                         <div class="form-group">
-                            <label>De:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                                <input type="date" class="form-control" name="startDateExpiry" id="startDateExpiry" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
+                            <label>Por Período</label>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="filterExpirationDate" name="notDefinedFilters" value="">
+                                <label for="filterExpirationDate" class="custom-control-label label-not-bold">Data de Venciemento</label> <!-- abre uma caixa pra ele colocar quantos dias, se nao vai ser 10 dias padrao exemplo -->
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="filterDateIssue" name="notDefinedFilters" value="">
+                                <label for="filterDateIssue" class="custom-control-label label-not-bold">Data de Emissão</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="filterPayday" name="notDefinedFilters" value="">
+                                <label for="filterPayday" class="custom-control-label label-not-bold">Data de Pagamento</label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                   <h5 style="visibility: hidden;">d</h5>
+
+                    <div class="col-sm-2" style="display: none;" id="divDateStart">
+                        <h5 id="h5DateStartDateAnd" style="font-weight: bold;"></h5>
                         <div class="form-group">
-                            <label>Até:</label>
+                            <label class="label-not-bold">De:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
-                                <input type="date" class="form-control" name="endDateExpiry" id="endDateExpiry" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
+                                <input type="date" class="form-control" name="filterStartDate" id="filterStartDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2" style="display: none;" id="divDateEnd">
+                        <h5 style="visibility: hidden;">d</h5>
+                        <div class="form-group">
+                            <label class="label-not-bold">Até:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" class="form-control" name="filterEndDate" id="filterEndDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
-                        <h5><b>Data de emissão</b></h5>
                         <div class="form-group">
-                            <label>De:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                                <input type="date" class="form-control" name="startDateIssue" id="startDateIssue" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
+                            <label>Pré-definidos</label>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="dateExperyNext" name="predefinedFilters" value="">
+                                <label for="dateExperyNext" class="custom-control-label label-not-bold">Próximas ao vencimento</label> <!-- abre uma caixa pra ele colocar quantos dias, se nao vai ser 10 dias padrao exemplo -->
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                   <h5 style="visibility: hidden;">d</h5>
-                        <div class="form-group">
-                            <label>Até:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                                <input type="date" class="form-control" name="endDateIssue" id="endDateIssue" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="overdueAccounts" name="predefinedFilters" value="">
+                                <label for="overdueAccounts" class="custom-control-label label-not-bold">Contas vencidas</label>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Tipo de Pagamento</label>
+                            <select class="form-control select2" name="filterAccountPayment" id="filterAccountPayment" style="width: 100%;">
+                                <option value="">Tipo de Pagamento</option>
+                                <?php foreach ($searchPaymentMethod as $row) { ?>
+                                    <option value="<?= $row['tpg_codigo'] ?>"> <?= $row['tpg_descricao'] ?> </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="statusFilter" id="statusFilter" onchange="">
+                                <option value="">TODOS</option>
+                                <option value="ABERTO" style="background-color: #ffc107; color: #fff; font-weight: bold;">ABERTO</option>
+                                <option value="PAGO" style="background-color: #28a745; color: #fff; font-weight: bold;">PAGO</option>
+                                <option value="CANCELADO" style="background-color: #b11800; color: #fff; font-weight: bold;">CANCELADO</option>
+                                <option value="NEGOCIADO" style="background-color: #286E80; color: #fff; font-weight: bold;">NEGOCIADO</option>
+                                <option value="PROTESTADO" style="background-color: #000; color: #fff; font-weight: bold;">PROTESTADO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select class="form-control select2" name="filterCategory" id="filterCategory" style="width: 100%;">
+                                <option value="">Tipo de Pagamento</option>
+                                <?php foreach ($searchCategory as $row) { ?>
+                                    <option value="<?= $row['cat_codigo'] ?>"> <?= $row['cat_descricao'] ?> </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div> -->
+                    <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <select class="form-control select2" name="filterCategory" id="filterCategory" style="width: 100%;">
+                                        <option value="">Categoria</option>
+                                        <?php foreach ($searchCategory as $row) { ?>
+                                            <option value="<?php echo $row['cat_codigo'] ?>"> <?= $row['cat_descricao']?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label>Descrição do Relatório</label>
-                            <input type="text" name="descriptionReport" id="descriptionReport" class="form-control">
+                            <textarea class="form-control" rows="3" name="descriptionReport" id="descriptionReport" style="height: 70px;"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
         <div class="card-footer">
-            <button type="reset" class="btn btn-default" value="Reset"><i class="fas fa-times"></i></button>
+            <button type="reset" class="btn btn-default" id="clearFilters">Limpar Filtros</button>
         </div>
     </div>
     <div class="row">
@@ -130,47 +213,52 @@ $searchPaymentMethod->execute();
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Resultado do Filtro &nbsp; <b>Status:</b></h3>
-                    <span class="badge badge-danger" style="margin-left: 0.5rem">ABERTO</span>
-                    <span class="badge badge-success" style="margin-left: 0.5rem">PAGO</span>
-                    <span class="badge badge-success" style="margin-left: 0.5rem; background-color: #FE5000; color: #fff">CANCELADO</span>
-                    <span class="badge badge-success" style="margin-left: 0.5rem; background-color: #286E80; color: #fff">NEGOCIADO</span>
-                    <span class="badge badge-success" style="margin-left: 0.5rem; background-color: #000; color: #fff">PROTESTADO</span>
+                    <span class="badge badge-warning badge-open" style="margin-left: 0.5rem;">ABERTO</span>
+                    <span class="badge badge-success badge-pay" style="margin-left: 0.5rem;">PAGO</span>
+                    <span class="badge badge-danger badge-pay" style="margin-left: 0.5rem;">CANCELADO</span>
+                    <span class="badge badge-negotiated" style="margin-left: 0.5rem;">NEGOCIADO</span>
+                    <span class="badge badge-protested" style="margin-left: 0.5rem;">PROTESTADO</span>
                     <div class="card-tools">
                         <button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#modalRegisterAccountsReceivable">Novo</button>
                     </div>
                 </div>
                 <div class="card-body">
+                    <!-- <div id="total_order" style="background-color: #286E80; font-size: large; align-content: center;"></div> -->
                     <table id="listAccountsReceivable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Nº</th>
+                                <th>Nº Doc.</th>
+                                <th>Nº Reg.</th>
                                 <th>Pessoa</th>
                                 <th>Tipo Pagto.</th>
                                 <th>Parcela</th>
                                 <th>Valor (R$)</th>
                                 <th>Emissão</th>
                                 <th>Vencimento</th>
+                                <th>Pagamento</th>
+                                <th>Categoria</th>
                                 <th>Status</th>
-                                <th>Classificação</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                         <tfoot>
                             <tr>
-                                <th>Nº</th>
+                            <th>Nº Doc.</th>
+                                <th>Nº Reg.</th>
                                 <th>Pessoa</th>
                                 <th>Tipo Pagto.</th>
                                 <th>Parcela</th>
                                 <th>Valor (R$)</th>
                                 <th>Emissão</th>
                                 <th>Vencimento</th>
+                                <th>Pagamento</th>
+                                <th>Categoria</th>
                                 <th>Status</th>
-                                <th>Classificação</th>
-                                <th>Ações</th>
+                                <th id="total_order" style="background-color: #286E80; font-size: large; color: #fff;">Ações</th>
                             </tr>
                         </tfoot>
-                        <P id="total_order"></P>
+                        <!-- <P id="total_order"></P> -->
                     </table>
                 </div>
             </div>
@@ -192,14 +280,14 @@ $searchPaymentMethod->execute();
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Nº doc.</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <input type="text" name="" id="" class="form-control">
+                                    <input type="text" name="numberDocumentRegister" id="numberDocumentRegister" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Pessoa:</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <label>Pessoa</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <select class="form-control select2" name="peopleRegister" id="peopleRegister" style="width: 100%;">
-                                        <option value="">Escolha...</option>
+                                        <option value="">Pessoa</option>
                                         <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
                                             <option value="<?php echo $row['pess_codigo'] ?>">
                                                 <?= $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social'] . " - " . $row['pess_classificacao'] ?>
@@ -212,8 +300,8 @@ $searchPaymentMethod->execute();
                                 <div class="form-group">
                                     <label>Tipo de Pagamento</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <select class="form-control select2" name="paymentMethodRegister" id="paymentMethodRegister" style="width: 100%;" onchange="showSettledRegister();">
-                                        <option value="">Escolha...</option>
-                                        <?php foreach ($searchPaymentMethod->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
+                                        <option value="">Tipo de Pagamento</option>
+                                        <?php foreach ($searchPaymentMethod as $row) { ?>
                                             <option data-valor="<?php echo $row['tpg_parcelas']; ?>" value="<?php echo $row['tpg_codigo'] ?>">
                                                 <?php echo $row['tpg_descricao'] ?>
                                             </option>
@@ -224,12 +312,12 @@ $searchPaymentMethod->execute();
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Parcela(s)</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <input type="text" name="installmentRegister" id="installmentRegister" class="form-control" onblur="showSettledRegister();">
+                                    <input type="text" name="installmentRegister" id="installmentRegister" class="form-control" onblur="showSettledRegister();" readonly>
                                 </div>
                             </div>
                             <div id="divApartmentEdit" class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Valor Total:</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <label>Valor Total</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <input type="text" name="amountRegister" id="amountRegister" class="form-control" autofocus>
                                 </div>
                             </div>
@@ -257,47 +345,20 @@ $searchPaymentMethod->execute();
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Status:</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <label>Status</label> <label style="color: red; font-size: 12px;"> * </label>
                                     <select class="form-control" name="statusRegister" id="statusRegister" onchange="">
-                                        <option value="Aberto" style="background-color: #b11800; color: #fff; font-weight: bold;">Aberto</option>
-                                        <option value="Pago" style="background-color: #28a745; color: #fff; font-weight: bold;">Pago</option>
-                                        <option value="Cancelado" style="background-color: #FE5000; color: #fff; font-weight: bold;">Cancelado</option>
-                                        <option value="Negociado" style="background-color: #286E80; color: #fff; font-weight: bold;">Negociado</option>
-                                        <option value="Protestado" style="background-color: #000; color: #fff; font-weight: bold;">Protestado</option>
-                                        <!-- <option value="Outro">Outro</option> -->
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- <div class="col-sm-6" id="divOtherStatus" style="display: none;">
-                                <div class="form-group">
-                                    <label>Outro Status</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <input type="text" name="otherStatusRegister" id="otherStatusRegister" class="form-control">
-                                </div>
-                            </div> -->
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Classificação:</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <select class="form-control" name="classificationRegister" id="classificationRegister" onchange="">
-                                        <option value="">Dinheiro</option>
-                                        <option value="">Boleto</option>
-                                        <option value="">Crédito em conta</option>
-                                        <option value="">Cartão</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Categoria:</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <select class="form-control" name="classificationRegister" id="classificationRegister" onchange="">
-                                        <option value="">Produtos</option>
-                                        <option value="">Serviços</option>
+                                        <option value="ABERTO" style="background-color: #ffc107; color: #fff; font-weight: bold;">ABERTO</option>
+                                        <option value="PAGO" style="background-color: #28a745; color: #fff; font-weight: bold;">PAGO</option>
+                                        <option value="CANCELADO" style="background-color: #b11800; color: #fff; font-weight: bold;">CANCELADO</option>
+                                        <option value="NEGOCIADO" style="background-color: #286E80; color: #fff; font-weight: bold;">NEGOCIADO</option>
+                                        <option value="PROTESTADO" style="background-color: #000; color: #fff; font-weight: bold;">PROTESTADO</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-6" id="divSettledRegister" style="display: none;">
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="settledRegister" name="settledRegister" value="settledRegisterYes" onchange="showDivPayday();">
-                                    <label for="settledRegister">Quitado</label>
+                                    <label for="settledRegister">Pago</label>
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divPaydayRegister" style="display: none;">
@@ -309,6 +370,19 @@ $searchPaymentMethod->execute();
                                         </div>
                                         <input type="date" class="form-control" id="payDayRegister" name="payDayRegister" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="{{date('Y-m-d')}}">
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Categoria</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <select class="form-control select2" name="categoryRegister" id="categoryRegister" style="width: 100%;">
+                                        <option value="">Categoria</option>
+                                        <?php foreach ($searchCategory as $row) { ?>
+                                            <option value="<?php echo $row['cat_codigo'] ?>">
+                                                <?= $row['cat_descricao']?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -383,6 +457,62 @@ $searchPaymentMethod->execute();
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalViewAccountReceivable" data-toggle="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detalhes da Parcela</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <dl class="row">
+                        
+                    <dt class="col-sm-3">Nº do Doc.:</dt>
+                        <dd class="col-sm-8" id="idBudgetView"></dd>
+
+                        <dt class="col-sm-3">Nº do Registro:</dt>
+                        <dd class="col-sm-8" id="idView"></dd>
+
+                        <dt class="col-sm-3">Pessoa:</dt>
+                        <dd class="col-sm-8" id="peopleView"></dd>
+
+                        <dt class="col-sm-3">Tipo Pagto.:</dt>
+                        <dd class="col-sm-8" id="paymentMethodView"></dd>
+
+                        <dt class="col-sm-3">Parcela:</dt>
+                        <dd class="col-sm-8" id="installmentView"></dd>
+
+                        <dt class="col-sm-3">Valor (R$):</dt>
+                        <dd class="col-sm-8" id="valueInstallmentView"></dd>
+
+                        <dt class="col-sm-3">Emissão:</dt>
+                        <dd class="col-sm-8" id="dateIssueView"></dd>
+
+                        <dt class="col-sm-3">Vencimento:</dt>
+                        <dd class="col-sm-8" id="dateExpiryView" ></dd>
+
+                        <dt class="col-sm-3" id="dtPayDayView"  style="display: none;">Data Pagto.:</dt>
+                        <dd class="col-sm-8" id="payDayView" style="display: none;"></dd>
+
+                        <dt class="col-sm-3">Status:</dt>
+                        <div class="col-sm-8" id="statusView"> </div>
+
+                        <dt class="col-sm-3">Categoria:</dt>
+                        <dd class="col-sm-8" id="categoryView"></dd>
+
+                        <dt class="col-sm-3" id="dtObservationView"> Observação: </dt>
+                        <div class="col-sm-9" id="divObservationView"> <textarea class="form-control" id="observationView" rows="2" style="width: 100%;"> </textarea></div>
+                    </dl>
+                </div>
+                <div class="modal-footer" id="footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
         </div>
     </div>
 

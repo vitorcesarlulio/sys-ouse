@@ -34,7 +34,7 @@ CREATE TABLE `tb_eventos` (
   `orca_numero` int(11) NOT NULL,
   PRIMARY KEY (`even_codigo`),
   UNIQUE KEY `even_datahorai` (`even_datahorai`,`even_datahoraf`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=132 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
@@ -91,6 +91,7 @@ INSERT INTO tb_eventos VALUES('56', 'Realizar Orçamento', '', 'P', '2020-09-17 
 ,('122', 'Voltar na Obra', '', 'P', '2021-10-23 08:01:00', '2021-10-23 10:40:00', 'aP TERREO
 ', '83')
 ,('123', 'Realizar Orçamento', '', 'P', '2021-11-18 08:00:00', '2021-11-18 08:00:00', '', '82')
+,('131', 'Voltar na Obra', '', 'P', '2020-10-20 09:10:00', '2020-10-20 09:11:00', '', '90')
 ;
 
 #
@@ -116,7 +117,7 @@ CREATE TABLE `tb_orcamento` (
   `orca_logradouro_condominio` varchar(80) DEFAULT NULL,
   `orca_observacao` varchar(510) DEFAULT NULL,
   PRIMARY KEY (`orca_numero`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
@@ -263,13 +264,32 @@ CREATE TABLE `tb_receber_pagar` (
   `crp_status` varchar(20) NOT NULL,
   `crp_tipo` char(1) NOT NULL,
   `crp_classificacao` varchar(80) NOT NULL,
-  PRIMARY KEY (`crp_numero`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 ;
+  `crp_categoria` varchar(30) NOT NULL,
+  PRIMARY KEY (`crp_numero`),
+  KEY `fk_tpg_codigo` (`tpg_codigo`),
+  CONSTRAINT `fk_tpg_codigo` FOREIGN KEY (`tpg_codigo`) REFERENCES `tb_tipo_pagamento` (`tpg_codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
 #
 
+INSERT INTO tb_receber_pagar VALUES('73', '1', '2020-10-18', '2020-12-01', '333.33', '', '', '', '18', '28', '0', 'ABERTO', 'R', 'garantia', '')
+,('74', '2', '2020-10-18', '2021-01-01', '333.33', '', '', '', '18', '28', '0', 'CANCELADO', 'R', 'garantia', '')
+,('75', '3', '2020-10-18', '2021-02-01', '333.34', '', '', '', '18', '28', '0', 'CANCELADO', 'R', 'garantia', '')
+,('76', '1', '2020-10-18', '2020-10-18', '10000.00', '', '', '', '17', '28', '0', 'CANCELADO', 'R', 'garantia', '')
+,('77', '1', '2020-10-18', '2020-10-18', '2900.00', '', '', '', '17', '28', '0', 'PAGO', 'R', 'garantia', '')
+,('78', '1', '2020-10-19', '2020-11-19', '46.67', '', '', '', '18', '28', '0', 'PAGO', 'R', 'Garantia', '')
+,('79', '2', '2020-10-19', '2020-12-19', '46.67', '', '', '', '18', '28', '0', 'PAGO', 'R', 'Garantia', '')
+,('80', '3', '2020-10-19', '2021-01-19', '46.66', '', '', '', '18', '28', '0', 'PAGO', 'R', 'Garantia', '')
+,('81', '1', '2020-10-19', '2020-10-31', '333.33', '', '', '', '19', '28', '0', 'PAGO', 'R', 'Título', '')
+,('82', '2', '2020-10-19', '2020-11-30', '333.33', '', '', '', '19', '28', '0', 'PAGO', 'R', 'Título', '')
+,('83', '3', '2020-10-19', '2020-12-31', '333.34', '', '', '', '19', '28', '0', 'PROTESTADO', 'R', 'Título', '')
+,('84', '1', '2020-10-19', '2021-01-31', '333.33', '', '', '', '19', '28', '0', 'ABERTO', 'R', 'Título', '')
+,('85', '2', '2020-10-19', '2021-02-28', '333.33', '', '', '', '19', '28', '0', 'NEGOCIADO', 'R', 'Título', '')
+,('86', '3', '2020-10-19', '2021-03-31', '333.34', '', '', '', '19', '28', '0', 'PAGO', 'R', 'Título', '')
+,('87', '1', '2020-10-19', '2020-10-19', '1.00', '', '', '', '17', '28', '0', 'PAGO', 'R', '', '')
+;
 
 #
 # //Criação da Tabela : tb_tentativas
@@ -298,7 +318,7 @@ CREATE TABLE `tb_tipo_pagamento` (
   `tpg_observacao` varchar(510) DEFAULT NULL,
   PRIMARY KEY (`tpg_codigo`),
   UNIQUE KEY `tpg_descricao` (`tpg_descricao`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
@@ -306,6 +326,7 @@ CREATE TABLE `tb_tipo_pagamento` (
 
 INSERT INTO tb_tipo_pagamento VALUES('17', 'Cartão de Crédito 1x', '1', '')
 ,('18', 'Dinheiro 2x', '2', '')
+,('19', 'Dinheiro 3x', '3', '')
 ;
 
 #

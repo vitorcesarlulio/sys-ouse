@@ -1,3 +1,12 @@
+function filtersPaymentMethod() {
+    var optionHome = document.getElementById("optionPaymentMethodsMoreUsed").checked;
+    if (optionHome) {
+        $("#formFiltersPaymentMethod #paymentMethodsMoreUsed").show();
+    } else {
+        $("#formFiltersPaymentMethod #paymentMethodsMoreUsed").hide();
+    }
+}
+
 function findPaymentMethod() {
     if ($('#descriptionRegister').val() !== "" && $('#installmentRegister').val() !== "") {
         var dados = $('#formRegisterPaymentMethod').serialize();

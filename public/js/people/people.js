@@ -301,7 +301,7 @@ $(document).on('click', '.btn-edit-people', function () {
 
                 if (dadosJson.pess_classificacao === "C") {
                     $('#modalEditPeople #classificationPersonCEdit').prop("checked", true);
-                }else{
+                } else {
                     $('#modalEditPeople #classificationPersonFEdit').prop("checked", true);
                 }
 
@@ -389,6 +389,7 @@ $(document).on('click', '.btn-edit-people', function () {
 $(document).on('click', '.btn-save-contact', function () {
     var typeContact = $('#tBodyTableContact #selectTypeContact').val();
     var responsibleContact = $('#tBodyTableContact #responsibleContact').val();
+
     if ($('#tBodyTableContact #cellphoneContact').val() !== "" && $('#tBodyTableContact #cellphoneContact').val() !== null) {
         var contact = $('#tBodyTableContact #cellphoneContact').val();
     } else if ($('#tBodyTableContact #telephoneContact').val() !== "" && $('#tBodyTableContact #telephoneContact').val() !== null) {
@@ -396,6 +397,7 @@ $(document).on('click', '.btn-save-contact', function () {
     } else {
         var contact = $('#tBodyTableContact #emailContact').val();
     }
+
     var idPeopleContact = $(this).attr("id");
 
     $.ajax({
@@ -451,21 +453,38 @@ window.onload = function () {
 // Deletar Contato
 $(document).on('click', '.btn-delete-contact', function () {
     var idContact = $(this).attr("id");
-    $.ajax({
-        url: "/pessoas/deletar-contato",
-        type: 'POST',
-        data: { idContact: idContact },
-        success: function (retunAjax) {
-            if (retunAjax === true) {
-                toastr.success('Sucesso: contato apagado!');
-                //Remover o contato do html sem recarregar a pagina
-                $('#' + idContact).remove();
-            } else {
-                toastr.error('Erro: contato não apagado!');
+    $.confirm({
+        title: 'Atenção!',
+        content: 'Realmente deseja excluir esse contato?',
+        type: 'red',
+        buttons: {
+            omg: {
+                text: 'Sim',
+                btnClass: 'btn-red',
+                action: function () {
+
+                    $.ajax({
+                        url: "/pessoas/deletar-contato",
+                        type: 'POST',
+                        data: { idContact: idContact },
+                        success: function (retunAjax) {
+                            if (retunAjax === true) {
+                                toastr.success('Sucesso: contato apagado!');
+                                //Remover o contato do html sem recarregar a pagina
+                                $('#' + idContact).remove();
+                            } else {
+                                toastr.error('Erro: contato não apagado!');
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
+                        }
+                    });
+                }
+            },
+            close: {
+                text: 'Não',
             }
-        },
-        error: function () {
-            toastr.error('Erro: dados não enviados ao servidor, contate o administrador do sistema!');
         }
     });
 });

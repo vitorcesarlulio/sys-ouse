@@ -206,22 +206,30 @@ $nameUser = $nameUser[0];
                   </a>
                 </li>
               </ul>
-              <ul class="nav nav-treeview">
+              <!-- <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="/financeiro/contas-a-pagar" class="nav-link">
                   <i class="nav-icon fas fa-dollar-sign"></i>
                     <p>Contas a Pagar</p>
                   </a>
                 </li>
-              </ul>
+              </ul> -->
               <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/financeiro/categoria" class="nav-link">
+                  <i class="nav-icon fas fa-filter"></i>
+                    <p>Categoria</p>
+                  </a>
+                </li>
+              </ul>
+              <!-- <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="/home" class="nav-link">
                   <i class="nav-icon fas fa-file-invoice-dollar"></i>
                     <p>Boletos</p>
                   </a>
                 </li>
-              </ul>
+              </ul> -->
               <?php 
                 if ($_SESSION["permition"] === "admin") {
                   echo '
@@ -242,7 +250,7 @@ $nameUser = $nameUser[0];
             }
             ?>
             <li class="nav-item">
-              <a href="/backup" class="nav-link">
+              <a href="/backup-manual" class="nav-link">
                 <i class="nav-icon far fas fa-cloud-download-alt"></i>
                 <p class="text">Backup</p>
               </a>

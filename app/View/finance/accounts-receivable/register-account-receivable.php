@@ -3,27 +3,20 @@ if (isset($_POST['peopleRegister']) && !empty($_POST['peopleRegister']) && isset
 }
 include_once '../app/Model/connection-pdo.php';
 
-//$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
+$numberDocumentRegister = filter_input(INPUT_POST, 'numberDocumentRegister', FILTER_DEFAULT);
 $peopleRegister         = filter_input(INPUT_POST, 'peopleRegister', FILTER_SANITIZE_NUMBER_INT);
 $paymentMethodRegister  = filter_input(INPUT_POST, 'paymentMethodRegister', FILTER_SANITIZE_NUMBER_INT);
 $amountRegister         = filter_input(INPUT_POST, 'amountRegister', FILTER_DEFAULT);
 $installmentRegister    = filter_input(INPUT_POST, 'installmentRegister', FILTER_SANITIZE_NUMBER_INT);
 $dateIssueRegister      = filter_input(INPUT_POST, 'dateIssueRegister', FILTER_SANITIZE_SPECIAL_CHARS);
 $statusRegister         = filter_input(INPUT_POST, 'statusRegister', FILTER_SANITIZE_SPECIAL_CHARS);
-$otherStatusRegister    = filter_input(INPUT_POST, 'otherStatusRegister', FILTER_SANITIZE_SPECIAL_CHARS);
 $dateExpiryRegister     = filter_input(INPUT_POST, 'dateExpiryRegister', FILTER_SANITIZE_SPECIAL_CHARS);
-$classificationRegister = filter_input(INPUT_POST, 'classificationRegister', FILTER_DEFAULT);
+$categoryRegister       = filter_input(INPUT_POST, 'categoryRegister', FILTER_DEFAULT);
+$payDayRegister         = filter_input(INPUT_POST, 'payDayRegister', FILTER_DEFAULT);/* if ($payDayRegister == "" || $payDayRegister == null) { $payDayRegister = null; } */
 $observationRegister    = filter_input(INPUT_POST, 'observationRegister', FILTER_DEFAULT);
-
-# Data de hoje 
-$today = new DateTime('now');
 
 # Padrao R de Receber
 $typeAccount = "R";
-
-# Se ele selcionar status = outro ai eu pego o valor do input
-$statusRegister === 'Outro' ? $status = $otherStatusRegister  : $status = $statusRegister;
 
 # Tratando o Valor Total e as Parcelas
 $amountFormated = floatval(str_replace(",", ".", str_replace(".", "", $amountRegister))); //10000 
@@ -51,6 +44,8 @@ for ($i = 1; $i < $installmentRegister; $i++) {
 $o = 0;
 for ($i = 1; $i <= $installmentRegister; $i++) {
 
+    # Data de hoje 
+    //$today = new DateTime('now');
     # Se existir mais que 1 parcela ai eu faço somar os meses (data de vencimento)
     //$installmentRegister == 1 ? $date = $dateExpiryRegister : $date = $today->modify("+ 1 month")->format("Y-m-d");
 
@@ -62,9 +57,12 @@ for ($i = 1; $i <= $installmentRegister; $i++) {
         $valueInstallment = $valueInstallment;
     }
 
-    $queryInsertAccountReceivable = " INSERT INTO tb_receber_pagar (pess_codigo, tpg_codigo, crp_parcela, crp_valor, crp_emissao, crp_vencimento, crp_status, crp_tipo, crp_classificacao ,crp_obs) 
-                                                               VALUES (:pess_codigo, :tpg_codigo, :crp_parcela, :crp_valor, :crp_emissao, :crp_vencimento, :crp_status, :crp_tipo, :crp_classificacao, :crp_obs) ";
+    $queryInsertAccountReceivable = " INSERT INTO tb_receber_pagar (orca_numero, pess_codigo, tpg_codigo, crp_parcela, crp_valor, crp_emissao, crp_vencimento, crp_status, crp_tipo, 
+    crp_obs, crp_datapagto, crp_categoria) 
+                                                               VALUES (:orca_numero, :pess_codigo, :tpg_codigo, :crp_parcela, :crp_valor, :crp_emissao, :crp_vencimento, :crp_status, :crp_tipo,
+                                                                :crp_obs, :crp_datapagto, :crp_categoria) ";
     $insertAccountReceivable = $connectionDataBase->prepare($queryInsertAccountReceivable);
+    $insertAccountReceivable->bindParam(':orca_numero', $numberDocumentRegister);
     $insertAccountReceivable->bindParam(':pess_codigo', $peopleRegister);
     $insertAccountReceivable->bindParam(':tpg_codigo', $paymentMethodRegister);
     $insertAccountReceivable->bindParam(':crp_parcela', $i);
@@ -73,8 +71,10 @@ for ($i = 1; $i <= $installmentRegister; $i++) {
     $insertAccountReceivable->bindParam(':crp_vencimento', $parc[$o]);
     $insertAccountReceivable->bindParam(':crp_status', $status);
     $insertAccountReceivable->bindParam(':crp_tipo', $typeAccount);
-    $insertAccountReceivable->bindParam(':crp_classificacao', $classificationRegister);
     $insertAccountReceivable->bindParam(':crp_obs', $observationRegister);
+    $insertAccountReceivable->bindParam(':crp_datapagto', $payDayRegister);
+    $insertAccountReceivable->bindParam(':crp_categoria', $categoryRegister);
+
     $insertAccountReceivable->execute();
     $o++;
 }

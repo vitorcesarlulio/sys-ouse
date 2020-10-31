@@ -58,8 +58,8 @@ $(document).ready(function () {
                         var resultado = moment(str_hora, 'hh:mm').add(20, 'minutes').format('HH:mm'); 
                         $('.login-box').html(`
                         <div class="alert alert-danger alert-dismissible" id="divErrors">
-                            <h5><i class="icon fas fa-ban"></i> Bloqueado!</h5>
-                            Tentativas excedidas, tente novamente às <b>` + resultado + ` (20 minutos)</b> ou entre em contato com o Administrador do sistema!
+                            <h5><i class="icon fas fa-ban"></i> Tentativas excedidas!</h5>
+                            Tente novamente às <b>` + resultado + ` (20 minutos)</b> ou entre em contato com o Administrador do sistema!
                         </div>`);
 
                         /*var timeleft = 10;

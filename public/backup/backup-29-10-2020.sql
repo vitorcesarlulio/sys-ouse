@@ -2,6 +2,24 @@ set foreign_key_checks=0;
 
 
 #
+# //Criação da Tabela : tb_categoria
+#
+
+CREATE TABLE `tb_categoria` (
+  `cat_codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_descricao` varchar(30) NOT NULL,
+  PRIMARY KEY (`cat_codigo`),
+  UNIQUE KEY `cat_descricao` (`cat_descricao`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
+
+#
+# //Dados a serem incluídos na tabela
+#
+
+INSERT INTO tb_categoria VALUES('1', 'Produtos')
+;
+
+#
 # //Criação da Tabela : tb_contatos
 #
 
@@ -12,7 +30,7 @@ CREATE TABLE `tb_contatos` (
   `cont_contato` varchar(80) NOT NULL,
   `pess_codigo` int(11) NOT NULL,
   PRIMARY KEY (`cont_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
@@ -91,7 +109,7 @@ INSERT INTO tb_eventos VALUES('56', 'Realizar Orçamento', '', 'P', '2020-09-17 
 ,('122', 'Voltar na Obra', '', 'P', '2021-10-23 08:01:00', '2021-10-23 10:40:00', 'aP TERREO
 ', '83')
 ,('123', 'Realizar Orçamento', '', 'P', '2021-11-18 08:00:00', '2021-11-18 08:00:00', '', '82')
-,('131', 'Voltar na Obra', '', 'P', '2020-10-20 09:10:00', '2020-10-20 09:11:00', '', '90')
+,('131', 'Voltar na Obra', '#28A745', 'R', '2020-10-20 09:10:00', '2020-10-20 09:11:00', '', '90')
 ;
 
 #
@@ -263,28 +281,34 @@ CREATE TABLE `tb_receber_pagar` (
   `orca_numero` int(11) NOT NULL,
   `crp_status` varchar(20) NOT NULL,
   `crp_tipo` char(1) NOT NULL,
-  `crp_classificacao` varchar(80) NOT NULL,
-  PRIMARY KEY (`crp_numero`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 ;
+  `cat_codigo` int(11) NOT NULL,
+  PRIMARY KEY (`crp_numero`),
+  KEY `fk_tpg_codigo` (`tpg_codigo`),
+  KEY `fk_pess_codigo` (`pess_codigo`),
+  CONSTRAINT `fk_pess_codigo` FOREIGN KEY (`pess_codigo`) REFERENCES `tb_pessoas` (`pess_codigo`),
+  CONSTRAINT `fk_tpg_codigo` FOREIGN KEY (`tpg_codigo`) REFERENCES `tb_tipo_pagamento` (`tpg_codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 ;
 
 #
 # //Dados a serem incluídos na tabela
 #
 
-INSERT INTO tb_receber_pagar VALUES('73', '1', '2020-10-18', '2020-12-01', '333.33', '', '', '', '18', '28', '0', 'Aberto', 'R', 'garantia')
-,('74', '2', '2020-10-18', '2021-01-01', '333.33', '', '', '', '18', '28', '0', 'Aberto', 'R', 'garantia')
-,('75', '3', '2020-10-18', '2021-02-01', '333.34', '', '', '', '18', '28', '0', 'Aberto', 'R', 'garantia')
-,('76', '1', '2020-10-18', '2020-10-18', '10000.00', '', '', '', '17', '28', '0', 'Aberto', 'R', 'garantia')
-,('77', '1', '2020-10-18', '2020-10-18', '2900.00', '', '', '', '17', '28', '0', 'Aberto', 'R', 'garantia')
-,('78', '1', '2020-10-19', '2020-11-19', '46.67', '', '', '', '18', '28', '0', 'Aberto', 'R', 'Garantia')
-,('79', '2', '2020-10-19', '2020-12-19', '46.67', '', '', '', '18', '28', '0', 'Aberto', 'R', 'Garantia')
-,('80', '3', '2020-10-19', '2021-01-19', '46.66', '', '', '', '18', '28', '0', 'Aberto', 'R', 'Garantia')
-,('81', '1', '2020-10-19', '2020-10-31', '333.33', '', '', '', '19', '28', '0', 'Aberto', 'R', 'Título')
-,('82', '2', '2020-10-19', '2020-11-30', '333.33', '', '', '', '19', '28', '0', 'Aberto', 'R', 'Título')
-,('83', '3', '2020-10-19', '2020-12-31', '333.34', '', '', '', '19', '28', '0', 'Aberto', 'R', 'Título')
-,('84', '1', '2020-10-19', '2021-01-31', '333.33', '', '', '', '19', '28', '0', 'Aberto', 'R', 'Título')
-,('85', '2', '2020-10-19', '2021-02-28', '333.33', '', '', '', '19', '28', '0', 'Aberto', 'R', 'Título')
-,('86', '3', '2020-10-19', '2021-03-31', '333.34', '', '', '', '19', '28', '0', 'Aberto', 'R', 'Título')
+INSERT INTO tb_receber_pagar VALUES('73', '1', '2020-10-18', '2020-10-26', '333.33', '', '', '', '18', '28', '0', 'ABERTO', 'R', '0')
+,('74', '2', '2020-10-18', '2021-01-01', '333.33', '2020-10-28', '', '', '18', '28', '0', 'CANCELADO', 'R', '1')
+,('75', '3', '2020-10-18', '2021-02-01', '333.34', '', '', '', '18', '28', '0', 'CANCELADO', 'R', '0')
+,('76', '1', '2020-10-18', '2020-10-18', '10000.00', '', '', '', '17', '28', '0', 'CANCELADO', 'R', '0')
+,('77', '1', '2020-10-18', '2020-10-18', '2900.00', '', '', '', '17', '28', '0', 'PAGO', 'R', '0')
+,('78', '1', '2020-10-19', '2020-11-19', '46.67', '', '', '', '18', '28', '0', 'PAGO', 'R', '0')
+,('79', '2', '2020-10-19', '2020-12-19', '46.67', '', '', '', '18', '28', '0', 'PAGO', 'R', '0')
+,('80', '3', '2020-10-19', '2021-01-19', '46.66', '', '', '', '18', '28', '0', 'PAGO', 'R', '0')
+,('81', '1', '2020-10-19', '2020-10-31', '333.33', '', '', '', '19', '28', '0', 'PAGO', 'R', '0')
+,('82', '2', '2020-11-19', '2020-11-30', '333.33', '', '', '', '19', '28', '0', 'PAGO', 'R', '0')
+,('83', '3', '2020-10-19', '2020-12-31', '333.34', '', '', '', '19', '28', '0', 'PROTESTADO', 'R', '0')
+,('84', '1', '2020-10-19', '2021-01-31', '333.33', '', '', '', '19', '28', '0', 'ABERTO', 'R', '0')
+,('85', '2', '2020-10-19', '2021-02-28', '333.33', '', '', '', '19', '28', '0', 'NEGOCIADO', 'R', '0')
+,('86', '3', '2020-10-19', '2021-03-31', '333.34', '', '', '', '19', '28', '0', 'PAGO', 'R', '0')
+,('87', '1', '2020-10-19', '2020-10-19', '1.00', '', '', '', '17', '28', '0', 'PAGO', 'R', '0')
+,('88', '1', '2020-10-29', '2020-11-05', '1000.00', '', '', 'PAGAR', '18', '28', '0', 'PAGO', 'P', '0')
 ;
 
 #
@@ -348,9 +372,7 @@ CREATE TABLE `tb_usuarios` (
 
 INSERT INTO tb_usuarios VALUES('3', 'ADMINISTRADOR', '$2y$10$Ge4WNj4lDQKpxUvwAqo2lu67rxKDz3K20TqJPlufOB1QR1yQj7/Oe', '2020-08-30 20:09:21.12', 'Administrador', 'do Sitema', 'admin', 'A')
 ,('7', 'JOAOMARCELO', '$2y$10$/7hJFO1ODY7OF.IILzCaje/Ig.93cPz.EN9Rp9ZkRXgM6inJU81/u', '2020-08-30 20:09:24.47', 'Joao', 'Marcelo', 'user', 'A')
-,('11', 'EDUARDO', '$2y$10$FLzsrPXh0fR9PhBdzWs.iuXSsfwl6u/m1e39AMETJl3bhQsJT4dhC', '2020-08-30 20:09:26.32', 'Eduardo ', 'Valentino', 'user', 'A')
 ,('14', 'PERINI', '$2y$10$2SLTgm8p4LkYhL/Xp3cVROgvVmCC9UEwlrXi4wRlQocK2WX8Q0MWi', '2020-08-30 19:43:04.59', 'Vinicius', 'Perini', 'user', 'A')
 ,('17', 'SOUZA', '$2y$10$35yDsRLnszHGRS57T8zqhOYaTBoupwueBaJIVwhBNMV/XvUeS0..W', '2020-08-30 19:43:06.40', 'vinicius', 'souza', 'admin', 'A')
-,('30', 'TALITA', '$2y$10$3DoTWM.Czjz6hnWDdrqVruYhwUoOdeEgY7bWrSoMciGvxInd/hE3a', '2020-08-30 20:24:28.42', 'talita', 'ellen', 'user', 'A')
 ,('32', 'VITOR', '$2y$10$YFNMYp2wgzvdzGxSBchpUelOmbG8QU8f6Op.85hRv.RSnBF/5Bv8u', '2020-09-19 13:19:32.38', 'Vitor', 'Cesar', 'user', 'A')
 ;

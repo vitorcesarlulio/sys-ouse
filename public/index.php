@@ -154,6 +154,10 @@ $route->group(['prefix' => '/financeiro'], function ($route) use ($blade) {
         include '../app/View/finance/accounts-receivable/register-account-receivable.php';
     });
 
+    $route->get('/contas-a-receber/listar', function () {
+        include '../app/View/finance/accounts-receivable/list-accounts-receivable-edit.php';
+    });
+
     $route->post('/contas-a-receber/editar', function () {
         include '../app/View/finance/accounts-receivable/edit-account-receivable.php';
     });
@@ -252,7 +256,7 @@ $route->get('/logout', function () {
 /**
  * Backup
  */
-$route->get('/backup', function () {
+$route->get('/backup-manual', function () {
     include '../app/View/backup/backup.php';
 });
 

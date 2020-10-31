@@ -5,16 +5,45 @@ $dateStartMonth = mktime(0, 0, 0, date('m'), 1, date('Y'));
 $dateStartMonth = date('Y-m-d', $dateStartMonth);
 $dateEndMonth   = mktime(23, 59, 59, date('m'), date("t"), date('Y'));
 $dateEndMonth   = date('Y-m-d', $dateEndMonth);
+$today = date('Y-m-d');
 
 /**
- * Contas a receber em aberto
+ * Contas a receber hoje 
  */
-$queryCountReceivableOpen = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_status = 'Aberto' AND crp_vencimento BETWEEN CAST(:firts_day_month AS DATE) AND CAST(:end_day_month AS DATE) ";
+$queryAccountsReceivedNow = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_vencimento=:today "; //AND crp_status != 'PAGO' AND crp_datapagto = ''
+$accountsReceivedNow = $connectionDataBase->prepare($queryAccountsReceivedNow);
+$accountsReceivedNow->bindParam(':today', $today);
+$accountsReceivedNow->execute();
+$accountsReceivedNow = $accountsReceivedNow->fetchAll(\PDO::FETCH_ASSOC);
+
+/**
+ * Contas a receber em aberto (mes)
+ */
+$queryCountReceivableOpen = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_status = 'ABERTO' AND crp_vencimento BETWEEN CAST(:firts_day_month AS DATE) AND CAST(:end_day_month AS DATE) ";
 $countReceivableOpen = $connectionDataBase->prepare($queryCountReceivableOpen);
 $countReceivableOpen->bindParam(':firts_day_month', $dateStartMonth);
 $countReceivableOpen->bindParam(':end_day_month', $dateEndMonth);
 $countReceivableOpen->execute();
 $countReceivableOpen = $countReceivableOpen->fetchAll(\PDO::FETCH_ASSOC);
+
+/**
+ * Contas recebidas (mes)
+ */
+$queryAccountsReceived = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_datapagto BETWEEN CAST(:firts_day_month AS DATE) AND CAST(:end_day_month AS DATE) ";
+$accountsReceived = $connectionDataBase->prepare($queryAccountsReceived);
+$accountsReceived->bindParam(':firts_day_month', $dateStartMonth);
+$accountsReceived->bindParam(':end_day_month', $dateEndMonth);
+$accountsReceived->execute();
+$accountsReceived = $accountsReceived->fetchAll(\PDO::FETCH_ASSOC);
+
+/**
+ * Contas atrasadas
+ */
+$queryAccountsOverdue = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_vencimento<:today AND crp_status != 'PAGO' "; 
+$accountsOverdue = $connectionDataBase->prepare($queryAccountsOverdue);
+$accountsOverdue->bindParam(':today', $today);
+$accountsOverdue->execute();
+$accountsOverdue = $accountsOverdue->fetchAll(\PDO::FETCH_ASSOC);
 
 /**
  * Eventos Hoje
@@ -90,59 +119,61 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 1);
 
 <?php $__env->startSection('content'); ?>
 
-<h4>Contas a receber</h4>
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-light">
-            <div class="inner">
-                <p>Contas a receber (hoje)</p>
-                <h3><sup style="font-size: 20px">R$&nbsp;</sup> </h3>
+<?php if ($_SESSION["permition"] === "admin") { ?>
+    <h4>Contas a receber</h4>
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-light">
+                <div class="inner">
+                    <p>Contas a receber (hoje)</p>
+                    <h3><sup style="font-size: 20px">R$&nbsp;</sup><?= number_format($accountsReceivedNow[0]['SUM(crp_valor)'], 2, ',', '.'); ?></h3>
+                </div>
+                <div class="icon"><i class="ion ion-stats-bars" style="color: #3BA4BF !important;"></i></div>
+                <a href="#" class="small-box-footer view-primary" style="color: #fff !important;">Ver mais</a>
             </div>
-            <div class="icon"><i class="ion ion-stats-bars" style="color: #3BA4BF !important;"></i></div>
-            <a href="#" class="small-box-footer view-primary" style="color: #fff !important;">Ver mais</a>
         </div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-light">
-            <div class="inner">
-                <b><p>Contas a receber (mês)</p></b>
-                <h3><sup style="font-size: 20px">R$&nbsp;</sup><?= number_format($countReceivableOpen[0]['SUM(crp_valor)'], 2, ',', '.'); ?></h3>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-light">
+                <div class="inner">
+                    <b><p>Contas a receber (mês)</p></b>
+                    <h3><sup style="font-size: 20px">R$&nbsp;</sup><?= number_format($countReceivableOpen[0]['SUM(crp_valor)'], 2, ',', '.'); ?></h3>
+                </div>
+                <div class="icon"><i class="ion ion-stats-bars icon-warning"></i></div>
+                <a href="#" class="small-box-footer view-warning">Ver mais</a>
             </div>
-            <div class="icon"><i class="ion ion-stats-bars icon-warning"></i></div>
-            <a href="#" class="small-box-footer view-warning">Ver mais</a>
         </div>
-    </div>
 
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-light">
-            <div class="inner">
-                <p>Contas recebidas (mês)</p>
-                <h3><sup style="font-size: 20px">R$&nbsp;</sup></h3>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-light">
+                <div class="inner">
+                    <p>Contas recebidas (mês)</p>
+                    <h3><sup style="font-size: 20px">R$&nbsp;</sup><?= number_format($accountsReceived[0]['SUM(crp_valor)'], 2, ',', '.'); ?></h3>
+                </div>
+                <div class="icon" style="color: #28a745 !important;">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer view-success" style="color: #fff !important;">Ver mais</a>
             </div>
-            <div class="icon" style="color: #28a745 !important;">
-                <i class="ion ion-stats-bars"></i>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-light">
+                <div class="inner">
+                    <p>Contas a receber (atrasadas)</p>
+                    <h3><sup style="font-size: 20px">R$&nbsp;</sup><?= number_format($accountsOverdue[0]['SUM(crp_valor)'], 2, ',', '.'); ?></h3>
+                </div>
+                <div class="icon" style="color: #b11800 !important;">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer view-danger" style="color: #fff !important;">Ver mais</a>
             </div>
-            <a href="#" class="small-box-footer view-success" style="color: #fff !important;">Ver mais</a>
         </div>
     </div>
+<?php }?>
+<!-- <h4>Contas a pagar</h4>
+<div class="row"> 
+</div> -->
 
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-light">
-            <div class="inner">
-                <p>Contas a receber (atrasadas)</p>
-                <h3><sup style="font-size: 20px">R$&nbsp;</sup></h3>
-            </div>
-            <div class="icon" style="color: #b11800 !important;">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer view-danger" style="color: #fff !important;">Ver mais</a>
-        </div>
-    </div>
-</div>
-<h4>Contas a pagar</h4>
-<div class="row">
-
-</div>
 <h4>Outros</h4>
 <div class="row">
     <div class="col-lg-3 col-6">
@@ -185,9 +216,9 @@ $percentualSpaceUsed = round($percentualSpaceUsed, 1);
         </div>
     </div>
 
-    <a href="/backup" class="btn btn-app"><i class="fas fa-download"></i>Backup</a>
+    <a href="/backup-manual" class="btn btn-app"><i class="fas fa-download"></i>Backup</a>
 
-    Saldo do mes??
+    <!-- Saldo do mes?? -->
     
 </div>
 <?php $__env->stopSection(); ?>

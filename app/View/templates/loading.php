@@ -5,7 +5,7 @@ $dbname = DATABASE;
 $checkUtf = true;
 $con = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
 mysqli_select_db($con, $dbname) or die(mysqli_connect_errno());
-$back = fopen('backup_' . date("d_m_Y") . ".sql", "w");
+$back = fopen('backup/backup-' . date("d-m-Y") . ".sql", "w");
 $res = mysqli_query($con, "SHOW TABLES FROM $dbname");
 fwrite($back, "set foreign_key_checks=0;\n\n");
 $regex1 = <<<'END'

@@ -13,7 +13,7 @@ DATE_FORMAT(crp_vencimento,'%d/%m/%Y') AS crp_vencimento,
 crp_valor,
 DATE_FORMAT(crp_datapagto,'%d/%m/%Y') AS crp_datapagto,
 crp_obs,
-orca_numero, 
+crp_ndoc, 
 crp_status,
 
 pess_nome,
@@ -21,8 +21,10 @@ pess_sobrenome,
 pess_razao_social,
 
 tpg_descricao,
+crp.tpg_codigo,
 
-cat_descricao
+cat_descricao,
+crp.cat_codigo
 
 FROM tb_receber_pagar crp
 
@@ -41,15 +43,15 @@ $searchAccountsReceivable = $connectionDataBase->prepare($querySelectAccountsRec
 $searchAccountsReceivable->bindParam(':crp_numero', $idAccountReceivable);
 $searchAccountsReceivable->execute();
 
-while ($rowAccountsReceivable = $searchAccountsReceivable->fetch(PDO::FETCH_ASSOC)) {
+$statusClass = [
+    "ABERTO"     => '<span class="badge badge-warning badge-open">ABERTO</span>',
+    "PAGO"       => '<span class="badge badge-success badge-pay">PAGO</span>',
+    "CANCELADO"  => '<span class="badge badge-danger badge-pay">CANCELADO</span>',
+    "NEGOCIADO"  => '<span class="badge badge-negotiated">NEGOCIADO</span>',
+    "PROTESTADO" => '<span class="badge badge-protested">PROTESTADO</span>'
+];
 
-    $statusClass = [
-        "ABERTO"     => '<span class="badge badge-warning badge-open">ABERTO</span>',
-        "PAGO"       => '<span class="badge badge-success badge-pay">PAGO</span>',
-        "CANCELADO"  => '<span class="badge badge-danger badge-pay">CANCELADO</span>',
-        "NEGOCIADO"  => '<span class="badge badge-negotiated">NEGOCIADO</span>',
-        "PROTESTADO" => '<span class="badge badge-protested">PROTESTADO</span>'
-    ];
+while ($rowAccountsReceivable = $searchAccountsReceivable->fetch(PDO::FETCH_ASSOC)) {
 
     $accountsReceivable[] = [
         'crp_numero'         => $rowAccountsReceivable['crp_numero'],
@@ -59,7 +61,7 @@ while ($rowAccountsReceivable = $searchAccountsReceivable->fetch(PDO::FETCH_ASSO
         'crp_valor'          => "R$ " . number_format($rowAccountsReceivable["crp_valor"], 2, ',', '.'),
         'crp_datapagto'      => $rowAccountsReceivable['crp_datapagto'],
         'crp_obs'            => $rowAccountsReceivable['crp_obs'],
-        'orca_numero'        => $rowAccountsReceivable['orca_numero'],
+        'crp_ndoc'        => $rowAccountsReceivable['crp_ndoc'],
         'crp_status'         => $rowAccountsReceivable['crp_status'],
         'crp_statusBadge'    => $statusClass[$rowAccountsReceivable['crp_status']],
         'cat_descricao'      => $rowAccountsReceivable['cat_descricao'],
@@ -67,6 +69,8 @@ while ($rowAccountsReceivable = $searchAccountsReceivable->fetch(PDO::FETCH_ASSO
         'pess_sobrenome'     => $rowAccountsReceivable['pess_sobrenome'],
         'pess_razao_social' => $rowAccountsReceivable['pess_razao_social'],
         'tpg_descricao'     => $rowAccountsReceivable['tpg_descricao'],
+        'tpg_codigo'     => $rowAccountsReceivable['tpg_codigo'],
+        'cat_codigo'     => $rowAccountsReceivable['cat_codigo'],
     ];
 }
 

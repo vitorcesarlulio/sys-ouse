@@ -214,14 +214,14 @@ $nameUser = $nameUser[0];
                   </a>
                 </li>
               </ul> -->
-              <ul class="nav nav-treeview">
+              <!-- <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="/financeiro/categoria" class="nav-link">
                   <i class="nav-icon fas fa-filter"></i>
                     <p>Categoria</p>
                   </a>
                 </li>
-              </ul>
+              </ul> -->
               <!-- <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="/home" class="nav-link">

@@ -166,6 +166,10 @@ $route->group(['prefix' => '/financeiro'], function ($route) use ($blade) {
         include '../app/View/finance/accounts-receivable/delete-account-receivable.php';
     });
 
+    $route->post('/contas-a-receber/estornar', function () {
+        include '../app/View/finance/accounts-receivable/reversing-payment.php';
+    });
+
     # Contas a Pagar
     $route->get('/contas-a-pagar', function () use ($blade) {
         echo $blade->render('finance.accounts-payable.account-payable');

@@ -6,13 +6,14 @@ include_once '../app/Model/connection-pdo.php';
 $numberDocumentRegister = filter_input(INPUT_POST, 'numberDocumentRegister', FILTER_DEFAULT);
 $peopleRegister         = filter_input(INPUT_POST, 'peopleRegister', FILTER_SANITIZE_NUMBER_INT);
 $paymentMethodRegister  = filter_input(INPUT_POST, 'paymentMethodRegister', FILTER_SANITIZE_NUMBER_INT);
-$amountRegister         = filter_input(INPUT_POST, 'amountRegister', FILTER_DEFAULT);
 $installmentRegister    = filter_input(INPUT_POST, 'installmentRegister', FILTER_SANITIZE_NUMBER_INT);
+$amountRegister         = filter_input(INPUT_POST, 'amountRegister', FILTER_DEFAULT);
 $dateIssueRegister      = filter_input(INPUT_POST, 'dateIssueRegister', FILTER_SANITIZE_SPECIAL_CHARS);
-$statusRegister         = filter_input(INPUT_POST, 'statusRegister', FILTER_SANITIZE_SPECIAL_CHARS);
 $dateExpiryRegister     = filter_input(INPUT_POST, 'dateExpiryRegister', FILTER_SANITIZE_SPECIAL_CHARS);
+$statusRegister         = filter_input(INPUT_POST, 'statusRegister', FILTER_SANITIZE_SPECIAL_CHARS);
 $categoryRegister       = filter_input(INPUT_POST, 'categoryRegister', FILTER_DEFAULT);
-$payDayRegister         = filter_input(INPUT_POST, 'payDayRegister', FILTER_DEFAULT);/* if ($payDayRegister == "" || $payDayRegister == null) { $payDayRegister = null; } */
+$payDayRegister         = filter_input(INPUT_POST, 'payDayRegister', FILTER_DEFAULT);
+ if ($payDayRegister == "") { $payDayRegister = null; } 
 $observationRegister    = filter_input(INPUT_POST, 'observationRegister', FILTER_DEFAULT);
 
 # Padrao R de Receber
@@ -57,23 +58,46 @@ for ($i = 1; $i <= $installmentRegister; $i++) {
         $valueInstallment = $valueInstallment;
     }
 
-    $queryInsertAccountReceivable = " INSERT INTO tb_receber_pagar (orca_numero, pess_codigo, tpg_codigo, crp_parcela, crp_valor, crp_emissao, crp_vencimento, crp_status, crp_tipo, 
-    crp_obs, crp_datapagto, crp_categoria) 
-                                                               VALUES (:orca_numero, :pess_codigo, :tpg_codigo, :crp_parcela, :crp_valor, :crp_emissao, :crp_vencimento, :crp_status, :crp_tipo,
-                                                                :crp_obs, :crp_datapagto, :crp_categoria) ";
+    $queryInsertAccountReceivable = " INSERT INTO tb_receber_pagar (
+        crp_ndoc, 
+        pess_codigo, 
+        tpg_codigo, 
+        crp_parcela, 
+        crp_valor, 
+        crp_emissao, 
+        crp_vencimento, 
+        crp_status, 
+        crp_tipo, 
+        crp_obs, 
+        crp_datapagto, 
+        cat_codigo) 
+    VALUES (
+        :crp_ndoc, 
+        :pess_codigo, 
+        :tpg_codigo, 
+        :crp_parcela, 
+        :crp_valor, 
+        :crp_emissao, 
+        :crp_vencimento, 
+        :crp_status, 
+        :crp_tipo,
+        :crp_obs, 
+        :crp_datapagto, 
+        :cat_codigo) ";
+
     $insertAccountReceivable = $connectionDataBase->prepare($queryInsertAccountReceivable);
-    $insertAccountReceivable->bindParam(':orca_numero', $numberDocumentRegister);
+    $insertAccountReceivable->bindParam(':crp_ndoc', $numberDocumentRegister);
     $insertAccountReceivable->bindParam(':pess_codigo', $peopleRegister);
     $insertAccountReceivable->bindParam(':tpg_codigo', $paymentMethodRegister);
     $insertAccountReceivable->bindParam(':crp_parcela', $i);
     $insertAccountReceivable->bindParam(':crp_valor', $valueInstallment);
     $insertAccountReceivable->bindParam(':crp_emissao', $dateIssueRegister);
     $insertAccountReceivable->bindParam(':crp_vencimento', $parc[$o]);
-    $insertAccountReceivable->bindParam(':crp_status', $status);
+    $insertAccountReceivable->bindParam(':crp_status', $statusRegister);
     $insertAccountReceivable->bindParam(':crp_tipo', $typeAccount);
-    $insertAccountReceivable->bindParam(':crp_obs', $observationRegister);
     $insertAccountReceivable->bindParam(':crp_datapagto', $payDayRegister);
-    $insertAccountReceivable->bindParam(':crp_categoria', $categoryRegister);
+    $insertAccountReceivable->bindParam(':cat_codigo', $categoryRegister);
+    $insertAccountReceivable->bindParam(':crp_obs', $observationRegister);
 
     $insertAccountReceivable->execute();
     $o++;

@@ -1,8 +1,11 @@
 <?php
+//require_once '../app/View/login/check-login.php';
 include_once '../app/Model/connection-mysqli.php';
 
+session_start();
+
 $columns = [
-    0 => 'orca_numero',
+    0 => 'crp_ndoc',
     1 => 'crp_numero',
     2 => 'pess_nome',
     3 => 'tpg_descricao',
@@ -17,7 +20,7 @@ $columns = [
 
 $query = " SELECT 
 crp_numero,
-orca_numero,
+crp_ndoc,
 crp_parcela,
 crp_valor,
 DATE_FORMAT(crp_emissao,'%d/%m/%Y') AS crp_emissao,
@@ -129,10 +132,31 @@ $statusClass = [
     "PROTESTADO" => '<span class="badge badge-protested">PROTESTADO</span>'
 ];
 
+$statusDisabled = [
+    "ABERTO"     => '',
+    "PAGO"       => 'disabled',
+    "CANCELADO"  => '',
+    "NEGOCIADO"  => '',
+    "PROTESTADO" => ''
+];
+
+$accessDisabled = [
+    "admin"     => '',
+    "user"       => 'disabled',
+];
+
+$statusPagoDisabled = [
+    "ABERTO"     => 'disabled',
+    "PAGO"       => '',
+    "CANCELADO"  => 'disabled',
+    "NEGOCIADO"  => 'disabled',
+    "PROTESTADO" => 'disabled'
+];
+
 $data = [];
 while ($row = mysqli_fetch_array($result)) {
     $subArray   = [];
-    $subArray[] = $row["orca_numero"];
+    $subArray[] = $row["crp_ndoc"];
     $subArray[] = $row["crp_numero"];
     $subArray[] = $row["pess_nome"] . " " . $row["pess_sobrenome"] . " " . $row["pess_razao_social"];
     $subArray[] = $row["tpg_descricao"];
@@ -148,11 +172,15 @@ while ($row = mysqli_fetch_array($result)) {
                         <i class="fas fa-eye"></i>
                      </button>
 
-                     <button type="button" name="updatePaymentMethod" class="btn btn-warning btn-update-payment-method" id="updatePaymentMethod" onclick="updatePaymentMethod(' . $row["crp_numero"] . ');">
+                     <button type="button" name="updateAccountReceivable" class="btn btn-warning btn-update-account-receivable" id="updateAccountReceivable"  '.$statusDisabled[$row["crp_status"]].' onclick="updateAccountReceivable(' . $row["crp_numero"] . ');">
                         <i class="fas fa-edit"></i>
                      </button>
+                     
+                     <button type="button" name="reversingPayment" class="btn btn-success btn-reversing-payment" id="reversingPayment" '.$accessDisabled[$_SESSION['permition']].' '.$statusPagoDisabled[$row["crp_status"]].' onclick="reversingPayment(' . $row["crp_numero"] . ');" title="Estornar">
+                        <i class="fas fa-undo-alt"></i>
+                    </button>
 
-                     <button type="button" name="deletePaymentMethod" class="btn btn-danger btn-delete-payment-method" id="deletePaymentMethod" onclick="confirmDeleteRecord(' . $row["crp_numero"] . ', `/financeiro/formas-de-pagamento/apagar`, `#listPaymentMethod`, `Sucesso: forma de pagamento deletada!`, `Erro: forma de pagamento não deletada!`);">
+                     <button type="button" name="deleteAccountReceivable" class="btn btn-danger btn-delete-account-receivable" id="deleteAccountReceivable" '.$statusDisabled[$row["crp_status"]].' '.$accessDisabled[$_SESSION['permition']].' onclick="confirmDeleteRecord(' . $row["crp_numero"] . ', `/financeiro/contas-a-receber/apagar`, `#listAccountsReceivable`, `Sucesso: conta a receber deletada!`, `Erro: conta a receber não deletada!`);">
                         <i class="fas fa-trash"></i>
                      </button>
                   </div>';

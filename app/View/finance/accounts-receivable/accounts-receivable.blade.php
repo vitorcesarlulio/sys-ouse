@@ -14,6 +14,12 @@ $searchPaymentMethod = $connectionDataBase->prepare($querySelectPaymentMethod);
 $searchPaymentMethod->execute();
 $searchPaymentMethod = $searchPaymentMethod->fetchAll(\PDO::FETCH_ASSOC);
 
+/* Formas de pagametno somente 1x */
+$querySelectPaymentMethod2 = " SELECT tpg_codigo, tpg_descricao, tpg_parcelas FROM tb_tipo_pagamento WHERE tpg_parcelas = 1 ";
+$searchPaymentMethod2 = $connectionDataBase->prepare($querySelectPaymentMethod2);
+$searchPaymentMethod2->execute();
+$searchPaymentMethod2 = $searchPaymentMethod2->fetchAll(\PDO::FETCH_ASSOC);
+
 /* Categorias */
 $querySelectCategory = " SELECT * FROM tb_categoria ";
 $searchCategory = $connectionDataBase->prepare($querySelectCategory);
@@ -140,7 +146,8 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                             <label>Pré-definidos</label>
                             <div class="custom-control custom-radio">
                                 <input class="custom-control-input" type="radio" id="dateExperyNext" name="predefinedFilters" value="">
-                                <label for="dateExperyNext" class="custom-control-label label-not-bold">Próximas ao vencimento</label> <!-- abre uma caixa pra ele colocar quantos dias, se nao vai ser 10 dias padrao exemplo -->
+                                <label for="dateExperyNext" class="custom-control-label label-not-bold">Próximas ao vencimento</label>
+                                <a href="#" title="Padrão: 7 dias"> <i class="fas fa-info-circle"></i> </a> <!-- abre uma caixa pra ele colocar quantos dias, se nao vai ser 10 dias padrao exemplo -->
                             </div>
                             <div class="custom-control custom-radio">
                                 <input class="custom-control-input" type="radio" id="overdueAccounts" name="predefinedFilters" value="">
@@ -153,7 +160,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                         <div class="form-group">
                             <label>Tipo de Pagamento</label>
                             <select class="form-control select2" name="filterAccountPayment" id="filterAccountPayment" style="width: 100%;">
-                                <option value="">Tipo de Pagamento</option>
+                                <option value="">Todos</option>
                                 <?php foreach ($searchPaymentMethod as $row) { ?>
                                     <option value="<?= $row['tpg_codigo'] ?>"> <?= $row['tpg_descricao'] ?> </option>
                                 <?php } ?>
@@ -164,7 +171,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                         <div class="form-group">
                             <label>Status</label>
                             <select class="form-control" name="statusFilter" id="statusFilter" onchange="">
-                                <option value="">TODOS</option>
+                                <option value="">Todos</option>
                                 <option value="ABERTO" style="background-color: #ffc107; color: #fff; font-weight: bold;">ABERTO</option>
                                 <option value="PAGO" style="background-color: #28a745; color: #fff; font-weight: bold;">PAGO</option>
                                 <option value="CANCELADO" style="background-color: #b11800; color: #fff; font-weight: bold;">CANCELADO</option>
@@ -173,28 +180,17 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-sm-2">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Categoria</label>
                             <select class="form-control select2" name="filterCategory" id="filterCategory" style="width: 100%;">
-                                <option value="">Tipo de Pagamento</option>
+                                <option value="">Todos</option>
                                 <?php foreach ($searchCategory as $row) { ?>
-                                    <option value="<?= $row['cat_codigo'] ?>"> <?= $row['cat_descricao'] ?> </option>
+                                    <option value="<?php echo $row['cat_codigo'] ?>"> <?= $row['cat_descricao'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>
-                    </div> -->
-                    <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label>Categoria</label>
-                                    <select class="form-control select2" name="filterCategory" id="filterCategory" style="width: 100%;">
-                                        <option value="">Categoria</option>
-                                        <?php foreach ($searchCategory as $row) { ?>
-                                            <option value="<?php echo $row['cat_codigo'] ?>"> <?= $row['cat_descricao']?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
+                    </div>
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label>Descrição do Relatório</label>
@@ -244,7 +240,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                         <tbody></tbody>
                         <tfoot>
                             <tr>
-                            <th>Nº Doc.</th>
+                                <th>Nº Doc.</th>
                                 <th>Nº Reg.</th>
                                 <th>Pessoa</th>
                                 <th>Tipo Pagto.</th>
@@ -280,7 +276,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Nº doc.</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <input type="text" name="numberDocumentRegister" id="numberDocumentRegister" class="form-control">
+                                    <input type="text" name="numberDocumentRegister" id="numberDocumentRegister" class="form-control" placeholder="Ex.: NF, Boleto, Nº Orçamento"> 
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -355,10 +351,23 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Categoria</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <select class="form-control select2" name="categoryRegister" id="categoryRegister" style="width: 100%;">
+                                        <option value="">Categoria</option>
+                                        <?php foreach ($searchCategory as $row) { ?>
+                                            <option value="<?php echo $row['cat_codigo'] ?>">
+                                                <?= $row['cat_descricao'] ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-6" id="divSettledRegister" style="display: none;">
                                 <div class="icheck-primary">
-                                    <input type="checkbox" id="settledRegister" name="settledRegister" value="settledRegisterYes" onchange="showDivPayday();">
-                                    <label for="settledRegister">Pago</label>
+                                    <input type="checkbox" id="settledRegister" name="settledRegister" value="settledRegisterYes" onchange="showDivPayday('settledRegister', 'divPaydayRegister', 'statusRegister');">
+                                    <label for="settledRegister">Pago?</label>
                                 </div>
                             </div>
                             <div class="col-sm-6" id="divPaydayRegister" style="display: none;">
@@ -372,19 +381,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Categoria</label> <label style="color: red; font-size: 12px;"> * </label>
-                                    <select class="form-control select2" name="categoryRegister" id="categoryRegister" style="width: 100%;">
-                                        <option value="">Categoria</option>
-                                        <?php foreach ($searchCategory as $row) { ?>
-                                            <option value="<?php echo $row['cat_codigo'] ?>">
-                                                <?= $row['cat_descricao']?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Observações</label>
@@ -402,58 +399,129 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <div class="modal fade" id="modalSettledAccounts" style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="modalUpDateAccountReceivable" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
-            <form id="formSettledAccounts" method="POST" novalidate="novalidate" autocomplete="off">
+            <form id="formUpDateAccountReceivable" method="POST" novalidate="novalidate" autocomplete="off">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Quitar</h4>
+                        <h4 class="modal-title">Editar Parcela</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
+                            <input type="hidden" name="idUpDate" id="idUpDate" class="form-control">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Cliente disabled</label>
+                                    <label>Nº doc.</label>
+                                    <input type="text" name="numberDocumentUpDate" id="numberDocumentUpDate" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>n titulo disabled</label>
+                                    <label>Pessoa</label>
+                                    <input type="text" name="peopleUpDate" id="peopleUpDate" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Data pagto</label>
+                                    <label>Tipo de Pagamento</label>
+                                    <select class="form-control select2" name="paymentMethodUpDate" id="paymentMethodUpDate" style="width: 100%;">
+                                        <option value="">Tipo de Pagamento</option>
+                                        <?php foreach ($searchPaymentMethod as $row) { ?>
+                                            <option value="<?= $row['tpg_codigo']?>"><?= $row['tpg_descricao'] ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Data baixa</label>
+                                    <label>Parcela</label> <a href="#" title="Número referente a parcela a ser editada!"> <i class="fas fa-info-circle"></i> </a>
+                                    <input type="text" name="installmentUpDate" id="installmentUpDate" class="form-control" onblur="showSettledRegister();" readonly>
+                                </div>
+                            </div>
+                            <div id="divApartmentEdit" class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Valor</label>
+                                    <input type="text" name="valueInstallmentUpDate" id="valueInstallmentUpDate" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Juros n sei</label>
+                                    <label>Emissão</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="dateIssueUpDate" id="dateIssueUpDate" disabled>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Desconto</label>
+                                    <label>Vencimento</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="date" class="form-control" name="dateExpiryUpDate" id="dateExpiryUpDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Satus ou situaçao</label>
+                                    <label>Status</label>
+                                    <select class="form-control" name="statusUpDate" id="statusUpDate">
+                                        <option value="ABERTO" style="background-color: #ffc107; color: #fff; font-weight: bold;">ABERTO</option>
+                                        <option value="PAGO" style="background-color: #28a745; color: #fff; font-weight: bold;">PAGO</option>
+                                        <option value="CANCELADO" style="background-color: #b11800; color: #fff; font-weight: bold;">CANCELADO</option>
+                                        <option value="NEGOCIADO" style="background-color: #286E80; color: #fff; font-weight: bold;">NEGOCIADO</option>
+                                        <option value="PROTESTADO" style="background-color: #000; color: #fff; font-weight: bold;">PROTESTADO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <select class="form-control select2" name="categoryUpDate" id="categoryUpDate" style="width: 100%;">
+                                        <option value="">Categoria</option>
+                                        <?php foreach ($searchCategory as $row) { ?>
+                                            <option value="<?php echo $row['cat_codigo'] ?>">
+                                                <?= $row['cat_descricao'] ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6" id="divSettledUpDate">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="settledUpDate" name="settledUpDate" value="settledUpDateYes" onchange="showDivPayday('settledUpDate', 'divPaydayUpDate', 'statusUpDate');">
+                                    <label for="settledUpDate">Pago?</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" id="divPaydayUpDate" style="display: none;">
+                                <div class="form-group">
+                                    <label>Pagamento</label> <label style="color: red; font-size: 12px;"> * </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="date" class="form-control" id="payDayUpDate" name="payDayUpDate" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="false" value="{{date('Y-m-d')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Observações</label>
+                                    <textarea class="form-control" rows="3" name="observationUpDate" id="observationUpDate" style="height: 60px;"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success btn-settled-accounts" id="btnSettledAccounts">quitar</button>
+                        <button type="submit" class="btn btn-success btn-settled-accounts" id="btnSettledAccounts">Salvar</button>
                     </div>
                 </div>
             </form>
@@ -471,8 +539,8 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                 </div>
                 <div class="modal-body">
                     <dl class="row">
-                        
-                    <dt class="col-sm-3">Nº do Doc.:</dt>
+
+                        <dt class="col-sm-3">Nº do Doc.:</dt>
                         <dd class="col-sm-8" id="idBudgetView"></dd>
 
                         <dt class="col-sm-3">Nº do Registro:</dt>
@@ -494,9 +562,9 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                         <dd class="col-sm-8" id="dateIssueView"></dd>
 
                         <dt class="col-sm-3">Vencimento:</dt>
-                        <dd class="col-sm-8" id="dateExpiryView" ></dd>
+                        <dd class="col-sm-8" id="dateExpiryView"></dd>
 
-                        <dt class="col-sm-3" id="dtPayDayView"  style="display: none;">Data Pagto.:</dt>
+                        <dt class="col-sm-3" id="dtPayDayView" style="display: none;">Data Pagto.:</dt>
                         <dd class="col-sm-8" id="payDayView" style="display: none;"></dd>
 
                         <dt class="col-sm-3">Status:</dt>
@@ -531,15 +599,16 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
     //$("#listAccountsReceivable_wrapper").append('<span class="badge badge-success">Shipped</span>');
 </script>
 
+<!-- DataTables -->
 <script src="<?= DIRPLUGINS . 'datatables/jquery.dataTables.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-bs4/js/dataTables.bootstrap4.min.js' ?>"></script>
-<!-- <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script> sai  -->
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
 <script src="<?= DIRJS . 'finance/accounts-receivable/accounts-receivable.js' ?>"></script>
 <script src="<?= DIRJS . 'finance/accounts-receivable/register-accounts-receivable.js' ?>"></script>
-<!-- <script src="<?= DIRJS . 'finance/accounts-receivable/edit-accounts-receivable.js' ?>"></script>
-<script src="<?= DIRJS . 'finance/accounts-receivable/-accounts-receivable.js' ?>"></script> -->
+<script src="<?= DIRJS . 'finance/accounts-receivable/edit-accounts-receivable.js' ?>"></script>
+<!-- <script src="<?= DIRJS . 'finance/accounts-receivable/-accounts-receivable.js' ?>"></script> -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
@@ -557,23 +626,20 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
         language: "pt-BR"
     });
 </script>
-
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fh-3.1.7/kt-2.5.2/datatables.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fh-3.1.7/kt-2.5.2/datatables.min.js"></script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script> <!-- so muda versao  -->
+
+<!-- Botões Data table -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-
-<!--<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>  sai  -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script> <!-- sai  testar p ver se n caga pdf excel -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> <!-- sai, ver qual versao testar p ver se n caga pdf excel  -->
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> <!-- sai, testar p ver se n caga pdf excel   -->
-
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script> <!-- testar p ver se n caga pdf excel  -->
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script> <!-- testar p ver se n caga pdf excel  -->
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script> <!-- se tirar o btn fica com uma setinha -->
-
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
 @endsection

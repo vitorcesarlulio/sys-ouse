@@ -324,7 +324,7 @@ $idBudget = filter_input(INPUT_GET, 'budget', FILTER_SANITIZE_NUMBER_INT);
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 
 <!-- Busca endereço pelo CEP -->
-<script src="<?= DIRPLUGINS . 'search-zip/search-zip.js' ?>"></script>
+<script src="<?= DIRPLUGINS . 'search-zip/search-zip.min.js' ?>"></script>
 
 <!-- Mensagem de validação -->
 <script src="<?= DIRPLUGINS . 'cadastro-cliente/msg-validacao.js' ?>"></script>

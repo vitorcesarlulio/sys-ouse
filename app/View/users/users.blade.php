@@ -404,7 +404,7 @@ $searchUser->execute();
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
-<script src="<?= DIRJS . 'users/users.js' ?>"></script>
+<script src="<?= DIRJS . 'users/users.min.js' ?>"></script>
 <!-- Select2 -->
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/i18n/pt-BR.js' ?>"></script>
@@ -415,8 +415,8 @@ $searchUser->execute();
     });
 </script>
 <!-- Vaidação -->
-<script src="<?= DIRJS . 'users/register-user-validation.js' ?>"></script>
-<script src="<?= DIRJS . 'users/edit-user-validation.js' ?>"></script>
+<script src="<?= DIRJS . 'users/register-user-validation.min.js' ?>"></script>
+<script src="<?= DIRJS . 'users/edit-user-validation.min.js' ?>"></script>
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>

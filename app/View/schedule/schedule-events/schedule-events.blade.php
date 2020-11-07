@@ -272,7 +272,7 @@ require_once '../app/View/login/check-login.php';
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
-<script src="<?= DIRJS . 'schedule/schedule-events/events.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-events/events.min.js' ?>"></script>
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>

@@ -45,7 +45,8 @@ $nameUser = $nameUser[0];
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'fontawesome-free/css/all.min.css' ?>">
   @yield('head')
   <!-- Theme style -->
-  <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.css' ?>"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+  <link rel="stylesheet" href="<?= DIRCSS . 'adminlte.min.css' ?>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="<?= DIRPLUGINS . 'overlayScrollbars/css/OverlayScrollbars.min.css' ?>">
   <!-- Google Font: Source Sans Pro -->
@@ -257,7 +258,7 @@ $nameUser = $nameUser[0];
             </li>
             <li class="nav-header">OUTROS</li>
             <li class="nav-item">
-              <a href="/" class="nav-link">
+              <a href="/manual" class="nav-link" target="_blank">
                 <i class="nav-icon far fas fa-file-alt"></i>
                 <p class="text">Manual</p>
               </a>
@@ -333,7 +334,7 @@ $nameUser = $nameUser[0];
   <!-- Alerta de cadastro - Toastr Examples -->
   <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
   <!-- Modal de confirmação -->
-  <script src="<?= DIRJS . 'global-functions/confirm-action.js' ?>"></script>
+  <script src="<?= DIRJS . 'global-functions/confirm-action.min.js' ?>"></script>
   @yield('script')
 
   <script>

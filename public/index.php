@@ -264,4 +264,11 @@ $route->get('/backup-manual', function () {
     include '../app/View/backup/backup.php';
 });
 
+/**
+ * Manual
+ */
+$route->get('/manual', function () {
+    include '../app/View/manual/manual.php';
+});
+
 $route->on();

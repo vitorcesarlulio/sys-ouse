@@ -93,9 +93,9 @@
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
-<script src="<?= DIRJS . 'budgets/budgets.js' ?>"></script>
+<script src="<?= DIRJS . 'budgets/budgets.min.js' ?>"></script>
 
-<!-- <script src="<?= DIRJS . 'users/register-user-validation.js' ?>"></script> -->
+<!-- <script src="<?= DIRJS . 'users/register-user-validation.min.js' ?>"></script> -->
 
 <!-- InputMask (MASCARAS) -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>

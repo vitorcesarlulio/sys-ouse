@@ -513,15 +513,15 @@ $searchClientBudget->execute();
 <script src="<?= DIRPLUGINS . 'fullcalendar-interaction/main.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'fullcalendar-bootstrap/main.min.js' ?>"></script>
 <!-- Script do Calendário -->
-<script src="<?= DIRJS . 'schedule/schedule-calendar/calendar.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-calendar/calendar.min.js' ?>"></script>
 <!-- JQuery validation -->
-<script src="<?= DIRJS . 'schedule/schedule-calendar/register-event-validation.js' ?>"></script>
-<script src="<?= DIRJS . 'schedule/schedule-calendar/edit-event-validation.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-calendar/register-event-validation.min.js' ?>"></script>
+<script src="<?= DIRJS . 'schedule/schedule-calendar/edit-event-validation.min.js' ?>"></script>
 <!-- InputMask -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <!-- Busca endereço pelo CEP -->
-<script src="<?= DIRJS . 'search-zip/search-zip.js' ?>"></script>
+<script src="<?= DIRJS . 'search-zip/search-zip.min.js' ?>"></script>
 <!-- Date Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <!-- Select2 -->

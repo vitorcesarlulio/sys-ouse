@@ -247,8 +247,8 @@ GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC
 <script src="<?= DIRPLUGINS . 'datatables-bs4/js/dataTables.bootstrap4.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
-<script src="<?= DIRJS . 'finance/payment-method/payment-method.js' ?>"></script>
-<script src="<?= DIRJS . 'finance/payment-method/register-payment-method.js' ?>"></script>
+<script src="<?= DIRJS . 'finance/payment-method/payment-method.min.js' ?>"></script>
+<script src="<?= DIRJS . 'finance/payment-method/register-payment-method.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 

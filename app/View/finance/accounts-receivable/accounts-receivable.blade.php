@@ -605,10 +605,10 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
 
-<script src="<?= DIRJS . 'finance/accounts-receivable/accounts-receivable.js' ?>"></script>
-<script src="<?= DIRJS . 'finance/accounts-receivable/register-accounts-receivable.js' ?>"></script>
-<script src="<?= DIRJS . 'finance/accounts-receivable/edit-accounts-receivable.js' ?>"></script>
-<!-- <script src="<?= DIRJS . 'finance/accounts-receivable/-accounts-receivable.js' ?>"></script> -->
+<script src="<?= DIRJS . 'finance/accounts-receivable/accounts-receivable.min.js' ?>"></script>
+<script src="<?= DIRJS . 'finance/accounts-receivable/register-accounts-receivable.min.js' ?>"></script>
+<script src="<?= DIRJS . 'finance/accounts-receivable/edit-accounts-receivable.min.js' ?>"></script>
+<!-- <script src="<?= DIRJS . 'finance/accounts-receivable/-accounts-receivable.min.js' ?>"></script> -->
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>

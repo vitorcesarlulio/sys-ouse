@@ -136,7 +136,7 @@ $checkedRemember  = ($remember == 'rememberYes') ? 'checked' : '';
     <script src="<?= DIRPLUGINS . 'jquery-validation/jquery.validate.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'jquery-validation/additional-methods.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
-    <script src="<?= DIRJS . 'login/login.js' ?>"></script>
+    <script src="<?= DIRJS . 'login/login.min.js' ?>"></script>
     <script src="<?= DIRPLUGINS . 'toastr/toastr.min.js' ?>"></script>
 
 

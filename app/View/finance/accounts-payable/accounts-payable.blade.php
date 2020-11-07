@@ -227,7 +227,7 @@ $searchPeople->execute();
 <script src="<?= DIRPLUGINS . 'datatables-bs4/js/dataTables.bootstrap4.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/dataTables.responsive.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'datatables-responsive/js/responsive.bootstrap4.min.js' ?>"></script>
-<script src="<?= DIRJS . 'finance/accounts-receivable/accounts-receivable.js' ?>"></script>
+<script src="<?= DIRJS . 'finance/accounts-receivable/accounts-receivable.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'moment/moment.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'inputmask/min/jquery.inputmask.bundle.min.js' ?>"></script>
 <script src="<?= DIRPLUGINS . 'select2/js/select2.full.min.js' ?>"></script>

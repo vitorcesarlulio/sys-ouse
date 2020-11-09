@@ -123,8 +123,8 @@ $searchPeople->execute();
                                     <select class="form-control select2" name="filterLogin" id="filterLogin" style="width: 100%;">
                                         <option value="">Todos</option>
                                         <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                            <option value="<?php echo $row['pess_codigo'] ?>">
-                                                <?php echo $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social']  ?>
+                                            <option value="<?= $row['pess_codigo'] ?>">
+                                                <?= $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social']  ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -137,8 +137,8 @@ $searchPeople->execute();
                                     <select class="form-control select2" name="filterLogin" id="filterLogin" style="width: 100%;">
                                         <option value="">Todos</option>
                                         <!-- <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                            <option value="<?php echo $row['pess_codigo'] ?>">
-                                                <?php echo $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social']  ?>
+                                            <option value="<?= $row['pess_codigo'] ?>">
+                                                <?= $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social']  ?>
                                             </option>
                                         <?php } ?> -->
                                     </select>

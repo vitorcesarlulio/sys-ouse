@@ -108,9 +108,9 @@ GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC
                                     <tbody>
                                         <?php foreach ($paymentMethodMoreUsed->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
                                             <tr>
-                                                <td><?php echo $row['tpg_descricao']; ?></td>
-                                                <td><?php echo $row['quantidade_de_vezes_utilizado']; ?></td>
-                                                <td><?php echo "R$ " . number_format($row['valor_total_cada_forma_pagto'], 2, ',', '.'); ?></td>
+                                                <td><?= $row['tpg_descricao']; ?></td>
+                                                <td><?= $row['quantidade_de_vezes_utilizado']; ?></td>
+                                                <td><?= "R$ " . number_format($row['valor_total_cada_forma_pagto'], 2, ',', '.'); ?></td>
                                                 <td>
                                                     <div class="progress progress-xs">
                                                         <div class="<?php //mais uma cor = azul
@@ -121,7 +121,7 @@ GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC
                                                                     } else {
                                                                         echo 'progress-bar bg-warning progress-bar-sucess';
                                                                     }
-                                                                    ?>" style="width: <?php echo $row['porcentagem'] . "%"; ?>"></div>
+                                                                    ?>" style="width: <?= $row['porcentagem'] . "%"; ?>"></div>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -133,7 +133,7 @@ GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC
                                                                     } else {
                                                                         echo 'badge bg-success';
                                                                     }
-                                                                    ?>"> <?php echo number_format($row['porcentagem'], 2, '.', '') . "%"; ?></span>
+                                                                    ?>"> <?= number_format($row['porcentagem'], 2, '.', '') . "%"; ?></span>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -213,6 +213,7 @@ GROUP BY tpg.tpg_descricao ORDER BY valor_total_cada_forma_pagto DESC
                                         <option value="Cartão de Debito">Cartão de Debito</option>
                                         <option value="Cheque">Cheque</option>
                                         <option value="Boleto bancário">Boleto bancário</option>
+                                        <option value="Boleto bancário">Crédito em Conta</option>
                                     </select>
                                 </div>
                             </div>

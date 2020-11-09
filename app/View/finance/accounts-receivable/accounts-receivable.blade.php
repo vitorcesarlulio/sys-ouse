@@ -186,7 +186,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                             <select class="form-control select2" name="filterCategory" id="filterCategory" style="width: 100%;">
                                 <option value="">Todos</option>
                                 <?php foreach ($searchCategory as $row) { ?>
-                                    <option value="<?php echo $row['cat_codigo'] ?>"> <?= $row['cat_descricao'] ?></option>
+                                    <option value="<?= $row['cat_codigo'] ?>"> <?= $row['cat_descricao'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -285,7 +285,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                                     <select class="form-control select2" name="peopleRegister" id="peopleRegister" style="width: 100%;">
                                         <option value="">Pessoa</option>
                                         <?php foreach ($searchPeople->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                            <option value="<?php echo $row['pess_codigo'] ?>">
+                                            <option value="<?= $row['pess_codigo'] ?>">
                                                 <?= $row['pess_nome'] . " " . $row['pess_sobrenome'] . $row['pess_razao_social'] . " - " . $row['pess_classificacao'] ?>
                                             </option>
                                         <?php } ?>
@@ -298,8 +298,8 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                                     <select class="form-control select2" name="paymentMethodRegister" id="paymentMethodRegister" style="width: 100%;" onchange="showSettledRegister();">
                                         <option value="">Tipo de Pagamento</option>
                                         <?php foreach ($searchPaymentMethod as $row) { ?>
-                                            <option data-valor="<?php echo $row['tpg_parcelas']; ?>" value="<?php echo $row['tpg_codigo'] ?>">
-                                                <?php echo $row['tpg_descricao'] ?>
+                                            <option data-valor="<?= $row['tpg_parcelas']; ?>" value="<?= $row['tpg_codigo'] ?>">
+                                                <?= $row['tpg_descricao'] ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -357,7 +357,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                                     <select class="form-control select2" name="categoryRegister" id="categoryRegister" style="width: 100%;">
                                         <option value="">Categoria</option>
                                         <?php foreach ($searchCategory as $row) { ?>
-                                            <option value="<?php echo $row['cat_codigo'] ?>">
+                                            <option value="<?= $row['cat_codigo'] ?>">
                                                 <?= $row['cat_descricao'] ?>
                                             </option>
                                         <?php } ?>
@@ -487,7 +487,7 @@ $searchCategory = $searchCategory->fetchAll(\PDO::FETCH_ASSOC);
                                     <select class="form-control select2" name="categoryUpDate" id="categoryUpDate" style="width: 100%;">
                                         <option value="">Categoria</option>
                                         <?php foreach ($searchCategory as $row) { ?>
-                                            <option value="<?php echo $row['cat_codigo'] ?>">
+                                            <option value="<?= $row['cat_codigo'] ?>">
                                                 <?= $row['cat_descricao'] ?>
                                             </option>
                                         <?php } ?>

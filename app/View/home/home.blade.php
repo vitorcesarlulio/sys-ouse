@@ -10,7 +10,7 @@ $today = date('Y-m-d');
 /**
  * Contas a receber hoje 
  */
-$queryAccountsReceivedNow = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_vencimento=:today "; //AND crp_status != 'PAGO' AND crp_datapagto = ''
+$queryAccountsReceivedNow = " SELECT SUM(crp_valor) FROM tb_receber_pagar WHERE crp_tipo = 'R' AND crp_status = 'ABERTO' AND crp_vencimento=:today "; //AND crp_status != 'PAGO' AND crp_datapagto = ''
 $accountsReceivedNow = $connectionDataBase->prepare($queryAccountsReceivedNow);
 $accountsReceivedNow->bindParam(':today', $today);
 $accountsReceivedNow->execute();

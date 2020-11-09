@@ -303,7 +303,7 @@ $nameUser = $nameUser[0];
       <strong>Copyright &copy; {{date('Y')}} <a href="https://ouse.com.br" target="_blank">Ouse</a>.</strong>
       Todos os direitos reservados.
       <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 1.10.43
+        <b>Version</b> 1.10.47
       </div>
     </footer>
   </div>

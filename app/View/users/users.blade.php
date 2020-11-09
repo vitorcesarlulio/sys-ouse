@@ -112,8 +112,8 @@ $searchUser->execute();
                             <select class="form-control select2" name="filterLogin" id="filterLogin" style="width: 100%;">
                                 <option value="">Todos</option>
                                 <?php foreach ($searchUser->fetchAll(\PDO::FETCH_ASSOC) as $row) { ?>
-                                    <option value="<?php echo $row['usu_codigo'] ?>">
-                                        <?php echo $row['usu_login'] ?>
+                                    <option value="<?= $row['usu_codigo'] ?>">
+                                        <?= $row['usu_login'] ?>
                                     </option>
                                 <?php } ?>
                             </select>
